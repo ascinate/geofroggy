@@ -3540,12 +3540,7 @@ img.profiles-uimos {
         margin-left: 0;
     }
 
-    .passoedr-bgs .container>div.row {
-        height: 550px;
-        overflow: hidden;
-        overflow-y: auto;
 
-    }
 }
 
 @media(max-width:768px) {
