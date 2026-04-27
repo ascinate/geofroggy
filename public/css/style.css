@@ -3429,8 +3429,26 @@ img.profiles-uimos {
         width: 84%;
     }
 
+    .navbar-toggler {
+        text-align: right;
+        border: none !important;
+    }
+
+    .user-rights {
+        width: 80%;
+        justify-content: space-between;
+    }
+
+    .navbar-toggler img {
+        width: 58%;
+    }
+
     .shaosdow-box {
         display: none !important;
+    }
+
+    .bg-heade {
+        height: 100%;
     }
 }
 
