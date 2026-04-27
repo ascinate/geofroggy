@@ -3536,8 +3536,13 @@ img.profiles-uimos {
     .lest-books {
         position: relative;
         z-index: 2;
-        margin-top: 310px;
-        margin-left: 70px;
+        margin-top: 180px;
+        margin-left: 0;
+    }
+
+    .next-sections {
+        height: 550px;
+        overflow-y: auto;
     }
 }
 
