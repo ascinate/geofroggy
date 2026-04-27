@@ -3540,6 +3540,10 @@ img.profiles-uimos {
         margin-left: 0;
     }
 
+    .card-body a img {
+        width: 90%;
+    }
+
 
 }
 
