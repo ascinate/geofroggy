@@ -3510,7 +3510,11 @@ img.profiles-uimos {
     }
 
     .table img {
-        width: 20% !important;
+        width: 56% !important;
+    }
+
+    .top-stitels-01 img {
+        width: 100%;
     }
 }
 
