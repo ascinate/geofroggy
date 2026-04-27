@@ -3424,7 +3424,7 @@ img.profiles-uimos {
     animation-delay: 300ms;
 }
 
-@media(max-width:768px) {
+@media(max-width:910px) {
     .user-names img {
         width: 84%;
     }
