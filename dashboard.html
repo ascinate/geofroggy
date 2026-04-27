@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geofroggy Dashboard</title>
+    <!-- Fonts -->
+    <link href="https://unpkg.com/aos@2.3.0/dist/aos.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Quicksand:wght@300..700&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+    <!-- FontAwesome for quick icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Global CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- <link rel="stylesheet" href="/css/dashboard.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+</head>
+
+<body>
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content wrapper -->
+    <div class="parallax-container" style=" background-image: url(/assets/bg-backgrounds.jpg);">
+        <div class="page-wrapper achives-nos" style="padding: 0 0 24px 0;">
+
+
+            <div class="profilest-text015">
+                <div class="container text-center">
+                    <h1> Teen Dashboard </h1>
+                    <p class="unlock-text01 mt-2"> Progress and activity tracking for parents and teachers of teens.
+                    </p>
+                </div>
+            </div>
+
+            <div class="profile-pages-015 po-dashboard w-100">
+                <div class="container position-relative ">
+                    <img src="/assets/main-maps-158.png" class="profiles-uimos" alt="profiles" />
+                    <div class="img-details-text position-relative">
+                        <h2 class="text-center">Teen Dashboard</h2>
+                        <div class="imgs-profiles-015">
+                            <img src="/assets/user-picou.png" class="profiles0158" alt="profiles" />
+                        </div>
+
+                    </div>
+
+                    <div class="lavels-xps position-relative">
+
+                        <div class="bg-new-cards w-100 d-flex align-items-center w-100 justify-content-between">
+
+                            <figure>
+                                <img src="/assets/geofogy-imgs.png" alt="" />
+                            </figure>
+                            <div class="d-flex align-items-star col-lg-10 row">
+                                <div class="col-lg-6">
+                                    <h3 id="display-name"> Alex (Teen)
+                                        <span class="d-block mt-2" id="xp-bonus"> +20 XP Streak Bonus </span>
+                                    </h3>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="/assets/floewer.png" class="flower-user015" alt="" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-10 ms-auto px-lg-4 nice-text015">
+
+                            <div class="d-flex align-items-center W-100 justify-content-between mb-3">
+                                <p id="level-text"> Nice work! Alex is halfway to Level 3! </p>
+                                <div class="rights-uicons">
+                                    <img src="/assets/rtgs.png" alt="smgsdah" />
+                                </div>
+                            </div>
+
+                            <div class="progress pogress-015x">
+                                <div class="progress-bar" id="level-progress" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="tops-profiles-div012 position-relative mt-5">
+                        <div class="bgs-tops-015-news  w-100 text-center position-relative">
+                            <h3 class="text-center">Progress Overview</h3>
+                        </div>
+
+                        <div class="card-modes015">
+                            <div class="d-flex px-3 pt-3  align-items-center W-100 justify-content-between mb-0">
+                                <h4> April 12 </h4>
+
+                                <div class="form-group">
+                                    <div class="datepicker date input-group">
+                                        <input type="text" placeholder="Choose Date" class="form-control" id="fecha1">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <table id="example" class="table boder-tops01 table-hover responsive nowrap"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sun </th>
+                                        <th>Mon</th>
+                                        <th>Tue</th>
+                                        <th>Wed</th>
+                                        <th>Thu</th>
+                                        <th>Fri</th>
+                                        <th>Sat</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <b>S</b>
+                                        </td>
+                                        <td>
+                                            32
+                                        </td>
+                                        <td>
+                                            32
+                                        </td>
+                                        <td>
+                                            24
+                                        </td>
+                                        <td>
+                                            25
+                                        </td>
+                                        <td>
+                                            24
+                                        </td>
+                                        <td>
+                                            25
+                                        </td>
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <img src="/assets/lism.png" alt="sm" />
+                                        </td>
+                                        <td>
+                                            32
+                                        </td>
+                                        <td>
+                                            <img src="/assets/rt-us.png" alt="sm" />
+                                        </td>
+                                        <td>
+                                            <img src="/assets/rt-us.png" alt="sm" />
+                                        </td>
+                                        <td>
+                                            <img src="/assets/rt-us.png" alt="sm" />
+                                        </td>
+                                        <td>
+                                            <img src="/assets/rt-us.png" alt="sm" />
+                                        </td>
+                                        <td>
+                                            <img src="/assets/rt-us.png" alt="sm" />
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tops-profiles-div012 position-relative mt-5">
+                        <div class="bgs-tops-015-news  w-100 text-center position-relative">
+                            <h3 class="text-center">Weekly Activity</h3>
+                        </div>
+
+                        <div class="card-modes015">
+                            <table id="example2" class="table table-hover responsive nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>April 12 - 18 </th>
+                                        <th>Status</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="d-flex align-items-center">
+                                                <span class="me-3">
+                                                    <img src="/assets/gm.png" alt="" />
+                                                </span> Jpana + 32Xp Completed
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="ms-auto">
+                                                <img src="/assets/right-us.png" alt="" />
+                                            </span>
+                                        </td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="d-flex align-items-center">
+                                                <span class="me-3">
+                                                    <img src="/assets/japans.png" alt="" />
+                                                </span> France + 32Xp Completed
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="ms-auto">
+                                                <img src="/assets/right-us.png" alt="" />
+                                            </span>
+                                        </td>
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="d-flex align-items-center">
+                                                <span class="me-3">
+                                                    <img src="/assets/france.png" alt="" />
+                                                </span> Brazil + 32Xp Completed
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="ms-auto">
+                                                <img src="/assets/right-us.png" alt="" />
+                                            </span>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tals-last-use015 mt-4">
+                        <div class="bgs-tops-015-news  w-100 text-center position-relative">
+                            <h3 class="text-center">User Streak</h3>
+                        </div>
+                        <div class="user-listr015">
+                            <div class="d-flex align-items-center ">
+                                <div class="user-items015">
+                                    <img src="/assets/list-uoi.png" alt="sm" />
+                                </div>
+                                <div class="right-tabsles">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">H</th>
+                                                <th scope="col">W</th>
+                                                <th scope="col">T</th>
+                                                <th scope="col">F</th>
+                                                <th scope="col">S</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Mark</td>
+                                                <td>Mark</td>
+                                                <td>Otto</td>
+                                                <td>@mdo</td>
+                                                <td>@mdo</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mark</td>
+                                                <td>Jacob</td>
+                                                <td>Thornton</td>
+                                                <td>@fat</td>
+                                                <td>@mdo</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="right-texr015 ps-3">
+                                    <h4> +25 XP</h4>
+                                    <a href="#" class="ms-auto mt-2 btn-caltegoris">
+                                        25 XP
+                                    </a>
+                                </div>
+                            </div>
+                            <h5 class="curt-text01 text-center"> Current Streak: <span id="streak-count">5</span> days
+                            </h5>
+
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button id="logout-btn" class="btn btn-sm px-4 logout-btn"
+                            style="border-radius: 50px; font-weight: 600;">
+                            <img src="/assets/logout.png" alt="logout" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Offcanvas Placeholder -->
+    <div id="offcanvas-placeholder"></div>
+
+    <!-- Global JS -->
+    <script src="https://unpkg.com/aos@2.3.0/dist/aos.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/parallax.js"></script>
+    <script src="/js/demo.js"></script>
+    <script src="/js/dashboard.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 1500,
+            easing: 'ease-in-out-cubic',
+            once: true,
+            mirror: false
+        });
+
+        $(document).ready(function () {
+            $("#example").DataTable({
+                aaSorting: [],
+                responsive: true,
+                paging: false,
+                info: false,
+                searching: false,
+            });
+
+            $("#example2").DataTable({
+                aaSorting: [],
+                responsive: true,
+                paging: false,
+                info: false,
+                searching: false,
+            });
+
+            $(".dataTables_filter input")
+                .attr("placeholder", "Search here...")
+                .css({
+                    width: "300px",
+                    display: "inline-block"
+                });
+
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $(function () {
+            $('.datepicker').datepicker({
+                language: "es",
+                autoclose: true,
+                format: "dd/mm/yyyy"
+            });
+        });
+
+        // Logout logic
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            const logoutBtn = document.getElementById('logout-btn');
+            const originalContent = logoutBtn.innerHTML;
+
+            try {
+                logoutBtn.disabled = true;
+                logoutBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging out...';
+
+                const token = localStorage.getItem('token');
+                const baseUrl = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : 'https://geo-froggy-backend.devhhtk.workers.dev';
+
+                await fetch(`${baseUrl}/auth/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (err) {
+                console.error('Logout error:', err);
+            } finally {
+                // Clear local storage regardless of API success
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('profile');
+                localStorage.removeItem('stats');
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

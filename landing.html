@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geofroggy - Interactive Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="landing-body">
+
+    <!-- Marketing Header -->
+    <header class="marketing-header" style="justify-content: space-between; align-items: center; display: flex;">
+        <div class="logo">
+            <a href="#">
+                <img src="/assets/logo.svg" alt="Geofroggy Logo" />
+            </a>
+        </div>
+
+        <nav class="nav-links landing-nav-links">
+            <a href="/">Explore</a>
+            <a href="/quiz">Play</a>
+            <a href="/stories">Stories</a>
+            <a href="/passport">My Passport</a>
+        </nav>
+
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <a href="/login" style="text-decoration: none; font-weight: 800; color: #1E3A8A; font-size: 16px;">Log
+                In</a>
+            <button class="btn-orange">Sign Up</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-text fade-in">
+            <h1>Explore the World<br>Through Interactive Learning</h1>
+            <p>Make geography fun and engaging with<br>interactive maps, quizzes, and rewards.</p>
+            <div class="hero-buttons">
+                <button class="btn-orange" style="padding: 14px 32px;">Start Learning</button>
+                <a href="/" style="text-decoration:none;"><button class="btn-white-glass">Try Demo</button></a>
+            </div>
+            <div style="font-size: 13px; color: #64748B; font-weight: 600; margin-top: 12px; margin-left: 8px;">
+                Free to try. No credit card required.
+            </div>
+        </div>
+
+        <div class="hero-image float-slow delay-200">
+            <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80"
+                alt="Kids Using Geofroggy App">
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="feature-grid">
+        <div class="feature-card fade-in delay-200">
+            <div class="feature-icon-wrapper" style="background: linear-gradient(135deg, #EFF6FF, #DBEAFE);">
+                <i class="fa-solid fa-map-location-dot" style="color: #3B82F6;"></i>
+                <div
+                    style="width: 32px; height: 20px; display:flex; border: 1px solid rgba(0,0,0,0.1); margin-top: 8px;">
+                    <div style="flex:1; background: #002395;"></div>
+                    <div style="flex:1; background: white;"></div>
+                    <div style="flex:1; background: #ED2939;"></div>
+                </div>
+            </div>
+            <div class="feature-content" style="flex: 1;">
+                <h3>Interactive Maps</h3>
+                <p>Explore a detailed, interactive world map and discover fun facts about each country.</p>
+                <div style="text-align: right;">
+                    <button class="secondary-btn"
+                        style="padding: 8px 16px; font-size: 14px; background: linear-gradient(135deg, #818CF8, #6366F1);">Resume
+                        Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card fade-in delay-200">
+            <div class="feature-icon-wrapper" style="background: linear-gradient(135deg, #FEF3C7, #FDE68A);">
+                <i class="fa-solid fa-book-atlas" style="color: #D97706;"></i>
+                <i class="fa-solid fa-treasure-chest" style="color: #F59E0B; font-size: 24px; margin-top: 8px;"></i>
+            </div>
+            <div class="feature-content" style="flex: 1;">
+                <h3>Country Capsules</h3>
+                <p>Learn about countries with engaging facts, photos, mini quizzes.</p>
+                <div style="text-align: right;">
+                    <a href="/map"><button class="btn-white-glass"
+                            style="padding: 8px 16px; font-size: 14px; color: #4F46E5;">Go to Map <i
+                                class="fa-solid fa-chevron-right"></i></button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card fade-in delay-200">
+            <div class="feature-icon-wrapper" style="background: linear-gradient(135deg, #E0E7FF, #C7D2FE);">
+                <i class="fa-solid fa-clipboard-question" style="color: #4F46E5;"></i>
+            </div>
+            <div class="feature-content" style="flex: 1;">
+                <h3 style="color: #4338CA;"><i class="fa-solid fa-puzzle-piece" style="font-size: 14px;"></i> Gamified
+                    Quizzes</h3>
+                <p>Test your knowledge with fun quizzes and earn XP points.</p>
+            </div>
+        </div>
+
+        <div class="feature-card fade-in delay-200">
+            <div class="feature-icon-wrapper" style="background: linear-gradient(135deg, #D1FAE5, #A7F3D0);">
+                <i class="fa-solid fa-passport" style="color: #059669;"></i>
+            </div>
+            <div class="feature-content" style="flex: 1;">
+                <h3 style="color: #047857;"><i class="fa-solid fa-stamp" style="font-size: 14px;"></i> Passport Progress
+                </h3>
+                <p>Track your travels and collect stamps in your virtual passport.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Start exploring the world in just a few easy steps</p>
+
+    <div class="how-it-works-grid">
+        <div class="step-card">
+            <img class="step-image"
+                src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80"
+                alt="Boy typing on laptop">
+            <div class="step-content">
+                <div class="step-number">O1</div>
+                <div class="step-title">Choose a Country</div>
+                <div class="step-desc"><i class="fa-solid fa-location-dot" style="color: #94A3B8;"></i> Pick a country
+                    to explore</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <img class="step-image"
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80"
+                alt="Kids looking at screen">
+            <div class="step-content">
+                <div class="step-number">O2</div>
+                <div class="step-title">Learn Fun Facts</div>
+                <div class="step-desc"><i class="fa-solid fa-coins" style="color: #FACC15;"></i> Discover facts with
+                    geofrog</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <img class="step-image"
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&q=80"
+                alt="Student studying">
+            <div class="step-content">
+                <div class="step-number">O3</div>
+                <div class="step-title">Take the Quiz</div>
+                <div class="step-desc"><i class="fa-solid fa-check-circle" style="color: #94A3B8;"></i> Answer questions
+                    to test your knowledge</div>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <img class="step-image"
+                src="https://images.unsplash.com/photo-1596496181848-3091d4878b24?auto=format&fit=crop&w=400&q=80"
+                alt="Education tools">
+            <div class="step-content">
+                <div class="step-number">O4</div>
+                <div class="step-title">Earn XP & Badges</div>
+                <div class="step-desc"><i class="fa-solid fa-coins" style="color: #FACC15;"></i> Gain XP points and
+                    collect badges</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <h2 class="section-title">Trusted by Thousands of Parents and Teachers</h2>
+
+    <div class="trusted-grid" style="margin-top: 40px;">
+        <div class="testimonial-card">
+            <img class="avatar-lg"
+                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80"
+                alt="Emma Johnson">
+            <div class="testimonial-content">
+                <h4>Emma Johnson</h4>
+                <div class="testimonial-role">Parent Reviewer</div>
+                <div class="testimonial-quote">"Geofroggy has been a fantastic way for my kids to learn geography. They
+                    love exploring the map and earning badges."</div>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card">
+            <img class="avatar-lg"
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80"
+                alt="Mr. Anderson">
+            <div class="testimonial-content">
+                <h4>Mr. Anderson</h4>
+                <div class="testimonial-role">Middle School Teacher</div>
+                <div class="testimonial-quote">"My students are hooked. It's a great tool for making geography lessons
+                    fun and interactive."</div>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Footer (Standard across portal) -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a> |
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Terms of Service</a> |
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2024 Geofroggy Learning Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/demo.js"></script>
+</body>
+
+</html>

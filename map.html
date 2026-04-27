@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geofroggy Map Explorer</title>
+    <!-- Fonts -->
+    <link href="https://unpkg.com/aos@2.3.0/dist/aos.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Quicksand:wght@300..700&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+    <!-- FontAwesome for quick icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Global CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border: 8px solid #fff;
+            background: #ffffff;
+            z-index: 1;
+            margin-top: -300px;
+        }
+
+        .leaflet-container {
+            background: #fff;
+        }
+
+        .info-box {
+            padding: 10px 15px;
+            font: 14px/16px 'Nunito', sans-serif;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 2px solid #8AC63C;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            pointer-events: none;
+            display: none;
+            transition: opacity 0.2s;
+        }
+
+        .search-wrapper {
+            position: absolute;
+            top: -280px;
+            left: 20px;
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        .search-wrapper.active {
+            width: 320px;
+            cursor: default;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 20px 10px 50px;
+            border: none;
+            background: transparent;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            outline: none;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .search-wrapper.active .search-input {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8AC63C;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 55px;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1200;
+        }
+
+        .search-results div {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 600;
+        }
+
+        .search-results div:hover {
+            background: #f9f9f9;
+            color: #8AC63C;
+        }
+
+        .map-controls {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .map-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 20px;
+            color: #331802;
+        }
+
+        .map-btn:hover {
+            background: #8AC63C;
+            border-color: #8AC63C;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+
+
+    <!-- Main Content -->
+    <div class="w-100">
+        <div class="aps-maps-tos position-relative">
+            <div class="map-bg-img position-relative">
+                <img src="/assets/maps1-bg.png" alt="" class="w-100 bg-heade-maps" />
+            </div>
+            <div class="container">
+
+                <div class="map-box w-100 text-center position-relative">
+                    <div class="search-wrapper" id="search-wrapper">
+                        <i class="ri-search-line search-icon" id="search-toggle-icon"></i>
+                        <input type="text" class="search-input" id="map-search" placeholder="Search a country...">
+                        <div class="search-results" id="search-results"></div>
+                    </div>
+                    <div class="map-controls">
+                        <div class="map-btn" id="map-zoom-in"><i class="ri-add-line"></i></div>
+                        <div class="map-btn" id="map-zoom-out"><i class="ri-subtract-line"></i></div>
+                    </div>
+                    <div id="map"></div>
+                    <div id="info" class="info-box"></div>
+
+                    <div class="groups-btnh d-flex align-items-center">
+                        <button class="btn p-0">
+                            <img src="/assets/map-icons.png" alt="s" />
+                        </button>
+                        <button class="btn p-0" id="zoom-in-btn">
+                            <img src="/assets/plus-icons02.png" alt="s" />
+                        </button>
+                        <button class="btn p-0" id="zoom-out-btn">
+                            <img src="/assets/minus-cion.png" alt="s" />
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Offcanvas Placeholder -->
+    <div id="offcanvas-placeholder"></div>
+
+
+    <!-- Global JS -->
+    <script src="https://unpkg.com/aos@2.3.0/dist/aos.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/parallax.js"></script>
+    <script src="/js/demo.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map', {
+            zoomControl: false, worldCopyJump: true, minZoom: 2.5,
+            maxBounds: [[-85, -540], [85, 540]], maxBoundsViscosity: 0.5
+        }).setView([20, 0], 2.8);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            noWrap: false, attribution: 'Tiles © Esri'
+        }).addTo(map);
+
+        let geojson;
+        let highlightedLayer = null;
+        const info = document.getElementById('info');
+        const searchWrapper = document.getElementById('search-wrapper');
+        const searchIcon = document.getElementById('search-toggle-icon');
+        const searchInput = document.getElementById('map-search');
+        const searchResults = document.getElementById('search-results');
+
+        let countryLinks = {}; // Will be populated from API
+        const defaultStyle = { color: 'rgba(255,255,255,0.6)', weight: 0.5, fillColor: '#000', fillOpacity: 0.05 };
+        const hoverStyle = { weight: 1.2, color: '#fff', fillColor: '#8AC63C', fillOpacity: 0.35 };
+
+        // Fetch countries from API to build links
+        async function fetchCountryLinks() {
+            try {
+                const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/country`);
+                if (response.ok) {
+                    const countries = await response.json();
+                    countries.forEach(country => {
+                        // Assuming country object has 'name' and we use name for 'id' parameter in details.html
+                        countryLinks[country.name] = `/details.html?id=${encodeURIComponent(country.name)}`;
+                    });
+                    console.log('Country links loaded:', countryLinks);
+                }
+            } catch (error) {
+                console.error('Error fetching country links:', error);
+                // Fallback hardcoded links if API fails
+                countryLinks = { "India": "/details.html?id=India", "France": "/details.html?id=France" };
+            }
+        }
+
+        function highlightFeature(e) {
+            const layer = e.target;
+            if (highlightedLayer === layer) return;
+            if (highlightedLayer) geojson.resetStyle(highlightedLayer);
+            layer.setStyle(hoverStyle); layer.bringToFront();
+            highlightedLayer = layer;
+            info.innerHTML = `<strong>${layer.feature.properties.name}</strong>`;
+            info.style.display = 'block'; info.style.opacity = '1';
+        }
+        function resetHighlight() { if (highlightedLayer) { geojson.resetStyle(highlightedLayer); highlightedLayer = null; } info.style.display = 'none'; }
+        function shiftCoords(coords, shift) {
+            if (typeof coords[0] === 'number') { coords[0] += shift; }
+            else { coords.forEach(c => shiftCoords(c, shift)); }
+        }
+
+        searchIcon.addEventListener('click', (e) => { e.stopPropagation(); searchWrapper.classList.toggle('active'); if (searchWrapper.classList.contains('active')) searchInput.focus(); });
+        searchWrapper.addEventListener('click', (e) => { if (!searchWrapper.classList.contains('active')) { searchWrapper.classList.add('active'); searchInput.focus(); } });
+
+        // Load both metadata and map data
+        Promise.all([
+            fetchCountryLinks(),
+            fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json').then(res => res.json())
+        ]).then(([_, data]) => {
+            const wrappedFeatures = [];
+            data.features.forEach(f => {
+                wrappedFeatures.push(f);
+                const left = JSON.parse(JSON.stringify(f)); shiftCoords(left.geometry.coordinates, -360); wrappedFeatures.push(left);
+                const right = JSON.parse(JSON.stringify(f)); shiftCoords(right.geometry.coordinates, 360); wrappedFeatures.push(right);
+            });
+            data.features = wrappedFeatures;
+
+            geojson = L.geoJSON(data, {
+                style: defaultStyle,
+                onEachFeature: function (feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        click: function () {
+                            const link = countryLinks[feature.properties.name];
+                            if (link) {
+                                window.location.href = link;
+                            } else {
+                                console.log('No link for:', feature.properties.name);
+                            }
+                        }
+                    });
+                }
+            }).addTo(map);
+            map.on('click', resetHighlight);
+
+            searchInput.addEventListener('input', function () {
+                const val = this.value.toLowerCase();
+                searchResults.innerHTML = '';
+                if (!val) { searchResults.style.display = 'none'; return; }
+                const matches = [...new Set(data.features.map(f => f.properties.name))].filter(n => n.toLowerCase().includes(val)).slice(0, 5);
+                if (matches.length > 0) {
+                    searchResults.style.display = 'block';
+                    matches.forEach(name => {
+                        const div = document.createElement('div');
+                        div.textContent = name;
+                        div.onclick = (e) => {
+                            e.stopPropagation(); searchInput.value = name; searchResults.style.display = 'none';
+                            geojson.eachLayer(layer => {
+                                if (layer.feature.properties.name === name) { map.flyTo(layer.getBounds().getCenter(), 5); highlightFeature({ target: layer }); }
+                            });
+                        };
+                        searchResults.appendChild(div);
+                    });
+                } else { searchResults.style.display = 'none'; }
+            });
+        });
+
+        document.addEventListener('click', (e) => { if (!searchWrapper.contains(e.target)) { searchWrapper.classList.remove('active'); searchResults.style.display = 'none'; } });
+        document.getElementById('map-zoom-in').addEventListener('click', () => map.zoomIn());
+        document.getElementById('map-zoom-out').addEventListener('click', () => map.zoomOut());
+
+        // Compatibility
+        const zIn = document.getElementById('zoom-in-btn'), zOut = document.getElementById('zoom-out-btn');
+        if (zIn) zIn.addEventListener('click', () => map.zoomIn()); if (zOut) zOut.addEventListener('click', () => map.zoomOut());
+
+        window.addEventListener('resize', () => map.invalidateSize());
+    </script>
+    <script>
+        AOS.init({
+            duration: 1500,
+            easing: 'ease-in-out-cubic',
+            once: true,
+            mirror: false
+        });
+    </script>
+    <script>
+        document.querySelectorAll(".quiz-option").forEach(option => {
+            option.addEventListener("click", function () {
+
+                document.querySelectorAll(".quiz-option").forEach(o => {
+                    o.classList.remove("active")
+                })
+
+                this.classList.add("active")
+
+            })
+        })
+    </script>
+</body>
+
+</html>

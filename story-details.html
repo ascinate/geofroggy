@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Details | Geofroggy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Global CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content Section -->
+    <div style="min-height: 100vh; padding: 40px 24px; background: #E1EFFB;">
+        <div class="page-wrapper position-relative" style="max-width: 1200px; margin: auto; padding: 80px 60px;">
+            <!-- Main Frame Background -->
+            <img src="/assets/main-maps-158.png" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: fill; z-index: 0;">
+
+            <div class="position-relative" style="z-index: 2;">
+                <!-- Header with Back Button -->
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div style="flex: 1;">
+                        <a href="javascript:history.back()" style="display: inline-flex; align-items: center; gap: 8px; color: #854d0e; text-decoration: none; font-weight: 800; margin-bottom: 15px; background: rgba(255,255,255,0.5); padding: 8px 16px; border-radius: 50px; border: 1px solid white;">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Exploration
+                        </a>
+                        <h1 id="story-title" style="font-family: 'Playfair Display', serif; font-size: 42px; color: #451a03; font-weight: 900; margin: 0; line-height: 1.2;">Loading Story...</h1>
+                        <div class="story-meta mt-3" style="display: flex; gap: 20px; color: #854d0e; font-size: 15px; font-weight: 700;">
+                            <span><i class="fa-regular fa-clock"></i> <span id="read-time">5</span> min read</span>
+                            <span><i class="fa-solid fa-tag"></i> <span id="story-category">Mystery</span></span>
+                            <span id="publish-date-container"><i class="fa-regular fa-calendar"></i> <span id="publish-date">April 25, 2026</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-5">
+                    <!-- Left Column: Content -->
+                    <div class="col-lg-7">
+                        <div class="story-content-box" style="background: rgba(255,255,255,0.4); backdrop-filter: blur(8px); border-radius: 30px; padding: 40px; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column;">
+                            <div id="story-content" style="color: #451a03; font-size: 17px; line-height: 1.8; overflow-y: auto; max-height: 500px; padding-right: 15px;">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-warning" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="story-footer mt-auto pt-4" style="border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+                                <div class="author-info d-flex align-items-center gap-3">
+                                    <img src="/assets/mascot_landscape.png" alt="Author" style="width: 50px; height: 50px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                                    <div>
+                                        <div class="fw-bold" style="color: #451a03; font-size: 16px;">Geofroggy</div>
+                                        <div class="text-muted" style="font-size: 13px;">Your Travel Companion</div>
+                                    </div>
+                                </div>
+                                <div class="share-btns d-flex gap-2">
+                                    <a href="#" class="btn btn-sm btn-light rounded-circle" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-facebook-f"></i></a>
+                                    <a href="#" class="btn btn-sm btn-light rounded-circle" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-twitter"></i></a>
+                                    <a href="#" class="btn btn-sm btn-light rounded-circle" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-link"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Hero Image -->
+                    <div class="col-lg-5 d-none d-lg-flex flex-column align-items-center">
+                        <div style="width: 100%; background: white; border-radius: 35px; padding: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-bottom: 30px;">
+                            <img id="story-banner" src="/assets/photo-1502602898657-3e91760cbb34-bg.png" alt="Story Hero" 
+                                style="width: 100%; height: 350px; object-fit: cover; border-radius: 25px; border: 1px solid #eee;">
+                        </div>
+                        
+                        <!-- Extra decorative card or metadata -->
+                        <div style="background: #fef3c7; border-radius: 24px; padding: 25px; width: 100%; border: 1px solid #fde68a; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                            <h5 style="color: #854d0e; font-weight: 800; margin-bottom: 10px;">Did you know?</h5>
+                            <p style="color: #451a03; font-size: 14px; margin: 0; line-height: 1.5;">Every story you complete earns you XP and brings you one step closer to becoming a World Explorer!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Global JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/story-details.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

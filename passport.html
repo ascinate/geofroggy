@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geofroggy Passport</title>
+    <!-- Fonts -->
+    <link href="https://unpkg.com/aos@2.3.0/dist/aos.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Quicksand:wght@300..700&family=Rubik:ital,wght@0,300..900;1,300..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+    <!-- FontAwesome for quick icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Global CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+
+    <!-- Main Content wrapper -->
+    <div class="parallax-container" style=" padding-bottom: 400px; background-image: url(/assets/bg-backgrounds.jpg);">
+        <div class="passoedr-bgs position-relative">
+
+            <div class="container position-relative">
+                <img src="/assets/passowerd-bg.png" alt="" class="pos-bgminfs w-100" />
+
+                <div class="row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <div class="lest-books w-100">
+                            <div class="top-centser d-flex align-items-center">
+                                <figure>
+                                    <img src="/assets/user-mans.png" alt="" />
+                                </figure>
+                                <div class="riht-text0158 ps-5">
+                                    <h3>Traveler</h3>
+                                    <p class="mb-1">Geo Lavel 6</p>
+                                    <div class="nuosi text-center mt-2">
+                                        <h6 class="m-0"> 495/920 </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="next-sections">
+                                <div class="row row-cols-3 gx-2  gy-lg-4">
+                                    <!-- Recent visits will be loaded dynamically here -->
+                                </div>
+                            </div>
+                            <div class="d-none d-lg-block">
+                                <a href="achievements.html"
+                                    class="d-inline-block mt-4 text-center all-hovers d-table ms-5"
+                                    style="transform: scale(0.9);">
+                                    <img src="/assets/see-btn.png" alt="See Full Collection" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="next-sections-right">
+                            <div class="row row-cols-3 gx-2 gy-lg-4">
+                                <!-- Stamps will be loaded dynamically here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-block d-lg-none">
+                    <a href="#" class="d-inline-block mt-5 text-center all-hovers d-table ms-5">
+                        <img src="/assets/see-btn.png" alt="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+
+    <!-- Offcanvas Placeholder -->
+    <div id="offcanvas-placeholder"></div>
+
+
+    <!-- Global JS -->
+    <script src="https://unpkg.com/aos@2.3.0/dist/aos.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/passport.js"></script>
+    <script src="/js/parallax.js"></script>
+    <script src="/js/demo.js"></script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 1500,
+            easing: 'ease-in-out-cubic',
+            once: true,
+            mirror: false
+        });
+    </script>
+    <script>
+        document.querySelectorAll(".quiz-option").forEach(option => {
+            option.addEventListener("click", function () {
+
+                document.querySelectorAll(".quiz-option").forEach(o => {
+                    o.classList.remove("active")
+                })
+
+                this.classList.add("active")
+
+            })
+        })
+    </script>
+</body>
+
+</html>
