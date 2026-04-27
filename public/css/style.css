@@ -3424,9 +3424,13 @@ img.profiles-uimos {
     animation-delay: 300ms;
 }
 
-@media(max-width:910px) {
-    .user-names img {
-        width: 84%;
+@media(max-width:1180px) {
+    .bg-heade {
+        height: 100%;
+    }
+
+    .navbar-toggler img {
+        width: 58%;
     }
 
     .navbar-toggler {
@@ -3434,21 +3438,34 @@ img.profiles-uimos {
         border: none !important;
     }
 
+    .cm-user-pic {
+        position: absolute;
+        left: 11%;
+        top: 19%;
+    }
+}
+
+@media(max-width:910px) {
+    .user-names img {
+        width: 84%;
+    }
+
+
+
     .user-rights {
         width: 80%;
         justify-content: space-between;
     }
 
-    .navbar-toggler img {
-        width: 58%;
-    }
+
 
     .shaosdow-box {
         display: none !important;
     }
 
-    .bg-heade {
-        height: 100%;
+
+    .testimonials {
+        perspective: 280px;
     }
 }
 
