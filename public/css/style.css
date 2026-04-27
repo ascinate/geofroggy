@@ -3532,6 +3532,13 @@ img.profiles-uimos {
     .copy-text01 {
         font-size: 12px;
     }
+
+    .lest-books {
+        position: relative;
+        z-index: 2;
+        margin-top: 310px;
+        margin-left: 70px;
+    }
 }
 
 @media(max-width:768px) {
