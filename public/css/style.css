@@ -3508,6 +3508,10 @@ img.profiles-uimos {
     .user-listr015 table {
         overflow-x: auto;
     }
+
+    .table img {
+        width: 20% !important;
+    }
 }
 
 @media(max-width:768px) {
