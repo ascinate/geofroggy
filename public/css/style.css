@@ -3516,6 +3516,22 @@ img.profiles-uimos {
     .top-stitels-01 img {
         width: 100%;
     }
+
+    .footer-bgh01 {
+        height: 100%;
+    }
+
+    footer .container {
+        max-width: 590px;
+    }
+
+    footer .container a.c-menus h5 {
+        font-size: 14px;
+    }
+
+    .copy-text01 {
+        font-size: 12px;
+    }
 }
 
 @media(max-width:768px) {
