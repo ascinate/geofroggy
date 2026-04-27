@@ -3428,6 +3428,10 @@ img.profiles-uimos {
     .user-names img {
         width: 84%;
     }
+
+    .shaosdow-box {
+        display: none !important;
+    }
 }
 
 @media(max-width:450px) {
