@@ -3475,6 +3475,39 @@ img.profiles-uimos {
         text-align: left;
         position: relative;
     }
+
+    .imags-progress-bar015 h5 {
+        position: relative;
+        top: -5px;
+    }
+
+    .img-details-text h2 {
+        font-family: "Playfair", serif;
+        font-size: 36px;
+        top: 24px;
+    }
+
+    .flower-user015 {
+        display: none !important;
+    }
+
+    .bg-new-cards h3,
+    .tops-profiles-div012 h3 {
+        font-size: 20px;
+    }
+
+    .card-modes015 thead th,
+    .card-modes015 a {
+        font-size: 15px;
+    }
+
+    .user-listr015 {
+        width: 100%;
+    }
+
+    .user-listr015 table {
+        overflow-x: auto;
+    }
 }
 
 @media(max-width:768px) {
