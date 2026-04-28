@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="panel-actions">
-                            <a href="#" class="btn-start-mission">Explore Stories <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="#" class="btn-start-mission" id="btn-try-quiz">Try Quiz <i class="fa-solid fa-arrow-right"></i></a>
                             <a href="#" class="btn-explore-another"><i class="fa-solid fa-earth-americas"></i> Explore Another Country</a>
                         </div>
                     </div>
@@ -305,6 +305,13 @@
             document.getElementById('detail-mission-count').textContent = `${country.missions_completed || 0} / ${country.total_missions || 5} Missions Completed`;
             document.getElementById('detail-pbar-fill').style.width = `${country.progress || 0}%`;
             
+            // Set quiz button link
+            const countryId = countryMap[country.name] || country.id;
+            const quizBtn = document.getElementById('btn-try-quiz');
+            if (quizBtn && countryId) {
+                quizBtn.href = `teen-quiz.html?id=${countryId}`;
+            }
+
             // Random Unsplash image for the country
             document.getElementById('detail-img').src = `https://source.unsplash.com/featured/?${encodeURIComponent(country.name)},landscape`;
         }
