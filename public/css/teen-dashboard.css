@@ -10,7 +10,7 @@
     --accent-green: #10b981;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
-    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -27,11 +27,12 @@ body {
     height: 100vh;
     width: 100vw;
     display: flex;
+    font-size: 14px;
 }
 
 /* Sidebar Styles */
 #sidebar-placeholder {
-    width: 260px;
+    width: 220px;
     height: 100vh;
     background-color: var(--sidebar-bg);
     color: white;
@@ -45,26 +46,18 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 30px 20px;
+    padding: 20px 15px;
     overflow: hidden;
 }
 
 .sidebar-logo {
-    margin-bottom: 40px;
-    padding-left: 10px;
+    margin-bottom: 25px;
+    padding-left: 5px;
 }
 
 .sidebar-logo img {
-    height: 35px;
+    height: 30px;
     width: auto;
-}
-
-.logo-geo {
-    color: white;
-}
-
-.logo-froggy {
-    color: #4ade80;
 }
 
 .sidebar-nav {
@@ -76,18 +69,19 @@ body {
 }
 
 .sidebar-nav li {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .sidebar-nav a {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 12px 15px;
-    border-radius: 12px;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
     color: #94a3b8;
     text-decoration: none;
     font-weight: 500;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
 }
 
@@ -98,30 +92,30 @@ body {
 }
 
 .sidebar-nav i {
-    font-size: 1.2rem;
-    width: 24px;
+    font-size: 1.1rem;
+    width: 20px;
     text-align: center;
 }
 
 .sidebar-bottom {
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 15px;
     text-align: center;
     position: relative;
 }
 
 .sidebar-mascot img {
-    width: 140px;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+    width: 110px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.25));
 }
 
 .sidebar-quote {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #64748b;
     font-style: italic;
-    line-height: 1.4;
-    padding: 0 10px;
+    line-height: 1.3;
+    padding: 0 5px;
 }
 
 /* Main Content Area */
@@ -135,9 +129,9 @@ body {
 
 /* Header Styles */
 #header-placeholder {
-    height: 80px;
+    height: 60px;
     background: transparent;
-    padding: 0 40px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
     z-index: 10;
@@ -153,16 +147,16 @@ body {
 .teen-portal-badge {
     background: #2d3748;
     color: white;
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 50px;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
 .header-nav ul {
     display: flex;
     list-style: none;
-    gap: 30px;
+    gap: 20px;
 }
 
 .header-nav a {
@@ -172,8 +166,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
+    gap: 3px;
+    font-size: 0.7rem;
     transition: color 0.3s;
 }
 
@@ -183,23 +177,24 @@ body {
 }
 
 .header-nav i {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .stat-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 15px;
+    gap: 8px;
+    padding: 6px 12px;
     background: white;
     border-radius: 50px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    font-size: 0.85rem;
 }
 
 .xp-badge i {
@@ -207,18 +202,19 @@ body {
 }
 
 .level-badge {
-    gap: 12px;
+    gap: 10px;
 }
 
 .level-icon {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     background: #10b981;
     color: white;
-    border-radius: 8px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.8rem;
 }
 
 .level-text {
@@ -229,44 +225,44 @@ body {
 
 .level-label {
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .level-name {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
 }
 
 .user-profile img {
-    width: 45px;
-    height: 45px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    border: 3px solid white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 /* Dashboard Content Grid */
 .dash-content {
-    padding: 0 40px 40px 40px;
+    padding: 0 25px 25px 25px;
     display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 30px;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
 }
 
 .content-left {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 /* Hero Section */
 .hero-card {
     position: relative;
-    height: 300px;
-    border-radius: 30px;
+    height: 220px;
+    border-radius: 20px;
     overflow: hidden;
     color: white;
-    padding: 40px;
+    padding: 25px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -293,38 +289,39 @@ body {
 }
 
 .hero-card h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 400;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .hero-card h1 {
-    font-size: 3.5rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .hero-card p {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     opacity: 0.9;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
 }
 
 .hero-btns {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .btn-primary-dash {
     background: var(--primary-purple);
     color: white;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 10px;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     transition: transform 0.3s;
 }
 
@@ -332,26 +329,27 @@ body {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     color: white;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 10px;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     transition: background 0.3s;
 }
 
 .recommended-pill {
     position: absolute;
-    right: 40px;
-    bottom: 40px;
+    right: 25px;
+    bottom: 25px;
     background: white;
     color: var(--text-primary);
-    padding: 15px 25px;
-    border-radius: 20px;
+    padding: 10px 15px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .recommended-info {
@@ -360,52 +358,53 @@ body {
 }
 
 .rec-label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: var(--text-muted);
 }
 
 .rec-name {
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 /* Progress Stats Section */
 .progress-stats-card {
     background: white;
-    border-radius: 25px;
-    padding: 30px;
+    border-radius: 20px;
+    padding: 15px 25px;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
     box-shadow: var(--card-shadow);
 }
 
 .lvl-box {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     flex-grow: 1;
 }
 
 .lvl-badge-large {
-    width: 70px;
-    height: 70px;
+    width: 55px;
+    height: 55px;
     background: #10b981;
     color: white;
-    border-radius: 15px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-weight: 800;
+    flex-shrink: 0;
 }
 
 .lvl-badge-large .lvl-num {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
 }
 
 .lvl-badge-large .lvl-txt {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     text-transform: uppercase;
 }
 
@@ -416,12 +415,13 @@ body {
 .lvl-progress-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-weight: 700;
+    font-size: 0.9rem;
 }
 
 .progress-bar-container {
-    height: 10px;
+    height: 8px;
     background: #e2e8f0;
     border-radius: 50px;
     overflow: hidden;
@@ -435,8 +435,8 @@ body {
 }
 
 .xp-needed {
-    margin-top: 8px;
-    font-size: 0.75rem;
+    margin-top: 5px;
+    font-size: 0.7rem;
     color: var(--text-muted);
     text-align: right;
 }
@@ -444,19 +444,19 @@ body {
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    padding-left: 40px;
+    gap: 20px;
+    padding-left: 25px;
     border-left: 1px solid #e2e8f0;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .stat-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 .stat-val {
@@ -466,11 +466,11 @@ body {
 
 .stat-number {
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
 }
 
 .stat-label {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
 }
 
@@ -479,11 +479,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .section-header h2 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 800;
 }
 
@@ -491,18 +491,18 @@ body {
     color: var(--primary-purple);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .missions-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
 }
 
 .mission-card {
     background: white;
-    border-radius: 25px;
+    border-radius: 18px;
     overflow: hidden;
     box-shadow: var(--card-shadow);
     display: flex;
@@ -512,11 +512,11 @@ body {
 }
 
 .mission-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 .mission-img-wrapper {
-    height: 140px;
+    height: 110px;
     position: relative;
 }
 
@@ -528,29 +528,29 @@ body {
 
 .mission-flag {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 30px;
-    height: 30px;
+    top: 10px;
+    left: 10px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     border: 2px solid white;
 }
 
 .mission-body {
-    padding: 20px;
+    padding: 12px;
 }
 
 .mission-title {
     font-weight: 800;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
 }
 
 .mission-progress {
-    height: 6px;
+    height: 5px;
     background: #e2e8f0;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .mission-progress-fill {
@@ -563,15 +563,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .difficulty-tag {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 .easy {
@@ -588,18 +588,18 @@ body {
 
 .xp-reward {
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
 }
 
 .btn-continue {
     background: #eef2ff;
     color: var(--primary-purple);
     text-align: center;
-    padding: 10px;
-    border-radius: 12px;
+    padding: 8px;
+    border-radius: 10px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     transition: all 0.3s;
 }
 
@@ -626,41 +626,43 @@ body {
 }
 
 .lock-circle {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     background: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-primary);
+    font-size: 0.8rem;
 }
 
 /* Quick Challenges */
 .challenges-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
 }
 
 .challenge-item {
     background: white;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 12px;
+    border-radius: 15px;
     box-shadow: var(--card-shadow);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .challenge-icon-box {
-    width: 50px;
-    height: 50px;
-    border-radius: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .orange-bg {
@@ -690,27 +692,27 @@ body {
 
 .challenge-name {
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 .challenge-meta {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
 /* Right Column Styles */
 .content-right {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .right-card {
     background: white;
-    border-radius: 25px;
-    padding: 25px;
+    border-radius: 20px;
+    padding: 15px;
     box-shadow: var(--card-shadow);
 }
 
@@ -723,49 +725,50 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .timer {
     color: var(--primary-purple);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
 }
 
 .daily-content {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .daily-icon {
-    font-size: 3rem;
+    font-size: 2.2rem;
     color: var(--primary-purple);
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .daily-title {
     font-weight: 800;
-    font-size: 1.2rem;
-    margin-bottom: 5px;
+    font-size: 1.1rem;
+    margin-bottom: 3px;
 }
 
 .daily-desc {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
 .daily-rewards {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 18px;
 }
 
 .reward-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-weight: 700;
+    font-size: 0.85rem;
 }
 
 .btn-start-challenge {
@@ -773,10 +776,11 @@ body {
     background: var(--primary-purple);
     color: white;
     text-align: center;
-    padding: 15px;
-    border-radius: 15px;
+    padding: 12px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
+    font-size: 0.9rem;
     transition: transform 0.3s;
 }
 
@@ -784,38 +788,40 @@ body {
 .leaderboard-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
 }
 
 .leader-item {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 10px;
-    border-radius: 15px;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 12px;
 }
 
 .leader-rank {
     font-weight: 800;
-    width: 20px;
+    width: 18px;
     color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
 .leader-avatar {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
 }
 
 .leader-name {
     font-weight: 700;
     flex-grow: 1;
+    font-size: 0.85rem;
 }
 
 .leader-xp {
     font-weight: 800;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .leader-item.user-row {
@@ -831,7 +837,7 @@ body {
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 10px;
 }
 
 .badge-item {
@@ -839,14 +845,14 @@ body {
 }
 
 .badge-icon {
-    width: 50px;
-    height: 50px;
-    margin: 0 auto 8px;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    border-radius: 12px;
+    font-size: 1.2rem;
+    border-radius: 10px;
 }
 
 .badge-item.locked {
@@ -855,7 +861,7 @@ body {
 }
 
 .badge-name {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 700;
     color: var(--text-muted);
 }
@@ -863,7 +869,7 @@ body {
 /* Footer Styles */
 .teen-dash-footer {
     margin-top: auto;
-    padding: 20px 40px;
+    padding: 15px 25px;
     background: transparent;
 }
 
@@ -871,12 +877,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 20px;
+    padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .copyright {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     margin: 0;
 }
@@ -888,12 +894,12 @@ body {
 
 .footer-nav {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 .footer-nav a {
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--primary-blue);
     font-weight: 600;
     transition: opacity 0.3s;
@@ -905,7 +911,7 @@ body {
 
 /* Scrollbar Customization */
 .main-wrapper::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .main-wrapper::-webkit-scrollbar-track {
@@ -919,4 +925,30 @@ body {
 
 .main-wrapper::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1400px) {
+    .dash-content {
+        grid-template-columns: 1fr;
+    }
+    .content-right {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    #sidebar-placeholder {
+        width: 70px;
+    }
+    .sidebar-nav span, .sidebar-logo, .sidebar-quote, .sidebar-mascot {
+        display: none;
+    }
+    .sidebar-container {
+        padding: 15px 10px;
+    }
+    .content-right {
+        grid-template-columns: 1fr;
+    }
 }
