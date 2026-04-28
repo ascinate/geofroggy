@@ -43,15 +43,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            const quizData = quizzes[0];
-            
-            // Check for previous attempt (Resuming logic)
-            const previousAttempt = await checkPreviousAttempt(quizData.id);
+            // 1. Prepare Data Immediately
+            currentQuiz = quizzes[0];
+            currentQuiz.questions = currentQuiz.questions.map(q => {
+                if (typeof q.question === 'string') {
+                    try {
+                        return { ...q, data: JSON.parse(q.question) };
+                    } catch (e) {
+                        return { ...q, data: { question: q.question, options: {}, correct: '' } };
+                    }
+                }
+                return { ...q, data: q.question };
+            });
+
+            // 2. Check for previous attempt (Resuming logic)
+            const previousAttempt = await checkPreviousAttempt(currentQuiz.id);
             if (previousAttempt && previousAttempt.id) {
                 console.log('Previous attempt found:', previousAttempt);
                 if (previousAttempt.completed) {
                     score = previousAttempt.score;
-                    initializeQuiz(quizData, true);
                     showResults(true); // Already completed
                     return;
                 } else {
@@ -60,15 +70,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     userAnswers = Array.isArray(previousAttempt.answers) ? previousAttempt.answers : [];
                     currentQuestionIndex = userAnswers.length;
                     
-                    if (currentQuestionIndex >= quizData.questions.length) {
-                        initializeQuiz(quizData, true);
+                    if (currentQuestionIndex >= currentQuiz.questions.length) {
                         showResults(false);
                         return;
                     }
                 }
             }
 
-            initializeQuiz(quizData);
+            // 3. Initialize UI only if playing
+            initializeQuizUI();
         } catch (err) {
             console.error('Quiz loading error:', err);
             alert('Error loading quiz. Please try again.');
@@ -76,22 +86,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function initializeQuiz(quizData, isCompleted = false) {
-        currentQuiz = quizData;
-        
-        // Parse questions
-        currentQuiz.questions = currentQuiz.questions.map(q => {
-            if (typeof q.question === 'string') {
-                try {
-                    return { ...q, data: JSON.parse(q.question) };
-                } catch (e) {
-                    return { ...q, data: { question: q.question, options: {}, correct: '' } };
-                }
-            }
-            return { ...q, data: q.question };
-        });
-
-        // Set Header Info - Prefer title if available, otherwise country_name
+    function initializeQuizUI() {
+        // Set Header Info
         document.getElementById('quiz-country-name').textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
         document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
         
@@ -100,15 +96,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Update UI for resumed attempts
         if (userAnswers.length > 0) {
             const currentAccuracy = Math.round((score / userAnswers.length) * 100);
-            document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
+            const accuracyEl = document.getElementById('current-accuracy');
+            if (accuracyEl) accuracyEl.textContent = `${currentAccuracy}%`;
         }
         
-        if (!isCompleted) {
-            renderQuestion();
-        }
-        
+        renderQuestion();
         quizLoader.style.display = 'none';
-        console.log("Quiz Initialized:", currentQuiz);
+        console.log("Quiz UI Initialized");
     }
 
     async function fetchCountryFlag(id) {
