@@ -23,6 +23,7 @@ export default defineConfig({
                 portalSelection: 'portal-selection.html',
                 teenLogin: 'teen-login.html',
                 teenDashboard: 'teen-dashboard.html',
+                teenMap: 'teen-map.html',
             }
         }
     }

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore the World - GeoFroggy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-map.css">
+</head>
+
+<body>
+    <!-- Sidebar Component -->
+    <div id="sidebar-placeholder"></div>
+
+    <div class="main-wrapper">
+        <!-- Header Component -->
+        <div id="header-placeholder"></div>
+
+        <main class="map-page-content">
+            <!-- Left Area: Map + Journey -->
+            <div class="map-main-area">
+                <div class="map-header-info">
+                    <div class="map-title-box">
+                        <h1>Explore the World</h1>
+                        <p>Select a country to discover, learn and complete missions.</p>
+                    </div>
+                    <div class="map-search-filter">
+                        <div class="search-input-group">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="map-search" placeholder="Search country...">
+                        </div>
+                        <button class="btn-filter"><i class="fa-solid fa-filter"></i> Filter</button>
+                    </div>
+                </div>
+
+                <div class="map-container-wrapper">
+                    <div id="map"></div>
+                    
+                    <div class="map-legend">
+                        <div class="legend-item"><span class="dot not-started"></span> Not Started</div>
+                        <div class="legend-item"><span class="dot in-progress"></span> In Progress</div>
+                        <div class="legend-item"><span class="dot completed"></span> Completed</div>
+                        <div class="legend-item"><span class="dot locked"></span> Locked</div>
+                    </div>
+
+                    <button class="btn-heatmap"><i class="fa-solid fa-chart-line"></i> View Heatmap</button>
+                </div>
+
+                <div class="journey-section">
+                    <div class="section-header">
+                        <h2>Continue Your Journey</h2>
+                        <a href="#" class="view-all">View all</a>
+                    </div>
+                    <div class="journey-grid">
+                        <div class="journey-card">
+                            <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&q=80&w=400" class="journey-card-bg">
+                            <div class="journey-card-overlay"></div>
+                            <div class="journey-card-content">
+                                <div class="journey-card-header">
+                                    <img src="https://flagcdn.com/w80/br.png" class="journey-flag">
+                                    <span class="journey-progress">30%</span>
+                                </div>
+                                <div class="journey-name">Brazil</div>
+                                <div class="journey-pbar">
+                                    <div class="journey-pbar-fill" style="width: 30%;"></div>
+                                </div>
+                                <div class="journey-meta">
+                                    <span class="journey-missions">2 / 6 Missions</span>
+                                    <span class="journey-difficulty"><i class="fa-solid fa-star" style="color:#f59e0b"></i> Medium</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-card">
+                            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=400" class="journey-card-bg">
+                            <div class="journey-card-overlay"></div>
+                            <div class="journey-card-content">
+                                <div class="journey-card-header">
+                                    <img src="https://flagcdn.com/w80/fr.png" class="journey-flag">
+                                    <span class="journey-progress">80%</span>
+                                </div>
+                                <div class="journey-name">France</div>
+                                <div class="journey-pbar">
+                                    <div class="journey-pbar-fill" style="width: 80%;"></div>
+                                </div>
+                                <div class="journey-meta">
+                                    <span class="journey-missions">4 / 5 Missions</span>
+                                    <span class="journey-difficulty"><i class="fa-solid fa-star" style="color:#10b981"></i> Easy</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-card">
+                            <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=400" class="journey-card-bg">
+                            <div class="journey-card-overlay"></div>
+                            <div class="journey-card-content">
+                                <div class="journey-card-header">
+                                    <img src="https://flagcdn.com/w80/eg.png" class="journey-flag">
+                                    <span class="journey-progress">10%</span>
+                                </div>
+                                <div class="journey-name">Egypt</div>
+                                <div class="journey-pbar">
+                                    <div class="journey-pbar-fill" style="width: 10%;"></div>
+                                </div>
+                                <div class="journey-meta">
+                                    <span class="journey-missions">1 / 5 Missions</span>
+                                    <span class="journey-difficulty"><i class="fa-solid fa-star" style="color:#ef4444"></i> Hard</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-card add-country-card">
+                            <div class="add-icon-box">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <div style="font-weight: 800; font-size: 0.9rem; color: #1e293b;">Add New Country</div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Discover new places and start learning!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Area: Country Details -->
+            <aside class="map-right-panel" id="country-panel">
+                <div class="panel-loader" id="panel-loader">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+
+                <div id="panel-content-placeholder" class="h-100 d-flex flex-column">
+                    <div class="country-detail-img-box">
+                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=400" class="country-detail-img" id="detail-img">
+                    </div>
+                    <div class="country-detail-header">
+                        <div class="country-title-row">
+                            <div class="country-name-flag">
+                                <img src="https://flagcdn.com/w80/jp.png" id="detail-flag">
+                                <h2 id="detail-name">Japan</h2>
+                            </div>
+                            <span class="country-percent-badge" id="detail-percent">60% Completed</span>
+                        </div>
+                        <div class="country-stats-row">
+                            <div class="difficulty-rating">
+                                Difficulty: <span id="detail-difficulty" style="color: #f59e0b;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i></span>
+                            </div>
+                            <div class="xp-reward-text">
+                                XP Reward: <span id="detail-xp">+120 XP</span>
+                            </div>
+                        </div>
+                        <p class="country-desc" id="detail-desc">A beautiful island country in East Asia known for its rich culture, advanced technology and amazing food.</p>
+                        
+                        <div class="progress-section">
+                            <div class="progress-label">
+                                <span>Your Progress</span>
+                                <span class="progress-missions-count" id="detail-mission-count">3 / 5 Missions Completed</span>
+                            </div>
+                            <div class="detail-pbar">
+                                <div class="detail-pbar-fill" id="detail-pbar-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="missions-list" id="detail-missions-list">
+                            <div class="mission-item">
+                                <div class="mission-icon" style="background: #f0fdf4; color: #10b981;"><i class="fa-solid fa-shield-halved"></i></div>
+                                <div class="mission-info">
+                                    <h4>Capital Challenge</h4>
+                                    <p>Test your knowledge of the capital</p>
+                                </div>
+                                <div class="mission-status">
+                                    <span class="mission-xp">+20 XP</span>
+                                    <span class="status-label completed"><i class="fa-solid fa-circle-check"></i> Completed</span>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <div class="mission-icon" style="background: #f5f3ff; color: #8b5cf6;"><i class="fa-solid fa-city"></i></div>
+                                <div class="mission-info">
+                                    <h4>Major Cities</h4>
+                                    <p>Learn about Japan's major cities</p>
+                                </div>
+                                <div class="mission-status">
+                                    <span class="mission-xp">+20 XP</span>
+                                    <span class="status-label completed"><i class="fa-solid fa-circle-check"></i> Completed</span>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <div class="mission-icon" style="background: #fffbeb; color: #f59e0b;"><i class="fa-solid fa-landmark"></i></div>
+                                <div class="mission-info">
+                                    <h4>Culture & Traditions</h4>
+                                    <p>Explore Japanese culture</p>
+                                </div>
+                                <div class="mission-status">
+                                    <span class="mission-xp">+30 XP</span>
+                                    <span class="status-label in-progress"><i class="fa-solid fa-circle-dot"></i> In Progress</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-actions">
+                            <a href="#" class="btn-start-mission">Start Next Mission <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="#" class="btn-explore-another"><i class="fa-solid fa-earth-americas"></i> Explore Another Country</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="panel-empty-state" class="h-100 flex-column align-items-center justify-content-center p-4 text-center" style="display: none;">
+                    <div class="empty-icon" style="font-size: 3rem; color: #e2e8f0; margin-bottom: 20px;"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h3>Select a Country</h3>
+                    <p style="color: #64748b;">Click on a country on the map to see its details and available missions.</p>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer Placeholder -->
+        <div id="footer-placeholder"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+
+    <script>
+        // Initialize Map
+        const map = L.map('map', {
+            zoomControl: false,
+            worldCopyJump: true,
+            minZoom: 2.2,
+            maxBounds: [[-85, -540], [85, 540]]
+        }).setView([20, 0], 2.2);
+
+        // Map Tile Layer
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            noWrap: false,
+            attribution: 'Tiles © Esri'
+        }).addTo(map);
+
+        let geojson;
+        let highlightedLayer = null;
+
+        const defaultStyle = {
+            color: 'rgba(255,255,255,0.4)',
+            weight: 0.5,
+            fillColor: '#000',
+            fillOpacity: 0.05
+        };
+
+        const hoverStyle = {
+            weight: 1.5,
+            color: '#fff',
+            fillColor: '#6366f1',
+            fillOpacity: 0.3
+        };
+
+        function onCountryClick(e) {
+            const layer = e.target;
+            const countryName = layer.feature.properties.name;
+            
+            if (highlightedLayer) geojson.resetStyle(highlightedLayer);
+            layer.setStyle(hoverStyle);
+            highlightedLayer = layer;
+            
+            map.flyTo(layer.getBounds().getCenter(), 4);
+            fetchCountryDetails(countryName);
+        }
+
+        async function fetchCountryDetails(name) {
+            const loader = document.getElementById('panel-loader');
+            const content = document.getElementById('panel-content-placeholder');
+            const empty = document.getElementById('panel-empty-state');
+            
+            loader.style.display = 'flex';
+            content.style.opacity = '0.5';
+            empty.style.display = 'none';
+
+            try {
+                const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/country/${encodeURIComponent(name)}`);
+                if (response.ok) {
+                    const country = await response.json();
+                    updateRightPanel(country);
+                } else {
+                    // Mock data for demo if API fails
+                    updateRightPanel({
+                        name: name,
+                        description: `Discover the wonders of ${name}. Explore its geography, history, and culture through exciting missions.`,
+                        xp_reward: 120,
+                        difficulty: 'Medium',
+                        progress: 0,
+                        missions_completed: 0,
+                        total_missions: 5
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch country details:", err);
+            } finally {
+                loader.style.display = 'none';
+                content.style.opacity = '1';
+                content.style.display = 'flex';
+            }
+        }
+
+        function updateRightPanel(country) {
+            document.getElementById('detail-name').textContent = country.name;
+            document.getElementById('detail-flag').src = `https://flagcdn.com/w80/${getCountryCode(country.name)}.png`;
+            document.getElementById('detail-desc').textContent = country.description;
+            document.getElementById('detail-xp').textContent = `+${country.xp_reward || 120} XP`;
+            document.getElementById('detail-percent').textContent = `${country.progress || 0}% Completed`;
+            document.getElementById('detail-mission-count').textContent = `${country.missions_completed || 0} / ${country.total_missions || 5} Missions Completed`;
+            document.getElementById('detail-pbar-fill').style.width = `${country.progress || 0}%`;
+            
+            // Random Unsplash image for the country
+            document.getElementById('detail-img').src = `https://source.unsplash.com/featured/?${encodeURIComponent(country.name)},landscape`;
+        }
+
+        function getCountryCode(name) {
+            // Simplified mapping for demo. In production, this should come from the API.
+            const codes = { 'Japan': 'jp', 'Brazil': 'br', 'France': 'fr', 'Egypt': 'eg', 'India': 'in', 'USA': 'us', 'China': 'cn' };
+            return codes[name] || 'un';
+        }
+
+        // Load Map Data
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(res => res.json())
+            .then(data => {
+                geojson = L.geoJSON(data, {
+                    style: defaultStyle,
+                    onEachFeature: function (feature, layer) {
+                        layer.on({
+                            mouseover: (e) => {
+                                if (highlightedLayer !== layer) layer.setStyle(hoverStyle);
+                            },
+                            mouseout: (e) => {
+                                if (highlightedLayer !== layer) geojson.resetStyle(layer);
+                            },
+                            click: onCountryClick
+                        });
+                    }
+                }).addTo(map);
+            });
+
+        // Search logic
+        document.getElementById('map-search').addEventListener('input', function(e) {
+            const val = this.value.toLowerCase();
+            if (!val) return;
+            
+            geojson.eachLayer(layer => {
+                if (layer.feature.properties.name.toLowerCase().includes(val)) {
+                    map.flyTo(layer.getBounds().getCenter(), 3);
+                    onCountryClick({ target: layer });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
