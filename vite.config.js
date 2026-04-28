@@ -21,6 +21,7 @@ export default defineConfig({
                 profile: 'profile.html',
                 storyDetails: 'story-details.html',
                 portalSelection: 'portal-selection.html',
+                teenLogin: 'teen-login.html',
             }
         }
     }
