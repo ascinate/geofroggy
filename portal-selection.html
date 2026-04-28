@@ -130,24 +130,28 @@
 
         .portal-card-content {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            bottom: 20px; /* Offset from bottom of the frame */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; /* Inner paper card width */
+            height: 75%; /* Inner paper card height */
             z-index: 3;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 30px;
+            padding: 30px 25px;
             text-align: center;
+            background-image: url('/assets/paper-card.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
         }
 
         .portal-card-title {
             font-family: 'Playfair', serif;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 800;
-            margin-top: 50px;
-            margin-bottom: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .kids-title { color: #2E7D32; }
@@ -156,14 +160,14 @@
         .portal-badge {
             font-family: 'Nunito', sans-serif;
             font-weight: 700;
-            font-size: 0.9rem;
-            padding: 6px 20px;
-            border-radius: 50px;
+            font-size: 0.85rem;
+            padding: 4px 15px;
+            border-radius: 5px; /* More squared as seen in image */
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            gap: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .kids-badge { background-color: #4CAF50; color: white; }
@@ -172,29 +176,35 @@
         .portal-features {
             list-style: none;
             padding: 0;
-            margin: 0 0 30px 0;
+            margin: 0 0 20px 0;
             width: 100%;
             text-align: left;
         }
 
         .feature-item {
             display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 18px;
+            align-items: center; /* Centered icons as in image */
+            gap: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 8px;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
         }
 
         .feature-icon {
-            width: 40px;
-            height: 40px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .kids-icon-1 { background-color: #9575CD; }
