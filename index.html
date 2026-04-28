@@ -36,7 +36,7 @@
             <img src="/assets/faceoff.png" alt="" class="cm-user-pic d-none d-lg-block" data-aos="fade-down" />
             <h1 class="col-lg-9 mx-auto" data-aos="fade-down"> Embark on World of Learning <br /> with GeoFroggy! </h1>
             <p data-aos="fade-down"> Fun quizzes, friendly rewards and 250+ countries to explore! </p>
-            <a href="#" class="btn stratbtn-expolrs mb-5" data-aos="fade-up">
+            <a href="#" id="home-explore" class="btn stratbtn-expolrs mb-5" data-aos="fade-up">
                 <img src="/assets/start-btn.png" alt="" />
                 <!-- Start Exploring -->
             </a>
@@ -408,6 +408,13 @@
 
         document.querySelectorAll(".reveal-top, .reveal-bottom")
             .forEach(el => observer.observe(el));
+    </script>
+    <script>
+        if (!localStorage.getItem('token')) {
+            console.log("token not found");
+        } else {
+            console.log("token found");
+        }
     </script>
 </body>
 
