@@ -20,7 +20,7 @@ export default defineConfig({
                 dashboard: 'dashboard.html',
                 profile: 'profile.html',
                 storyDetails: 'story-details.html',
-                portal: 'portal-selection.html',
+                portalSelection: 'portal-selection.html',
             }
         }
     }
