@@ -651,7 +651,12 @@
                     showAlert("success", "Login Successful. Redirecting...");
                     localStorage.setItem("token", data.session.access_token);
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    setTimeout(() => window.location.href = "/dashboard.html", 1500);
+                    
+                    // Conditional redirection based on age group
+                    const ageGroup = data.user.age_group ? data.user.age_group.toLowerCase() : 'teen';
+                    const targetPage = ageGroup === 'child' ? "/dashboard.html" : "/teen-dashboard.html";
+                    
+                    setTimeout(() => window.location.href = targetPage, 1500);
                 } else {
                     showAlert("error", data.error || "Login Failed");
                 }
