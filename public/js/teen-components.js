@@ -171,4 +171,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Set active links after all components are loaded
     setActiveLinks();
+
+    // Add logout functionality
+    const logoutBtn = document.getElementById('sidebar-logout');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                window.location.href = 'teen-login.html';
+            }
+        });
+    }
 });
