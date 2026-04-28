@@ -37,12 +37,14 @@
             flex-direction: column;
             color: var(--text-light);
             overflow-x: hidden;
-            overflow-y: auto; /* Allow scroll if content exceeds viewport */
+            overflow-y: auto;
+            /* Allow scroll if content exceeds viewport */
         }
 
         @media (min-width: 993px) {
             body {
-                overflow: hidden; /* Compact for desktop */
+                overflow: hidden;
+                /* Compact for desktop */
             }
         }
 
@@ -222,7 +224,8 @@
             background: #f1f5f9;
             color: #0f172a;
             border-color: #e2e8f0;
-            appearance: none; /* For select elements */
+            appearance: none;
+            /* For select elements */
             background-image: none;
         }
 
@@ -406,7 +409,8 @@
                 background: transparent;
             }
 
-            .login-side, .register-side {
+            .login-side,
+            .register-side {
                 border-radius: 30px !important;
                 display: none;
                 padding: 30px 25px;
@@ -414,7 +418,8 @@
                 border: 1px solid rgba(255, 255, 255, 0.1) !important;
             }
 
-            .login-side.active, .register-side.active {
+            .login-side.active,
+            .register-side.active {
                 display: flex;
             }
 
@@ -529,7 +534,7 @@
 
                 <form id="teenRegisterForm">
                     <span class="form-section-title">Create New Account</span>
-                    
+
                     <div class="input-group">
                         <i class="fa-regular fa-user"></i>
                         <input type="text" class="form-control" placeholder="Username" id="reg-username" required>
@@ -651,11 +656,11 @@
                     showAlert("success", "Login Successful. Redirecting...");
                     localStorage.setItem("token", data.session.access_token);
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    
+
                     // Conditional redirection based on age group
-                    const ageGroup = data.user.age_group ? data.user.age_group.toLowerCase() : 'teen';
+                    const ageGroup = data.profile.age_group ? data.profile.age_group.toLowerCase() : 'teen';
                     const targetPage = ageGroup === 'child' ? "/dashboard.html" : "/teen-dashboard.html";
-                    
+
                     setTimeout(() => window.location.href = targetPage, 1500);
                 } else {
                     showAlert("error", data.error || "Login Failed");
