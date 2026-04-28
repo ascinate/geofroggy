@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (headerRank) headerRank.textContent = profile.role || 'Explorer';
 
         const headerAvatar = document.getElementById("header-avatar");
-        if (headerAvatar && user.avatar_url) {
-            headerAvatar.src = user.avatar_url;
+        if (headerAvatar) {
+            headerAvatar.src = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username || 'User')}&background=random&color=fff`;
         }
     }
 
