@@ -8,12 +8,13 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Global CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    
+
     <style>
         :root {
             --primary-blue: #2563eb;
@@ -35,7 +36,14 @@
             display: flex;
             flex-direction: column;
             color: var(--text-light);
-            overflow: hidden; /* Prevent scrolling */
+            overflow-x: hidden;
+            overflow-y: auto; /* Allow scroll if content exceeds viewport */
+        }
+
+        @media (min-width: 993px) {
+            body {
+                overflow: hidden; /* Compact for desktop */
+            }
         }
 
         /* Header Styles */
@@ -148,13 +156,13 @@
             top: 50px;
             right: -50px;
             width: 220px;
-            z-index: 5;
+            z-index: -1;
             pointer-events: none;
         }
 
         .mascot-container img {
             width: 100%;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
         }
 
         /* Form Controls */
@@ -335,30 +343,74 @@
             }
         }
 
+        /* Mobile Toggle UI */
+        .mobile-tabs {
+            display: none;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 5px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            width: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            padding: 8px 30px;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
         @media (max-width: 992px) {
             header {
-                padding: 20px;
+                padding: 15px 20px;
             }
+
+            .mobile-tabs {
+                display: flex;
+            }
+
             .auth-card {
                 flex-direction: column;
-                max-width: 550px;
+                max-width: 500px;
+                min-height: auto;
+                box-shadow: none;
+                background: transparent;
             }
-            .login-side {
-                border-radius: 40px 40px 0 0;
-                padding: 40px 30px;
+
+            .login-side, .register-side {
+                border-radius: 30px !important;
+                display: none;
+                padding: 30px 25px;
+                border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
             }
-            .register-side {
-                border-radius: 0 0 40px 40px;
-                padding: 40px 30px;
+
+            .login-side.active, .register-side.active {
+                display: flex;
             }
+
             .or-divider {
-                top: auto;
-                bottom: -28px;
-                left: 50%;
                 display: none;
             }
+
             .side-header h1 {
-                font-size: 2.8rem;
+                font-size: 2.2rem;
+            }
+
+            .mascot-container {
+                display: none;
             }
         }
 
@@ -374,11 +426,13 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.1);
         }
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
         }
     </style>
@@ -394,12 +448,18 @@
     </header>
 
     <main>
+        <!-- Mobile Tabs -->
+        <div class="mobile-tabs">
+            <button class="tab-btn active" id="login-tab" onclick="switchMobileTab('login')">Log In</button>
+            <button class="tab-btn" id="register-tab" onclick="switchMobileTab('register')">Sign Up</button>
+        </div>
+
         <div class="auth-card">
             <!-- OR Divider -->
             <div class="or-divider">OR</div>
 
             <!-- Login Side -->
-            <div class="login-side">
+            <div class="login-side active" id="login-section">
                 <div class="mascot-container">
                     <img src="/assets/Teen-frog.png" alt="Teen Frog Mascot">
                 </div>
@@ -412,7 +472,7 @@
 
                 <form id="teenLoginForm">
                     <span class="form-section-title">Log In To Your Account</span>
-                    
+
                     <div class="input-group">
                         <i class="fa-regular fa-envelope"></i>
                         <input type="email" class="form-control" placeholder="Email address" id="login-email" required>
@@ -443,7 +503,7 @@
             </div>
 
             <!-- Register Side -->
-            <div class="register-side">
+            <div class="register-side" id="register-section">
                 <div class="side-header">
                     <span class="welcome-text">Start Your Adventure,</span>
                     <h1>Explorer!</h1>
@@ -452,7 +512,7 @@
 
                 <form id="teenRegisterForm">
                     <span class="form-section-title">Create New Account</span>
-                    
+
                     <div class="input-group">
                         <i class="fa-regular fa-user"></i>
                         <input type="text" class="form-control" placeholder="Full name" id="reg-username" required>
@@ -471,14 +531,16 @@
 
                     <div class="input-group">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" class="form-control" placeholder="Confirm password" id="reg-confirm" required>
+                        <input type="password" class="form-control" placeholder="Confirm password" id="reg-confirm"
+                            required>
                         <i class="fa-regular fa-eye eye-toggle" onclick="togglePassword('reg-confirm')"></i>
                     </div>
 
                     <div class="form-options mb-4">
                         <label style="font-size: 0.85rem; align-items: flex-start;">
                             <input type="checkbox" required style="margin-top: 3px;">
-                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span>
+                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+                                    Policy</a>.</span>
                         </label>
                     </div>
 
@@ -487,7 +549,8 @@
                     </button>
 
                     <div class="form-footer mt-4">
-                        Already have an account? <a href="#" onclick="focusLogin()" style="color: var(--primary-blue); font-weight: 700;">Log in</a>
+                        Already have an account? <a href="#" onclick="focusLogin()"
+                            style="color: var(--primary-blue); font-weight: 700;">Log in</a>
                     </div>
                 </form>
             </div>
@@ -500,6 +563,25 @@
     <script src="/js/alert.js"></script>
 
     <script>
+        function switchMobileTab(tab) {
+            const loginSection = document.getElementById('login-section');
+            const registerSection = document.getElementById('register-section');
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+
+            if (tab === 'login') {
+                loginSection.classList.add('active');
+                registerSection.classList.remove('active');
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+            } else {
+                loginSection.classList.remove('active');
+                registerSection.classList.add('active');
+                loginTab.classList.remove('active');
+                registerTab.classList.add('active');
+            }
+        }
+
         function togglePassword(id) {
             const input = document.getElementById(id);
             const icon = input.nextElementSibling.nextElementSibling || input.nextElementSibling;
@@ -564,12 +646,12 @@
                 const res = await fetch(`${baseUrl}/api/auth/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username, 
-                        email, 
-                        password, 
-                        age_group: 'Teen', 
-                        role: 'user' 
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                        age_group: 'Teen',
+                        role: 'user'
                     })
                 });
                 const data = await res.json();
@@ -587,4 +669,3 @@
 </body>
 
 </html>
-
