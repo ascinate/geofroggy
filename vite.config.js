@@ -25,6 +25,8 @@ export default defineConfig({
                 teenDashboard: 'teen-dashboard.html',
                 teenMap: 'teen-map.html',
                 teenQuiz: 'teen-quiz.html',
+                teenStories: 'teen-stories.html',
+                teenStoryDetails: 'teen-story-details.html',
             }
         }
     }

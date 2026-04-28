@@ -250,6 +250,11 @@ body {
     gap: 20px;
 }
 
+.dash-content-full {
+    padding: 25px;
+    width: 100%;
+}
+
 .content-left {
     display: flex;
     flex-direction: column;
