@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges - GeoFroggy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-challenges.css">
+</head>
+
+<body>
+    <!-- Sidebar Component -->
+    <div id="sidebar-placeholder"></div>
+
+    <div class="main-wrapper">
+        <!-- Header Component -->
+        <div id="header-placeholder"></div>
+
+        <main class="dash-content-full">
+            <!-- Hero Section -->
+            <section class="challenges-hero">
+                <img src="/assets/challenges-hero.png" alt="Challenges Hero" class="challenges-hero-bg">
+                <div class="challenges-hero-content">
+                    <h1>Challenges</h1>
+                    <p>Choose a challenge category and level up your knowledge!</p>
+                </div>
+
+                <!-- Floating Stats -->
+                <div class="hero-stat-card streak-card">
+                    <div class="streak-val"><i class="fa-solid fa-fire" style="color: #f97316;"></i> 3</div>
+                    <div class="streak-label">Day Streak</div>
+                    <div class="streak-msg">Keep it up!</div>
+                </div>
+
+                <img src="https://cdn-icons-png.flaticon.com/512/869/869113.png" alt="Compass" class="hero-compass">
+
+                <div class="hero-stat-card points-card">
+                    <div class="points-icon-hex">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div class="points-info">
+                        <div class="points-header">
+                            <span class="points-label">Challenge Points</span>
+                            <span class="points-val">1,240 XP</span>
+                        </div>
+                        <div class="points-progress">
+                            <div class="points-progress-fill"></div>
+                        </div>
+                        <span class="points-next-lv">650 XP to Level 6</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs-container">
+                <button class="category-tab active"><i class="fa-solid fa-border-all"></i> All Challenges</button>
+                <button class="category-tab"><i class="fa-solid fa-brain"></i> Knowledge</button>
+                <button class="category-tab"><i class="fa-solid fa-earth-americas"></i> Geography</button>
+                <button class="category-tab"><i class="fa-solid fa-masks-theater"></i> Culture</button>
+                <button class="category-tab"><i class="fa-solid fa-monument"></i> History</button>
+                <button class="category-tab"><i class="fa-solid fa-flask"></i> Science</button>
+            </div>
+
+            <!-- Challenges Grid -->
+            <div class="challenges-grid-main">
+                <!-- Challenge 1 -->
+                <div class="challenge-main-card">
+                    <div class="challenge-img-box">
+                        <img src="https://images.unsplash.com/photo-1548013146-72479768b921?auto=format&fit=crop&q=80&w=400" alt="Capital Blitz">
+                        <div class="challenge-badge-hex"><i class="fa-solid fa-globe"></i></div>
+                        <div class="challenge-diff-badge easy"><i class="fa-solid fa-circle"></i> Easy</div>
+                    </div>
+                    <div class="challenge-body">
+                        <div class="challenge-title">Capital Blitz</div>
+                        <div class="challenge-desc">Test your knowledge of world capitals.</div>
+                        <div class="challenge-progress-box">
+                            <div class="progress-info">
+                                <span>Progress</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="progress-bar-sm">
+                                <div class="progress-bar-sm-fill" style="width: 60%; background: #10b981;"></div>
+                            </div>
+                        </div>
+                        <div class="reward-info-row">
+                            <span class="reward-label">XP Reward</span>
+                            <span class="reward-val">+20 XP</span>
+                        </div>
+                        <a href="teen-quiz.html" class="btn-start-challenge-grid">Start <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Challenge 2 -->
+                <div class="challenge-main-card">
+                    <div class="challenge-img-box">
+                        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&q=80&w=400" alt="Landmark Quest">
+                        <div class="challenge-badge-hex" style="background: #3b82f6;"><i class="fa-solid fa-landmark"></i></div>
+                        <div class="challenge-diff-badge medium"><i class="fa-solid fa-circle"></i> Medium</div>
+                    </div>
+                    <div class="challenge-body">
+                        <div class="challenge-title">Landmark Quest</div>
+                        <div class="challenge-desc">Identify famous landmarks around the world.</div>
+                        <div class="challenge-progress-box">
+                            <div class="progress-info">
+                                <span>Progress</span>
+                                <span>40%</span>
+                            </div>
+                            <div class="progress-bar-sm">
+                                <div class="progress-bar-sm-fill" style="width: 40%; background: #f59e0b;"></div>
+                            </div>
+                        </div>
+                        <div class="reward-info-row">
+                            <span class="reward-label">XP Reward</span>
+                            <span class="reward-val">+25 XP</span>
+                        </div>
+                        <a href="teen-quiz.html" class="btn-start-challenge-grid">Start <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Challenge 3 -->
+                <div class="challenge-main-card">
+                    <div class="challenge-img-box">
+                        <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=400" alt="Flag Frenzy">
+                        <div class="challenge-badge-hex" style="background: #10b981;"><i class="fa-solid fa-flag"></i></div>
+                        <div class="challenge-diff-badge easy"><i class="fa-solid fa-circle"></i> Easy</div>
+                    </div>
+                    <div class="challenge-body">
+                        <div class="challenge-title">Flag Frenzy</div>
+                        <div class="challenge-desc">Recognize flags and their countries.</div>
+                        <div class="challenge-progress-box">
+                            <div class="progress-info">
+                                <span>Progress</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="progress-bar-sm">
+                                <div class="progress-bar-sm-fill" style="width: 80%; background: #10b981;"></div>
+                            </div>
+                        </div>
+                        <div class="reward-info-row">
+                            <span class="reward-label">XP Reward</span>
+                            <span class="reward-val">+20 XP</span>
+                        </div>
+                        <a href="teen-quiz.html" class="btn-start-challenge-grid">Start <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Challenge 4 -->
+                <div class="challenge-main-card">
+                    <div class="challenge-img-box">
+                        <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=400" alt="History Heroes">
+                        <div class="challenge-badge-hex" style="background: #8b5cf6;"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div class="challenge-diff-badge hard"><i class="fa-solid fa-circle"></i> Hard</div>
+                    </div>
+                    <div class="challenge-body">
+                        <div class="challenge-title">History Heroes</div>
+                        <div class="challenge-desc">Dive into historical events and great personalities.</div>
+                        <div class="challenge-progress-box">
+                            <div class="progress-info">
+                                <span>Progress</span>
+                                <span>20%</span>
+                            </div>
+                            <div class="progress-bar-sm">
+                                <div class="progress-bar-sm-fill" style="width: 20%; background: #ef4444;"></div>
+                            </div>
+                        </div>
+                        <div class="reward-info-row">
+                            <span class="reward-label">XP Reward</span>
+                            <span class="reward-val">+30 XP</span>
+                        </div>
+                        <a href="teen-quiz.html" class="btn-start-challenge-grid">Start <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Featured Section -->
+            <div class="bottom-featured-row">
+                <!-- Mission of the Week -->
+                <div class="featured-challenge-card mission-week-card">
+                    <div class="mission-bg-overlay"></div>
+                    <div class="featured-header">
+                        <div class="featured-badge" style="color: #f59e0b;">
+                            <i class="fa-solid fa-shield-halved"></i> Mission of the Week
+                        </div>
+                        <div class="featured-timer">
+                            <i class="fa-regular fa-clock"></i> 5d : 12h : 45m
+                        </div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-title">World War II: Key Events</div>
+                        <div class="featured-desc">Complete 10 questions about important events of World War II.</div>
+                        <div class="featured-rewards">
+                            <div class="reward-badge-tiny" style="color: #10b981;"><i class="fa-solid fa-hexagon-nodes"></i> +100 XP</div>
+                            <div class="reward-badge-tiny" style="color: #f59e0b;"><i class="fa-solid fa-coins"></i> 50</div>
+                        </div>
+                        <a href="#" class="btn-featured-start">Start Mission <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Daily Challenge -->
+                <div class="featured-challenge-card">
+                    <div class="featured-header">
+                        <div class="featured-badge" style="color: #6366f1;">
+                            <i class="fa-solid fa-calendar-day"></i> Daily Challenge
+                        </div>
+                        <div class="featured-timer" style="color: #6366f1;">
+                            07h : 32m : 15s
+                        </div>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-title">Geography Sprint</div>
+                        <div class="featured-desc">Answer 5 questions on rivers and lakes.</div>
+                        <div class="featured-rewards">
+                            <div class="reward-badge-tiny" style="color: #10b981;"><i class="fa-solid fa-hexagon-nodes"></i> +20 XP</div>
+                            <div class="reward-badge-tiny" style="color: #f59e0b;"><i class="fa-solid fa-coins"></i> 5</div>
+                        </div>
+                        <a href="#" class="btn-featured-start">Start Challenge <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="featured-illust-box">
+                        <img src="/assets/river-challenge.png" alt="River Challenge">
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Placeholder -->
+        <div id="footer-placeholder"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+</body>
+
+</html>
