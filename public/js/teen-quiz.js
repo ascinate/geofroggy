@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Check for previous attempt (Resuming logic)
             const previousAttempt = await checkPreviousAttempt(quizData.id);
             if (previousAttempt && previousAttempt.id) {
+                console.log('Previous attempt found:', previousAttempt);
                 if (previousAttempt.completed) {
                     currentQuiz = quizData;
                     score = previousAttempt.score;
@@ -82,14 +83,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             return { ...q, data: q.question };
         });
 
-        // Set Header Info
-        document.getElementById('quiz-country-name').textContent = currentQuiz.country_name || 'Global Challenge';
+        // Set Header Info - Prefer title if available, otherwise country_name
+        document.getElementById('quiz-country-name').textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
         document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
         
         fetchCountryFlag(countryId);
+
+        // Update UI for resumed attempts
+        if (userAnswers.length > 0) {
+            const currentAccuracy = Math.round((score / userAnswers.length) * 100);
+            document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
+        }
         
         renderQuestion();
         quizLoader.style.display = 'none';
+        console.log("Quiz Initialized:", currentQuiz);
     }
 
     async function fetchCountryFlag(id) {
@@ -201,11 +209,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function saveAttempt(completed) {
         const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!token) {
+            console.warn('No token found, cannot save attempt');
+            return;
+        }
 
         const xpEarned = completed ? Math.round((currentQuiz.xp_reward || 20) * (score / currentQuiz.questions.length)) : 0;
 
         try {
+            console.log(`Saving attempt (completed: ${completed})...`);
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
                 method: 'POST',
                 headers: {
@@ -221,10 +233,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })
             });
             
+            const result = await response.json();
+
             if (!response.ok) {
-                console.error('Failed to save quiz attempt');
+                console.error('Failed to save quiz attempt:', result.error || 'Unknown error');
             } else {
-                console.log(completed ? 'Attempt finalized' : 'Progress saved');
+                console.log(completed ? 'Attempt finalized!' : 'Progress saved...', result);
+                
+                // If completed, update the local stats to reflect the rewards immediately
+                if (completed && result.rewards) {
+                    const stats = JSON.parse(localStorage.getItem('stats') || '{}');
+                    stats.xp = (stats.xp || 0) + (result.rewards.xp || 0);
+                    stats.tokens = (stats.tokens || 0) + (result.rewards.tokens || 0);
+                    localStorage.setItem('stats', JSON.stringify(stats));
+                    
+                    // Dispatch event for components to update if needed
+                    window.dispatchEvent(new Event('statsUpdated'));
+                }
             }
         } catch (e) {
             console.error('Error saving attempt:', e);
