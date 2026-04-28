@@ -22,6 +22,7 @@ export default defineConfig({
                 storyDetails: 'story-details.html',
                 portalSelection: 'portal-selection.html',
                 teenLogin: 'teen-login.html',
+                teenDashboard: 'teen-dashboard.html',
             }
         }
     }
