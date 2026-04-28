@@ -33,8 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function loadQuiz() {
         try {
+            console.log('Loading quiz for country:', countryId);
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/country/${countryId}`);
-            if (!response.ok) throw new Error('Failed to fetch quiz');
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
             const quizzes = await response.json();
             if (!quizzes || quizzes.length === 0) {
@@ -45,15 +46,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 1. Prepare Data Immediately
             currentQuiz = quizzes[0];
+            
+            // Safety check for questions
+            if (!currentQuiz.questions || !Array.isArray(currentQuiz.questions) || currentQuiz.questions.length === 0) {
+                throw new Error('Quiz has no questions data');
+            }
+
             currentQuiz.questions = currentQuiz.questions.map(q => {
+                let parsedData = q.question;
                 if (typeof q.question === 'string') {
                     try {
-                        return { ...q, data: JSON.parse(q.question) };
+                        parsedData = JSON.parse(q.question);
                     } catch (e) {
-                        return { ...q, data: { question: q.question, options: {}, correct: '' } };
+                        console.error('Failed to parse question JSON:', q.question);
+                        parsedData = { question: q.question, options: {}, correct: '' };
                     }
                 }
-                return { ...q, data: q.question };
+                return { ...q, data: parsedData || {} };
             });
 
             // 2. Check for previous attempt (Resuming logic)
@@ -81,15 +90,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             initializeQuizUI();
         } catch (err) {
             console.error('Quiz loading error:', err);
-            alert('Error loading quiz. Please try again.');
+            alert(`Error loading quiz: ${err.message || 'Unknown error'}`);
             window.location.href = 'teen-map.html';
         }
     }
 
     function initializeQuizUI() {
         // Set Header Info
-        document.getElementById('quiz-country-name').textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
-        document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
+        const nameEl = document.getElementById('quiz-country-name');
+        const xpEl = document.getElementById('potential-xp');
+        
+        if (nameEl) nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
+        if (xpEl) xpEl.textContent = `+${currentQuiz.xp_reward || 20}`;
         
         fetchCountryFlag(countryId);
 
@@ -101,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         renderQuestion();
-        quizLoader.style.display = 'none';
+        if (quizLoader) quizLoader.style.display = 'none';
         console.log("Quiz UI Initialized");
     }
 
