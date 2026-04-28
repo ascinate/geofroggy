@@ -125,15 +125,139 @@
             display: block;
             border-radius: 20px;
             position: relative;
-            z-index: 2;
+            z-index: 1;
+        }
+
+        .portal-card-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .portal-card-title {
+            font-family: 'Playfair', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 15px;
+        }
+
+        .kids-title { color: #2E7D32; }
+        .teen-title { color: #1565C0; }
+
+        .portal-badge {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .kids-badge { background-color: #4CAF50; color: white; }
+        .teen-badge { background-color: #0D47A1; color: white; }
+
+        .portal-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+            width: 100%;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .kids-icon-1 { background-color: #9575CD; }
+        .kids-icon-2 { background-color: #4DB6AC; }
+        .kids-icon-3 { background-color: #FFB74D; }
+
+        .teen-icon-1 { background-color: #5C6BC0; }
+        .teen-icon-2 { background-color: #26A69A; }
+        .teen-icon-3 { background-color: #AFB42B; }
+
+        .feature-text h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            margin: 0;
+            color: #3E2723;
+        }
+
+        .feature-text p {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            margin: 0;
+            color: #5D4037;
+            line-height: 1.2;
+        }
+
+        .portal-btn {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 12px 35px;
+            border-radius: 50px;
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: auto;
+        }
+
+        .kids-btn { 
+            background: linear-gradient(to right, #689F38, #558B2F);
+            box-shadow: 0 5px 15px rgba(85, 139, 47, 0.4);
+        }
+
+        .teen-btn { 
+            background: linear-gradient(to right, #1565C0, #0D47A1);
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+        }
+
+        .portal-btn:hover {
+            transform: scale(1.05);
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .portal-footer-notice {
-            background-image: url('/assets/bg-card.png'); /* Or another suitable small bg */
-            background-size: cover;
-            background-position: center;
-            padding: 15px 30px;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 20px;
             margin-top: 60px;
             display: inline-flex;
             align-items: center;
@@ -141,6 +265,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             position: relative;
             z-index: 2;
+            border: 1px solid rgba(255,255,255,0.5);
         }
         
         .notice-content {
@@ -222,15 +347,91 @@
         <div class="portals-container">
             
             <!-- Kids Portal Card -->
-            <div class="portal-card-container" data-aos="fade-up" data-aos-delay="100" onclick="window.location.href='index.html'">
+            <div class="portal-card-container" data-aos="fade-up" data-aos-delay="100">
                 <img src="/assets/kid-frog.png" alt="Kids Frog" class="portal-frog" />
                 <img src="/assets/card-kid.png" alt="Kids Portal" class="portal-card-bg" />
+                
+                <div class="portal-card-content">
+                    <h2 class="portal-card-title kids-title">Kids Portal</h2>
+                    
+                    <div class="portal-badge kids-badge">
+                        <i class="fa-solid fa-star"></i>
+                        Fun & Easy Learning
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <ul class="portal-features">
+                        <li class="feature-item">
+                            <div class="feature-icon kids-icon-1"><i class="fa-solid fa-gamepad"></i></div>
+                            <div class="feature-text">
+                                <h4>Fun quizzes & games</h4>
+                                <p>Play and learn with exciting quizzes.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon kids-icon-2"><i class="fa-solid fa-map"></i></div>
+                            <div class="feature-text">
+                                <h4>Explore the world</h4>
+                                <p>Discover countries on an interactive map.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon kids-icon-3"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="feature-text">
+                                <h4>Earn rewards</h4>
+                                <p>Collect tokens and unlock badges.</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="portal-btn kids-btn">
+                        Enter Kids Portal <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- Teen Portal Card -->
-            <div class="portal-card-container" data-aos="fade-up" data-aos-delay="200" onclick="window.location.href='dashboard.html'">
+            <div class="portal-card-container" data-aos="fade-up" data-aos-delay="200">
                 <img src="/assets/Teen-frog.png" alt="Teen Frog" class="portal-frog" />
                 <img src="/assets/teen-card.png" alt="Teen Portal" class="portal-card-bg" />
+                
+                <div class="portal-card-content">
+                    <h2 class="portal-card-title teen-title">Teen Portal</h2>
+                    
+                    <div class="portal-badge teen-badge">
+                        <i class="fa-solid fa-star"></i>
+                        Challenge. Explore. Achieve.
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <ul class="portal-features">
+                        <li class="feature-item">
+                            <div class="feature-icon teen-icon-1"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="feature-text">
+                                <h4>Advanced challenges</h4>
+                                <p>Test your knowledge with challenging quizzes.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon teen-icon-2"><i class="fa-solid fa-bullseye"></i></div>
+                            <div class="feature-text">
+                                <h4>Mission-based learning</h4>
+                                <p>Complete missions and explore in depth.</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon teen-icon-3"><i class="fa-solid fa-crown"></i></div>
+                            <div class="feature-text">
+                                <h4>XP & achievements</h4>
+                                <p>Earn XP, level up and compete globally.</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="portal-btn teen-btn">
+                        Enter Teen Portal <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
 
         </div>
