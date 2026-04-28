@@ -34,8 +34,8 @@
                     <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000" alt="Mountains" class="hero-bg">
                     <div class="hero-overlay"></div>
                     <h3>Welcome back,</h3>
-                    <h1>Explorer!</h1>
-                    <p>You're 2 missions away from Level 6 <i class="fa-solid fa-hexagon-nodes" style="color: #8b5cf6;"></i></p>
+                    <h1 id="hero-username">Explorer!</h1>
+                    <p id="hero-subtitle">You're 2 missions away from Level 6 <i class="fa-solid fa-hexagon-nodes" style="color: #8b5cf6;"></i></p>
                     <div class="hero-btns">
                         <a href="#" class="btn-primary-dash">Continue Mission <i class="fa-solid fa-arrow-right"></i></a>
                         <a href="#" class="btn-glass-dash"><i class="fa-solid fa-earth-americas"></i> Explore New Country</a>
@@ -54,45 +54,45 @@
                 <section class="progress-stats-card">
                     <div class="lvl-box">
                         <div class="lvl-badge-large">
-                            <span class="lvl-num">5</span>
+                            <span class="lvl-num" id="dash-level-num">5</span>
                             <span class="lvl-txt">Level</span>
                         </div>
                         <div class="lvl-progress-col">
                             <div class="lvl-progress-header">
-                                <span>Level 5 Explorer</span>
+                                <span id="dash-level-title">Level 5 Explorer</span>
                             </div>
                             <div class="progress-bar-container">
-                                <div class="progress-bar-fill"></div>
+                                <div class="progress-bar-fill" id="dash-progress-fill" style="width: 65%;"></div>
                             </div>
-                            <div class="xp-needed">650 XP / 1,000 XP to Level 6</div>
+                            <div class="xp-needed" id="dash-progress-xp">650 XP / 1,000 XP to Level 6</div>
                         </div>
                     </div>
                     <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-icon" style="color: #f97316;"><i class="fa-solid fa-fire"></i></div>
                             <div class="stat-val">
-                                <span class="stat-number">5</span>
+                                <span class="stat-number" id="stat-streak">5</span>
                                 <span class="stat-label">Day Streak</span>
                             </div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon" style="color: #ef4444;"><i class="fa-solid fa-bullseye"></i></div>
                             <div class="stat-val">
-                                <span class="stat-number">82%</span>
+                                <span class="stat-number" id="stat-accuracy">82%</span>
                                 <span class="stat-label">Accuracy</span>
                             </div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon" style="color: #6366f1;"><i class="fa-solid fa-book"></i></div>
                             <div class="stat-val">
-                                <span class="stat-number">12/50</span>
+                                <span class="stat-number" id="stat-missions">12/50</span>
                                 <span class="stat-label">Missions Completed</span>
                             </div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon" style="color: #10b981;"><i class="fa-solid fa-globe"></i></div>
                             <div class="stat-val">
-                                <span class="stat-number">8</span>
+                                <span class="stat-number" id="stat-countries">8</span>
                                 <span class="stat-label">Countries Explored</span>
                             </div>
                         </div>

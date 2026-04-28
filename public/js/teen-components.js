@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("profile", JSON.stringify(data.profile || {}));
                 localStorage.setItem("stats", JSON.stringify(data.stats || {}));
+                populateDynamicData();
             } else if (res.status === 401) {
                 localStorage.clear();
                 window.location.href = 'teen-login.html';
@@ -49,7 +50,62 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    await syncSession();
+    function populateDynamicData() {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+        const stats = JSON.parse(localStorage.getItem("stats") || "{}");
+
+        // Main Dashboard Data
+        const heroName = document.getElementById("hero-username");
+        if (heroName && user.username) heroName.textContent = `${user.username}!`;
+
+        const levelNum = document.getElementById("dash-level-num");
+        const levelTitle = document.getElementById("dash-level-title");
+        const currentLevel = profile.level || 1;
+        if (levelNum) levelNum.textContent = currentLevel;
+        if (levelTitle) levelTitle.textContent = `Level ${currentLevel} Explorer`;
+
+        const xpNeeded = document.getElementById("dash-progress-xp");
+        const progressFill = document.getElementById("dash-progress-fill");
+        const currentXP = stats.xp || 0;
+        const targetXP = currentLevel * 1000; // Simplified logic
+        const progressPercent = Math.min((currentXP / targetXP) * 100, 100);
+
+        if (xpNeeded) xpNeeded.textContent = `${currentXP.toLocaleString()} XP / ${targetXP.toLocaleString()} XP to Level ${currentLevel + 1}`;
+        if (progressFill) progressFill.style.width = `${progressPercent}%`;
+
+        // Stats
+        const streak = document.getElementById("stat-streak");
+        if (streak) streak.textContent = stats.streak || 0;
+
+        const accuracy = document.getElementById("stat-accuracy");
+        if (accuracy) accuracy.textContent = `${stats.accuracy || 0}%`;
+
+        const missions = document.getElementById("stat-missions");
+        if (missions) missions.textContent = `${stats.missions_completed || 0}/50`;
+
+        const countries = document.getElementById("stat-countries");
+        if (countries) countries.textContent = stats.countries_explored || 0;
+
+        // Header Data (populated after components load)
+        updateHeaderDynamic(stats, profile, user);
+    }
+
+    function updateHeaderDynamic(stats, profile, user) {
+        const headerXP = document.getElementById("header-xp");
+        if (headerXP) headerXP.textContent = `${(stats.xp || 0).toLocaleString()} XP`;
+
+        const headerLevel = document.getElementById("header-level");
+        if (headerLevel) headerLevel.textContent = `Level ${profile.level || 1}`;
+
+        const headerRank = document.getElementById("header-rank");
+        if (headerRank) headerRank.textContent = profile.role || 'Explorer';
+
+        const headerAvatar = document.getElementById("header-avatar");
+        if (headerAvatar && user.avatar_url) {
+            headerAvatar.src = user.avatar_url;
+        }
+    }
 
     function setActiveLinks() {
         const path = window.location.pathname;
@@ -83,6 +139,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Initial population from existing storage
+    populateDynamicData();
+    
+    // Sync with backend
+    await syncSession();
+
     // Load each component
     const loadPromises = components.map(async (comp) => {
         const placeholder = document.getElementById(comp.id);
@@ -92,15 +154,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (response.ok) {
                     const html = await response.text();
                     placeholder.innerHTML = html;
-
-                    if (comp.id === 'header-placeholder') {
-                        const statsStr = localStorage.getItem("stats");
-                        const stats = statsStr ? JSON.parse(statsStr) : {};
-                        const xpEl = placeholder.querySelector('.xp-badge span');
-                        if (xpEl && stats.xp) {
-                            xpEl.textContent = `${stats.xp.toLocaleString()} XP`;
-                        }
-                    }
                 }
             } catch (err) {
                 console.error(`Failed to load component ${comp.file}:`, err);
@@ -110,6 +163,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await Promise.all(loadPromises);
     
+    // Refresh dynamic data once header is in the DOM
+    const stats = JSON.parse(localStorage.getItem("stats") || "{}");
+    const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    updateHeaderDynamic(stats, profile, user);
+
     // Set active links after all components are loaded
     setActiveLinks();
 });
