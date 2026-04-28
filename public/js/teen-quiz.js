@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let userAnswers = [];
-    let isSaving = false;
+    let isQuizCompleted = false;
 
     // Elements
     const quizLoader = document.getElementById('quiz-loader');
@@ -35,28 +35,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            currentQuiz = quizzes[0];
+            const quizData = quizzes[0];
             
-            // Parse questions if they are JSON strings
-            currentQuiz.questions = currentQuiz.questions.map(q => {
-                if (typeof q.question === 'string') {
-                    try {
-                        return { ...q, data: JSON.parse(q.question) };
-                    } catch (e) {
-                        return { ...q, data: { question: q.question, options: {}, correct: '' } };
+            // Check for previous attempt (Resuming logic)
+            const previousAttempt = await checkPreviousAttempt(quizData.id);
+            if (previousAttempt && previousAttempt.id) {
+                if (previousAttempt.completed) {
+                    currentQuiz = quizData;
+                    score = previousAttempt.score;
+                    showResults(true); // Already completed
+                    return;
+                } else {
+                    // Resume progress
+                    score = previousAttempt.score || 0;
+                    userAnswers = Array.isArray(previousAttempt.answers) ? previousAttempt.answers : [];
+                    currentQuestionIndex = userAnswers.length;
+                    
+                    if (currentQuestionIndex >= quizData.questions.length) {
+                        currentQuiz = quizData;
+                        showResults(false);
+                        return;
                     }
                 }
-                return { ...q, data: q.question };
-            });
+            }
 
-            // Set Header Info
-            document.getElementById('quiz-country-name').textContent = currentQuiz.country_name || 'Global Challenge';
-            document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
-            
-            fetchCountryFlag(countryId);
-            
-            renderQuestion();
-            quizLoader.style.display = 'none';
+            initializeQuiz(quizData);
         } catch (err) {
             console.error('Quiz loading error:', err);
             alert('Error loading quiz. Please try again.');
@@ -64,11 +67,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    function initializeQuiz(quizData) {
+        currentQuiz = quizData;
+        
+        // Parse questions
+        currentQuiz.questions = currentQuiz.questions.map(q => {
+            if (typeof q.question === 'string') {
+                try {
+                    return { ...q, data: JSON.parse(q.question) };
+                } catch (e) {
+                    return { ...q, data: { question: q.question, options: {}, correct: '' } };
+                }
+            }
+            return { ...q, data: q.question };
+        });
+
+        // Set Header Info
+        document.getElementById('quiz-country-name').textContent = currentQuiz.country_name || 'Global Challenge';
+        document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
+        
+        fetchCountryFlag(countryId);
+        
+        renderQuestion();
+        quizLoader.style.display = 'none';
+    }
+
     async function fetchCountryFlag(id) {
         try {
             const res = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/country`);
             const countries = await res.json();
-            const country = countries.find(c => c.id === id || c.name === id);
+            const country = countries.find(c => c.id == id || c.name === id); // Use == for loose match if ID is string/num
             if (country && country.code) {
                 const flagImg = document.getElementById('quiz-flag');
                 flagImg.src = `https://flagcdn.com/w80/${country.code.toLowerCase()}.png`;
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProgress();
     }
 
-    function selectOption(card, letter) {
+    async function selectOption(card, letter) {
         if (nextBtn.disabled === false) return; // Already answered
 
         const qData = currentQuiz.questions[currentQuestionIndex].data;
@@ -110,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Visual feedback
         const allCards = document.querySelectorAll('.option-card');
-        allCards.forEach(c => c.classList.remove('selected'));
+        allCards.forEach(c => c.onclick = null); // Disable all clicks
         
         if (isCorrect) {
             card.classList.add('correct');
@@ -131,14 +159,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             is_correct: isCorrect
         });
 
-        // Save partial progress
-        saveAttempt(false);
-
-        nextBtn.disabled = false;
-        
-        // Update accuracy stat
+        // Update accuracy stat immediately
         const currentAccuracy = Math.round((score / userAnswers.length) * 100);
         document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
+
+        // Save progress (Partial)
+        await saveAttempt(false);
+
+        nextBtn.disabled = false;
     }
 
     function updateProgress() {
@@ -157,6 +185,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    async function checkPreviousAttempt(quizId) {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        try {
+            const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt/${quizId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) return await response.json();
+        } catch (e) {
+            console.error('Error checking attempt:', e);
+        }
+        return null;
+    }
+
     async function saveAttempt(completed) {
         const token = localStorage.getItem('token');
         if (!token) return;
@@ -164,7 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const xpEarned = completed ? Math.round((currentQuiz.xp_reward || 20) * (score / currentQuiz.questions.length)) : 0;
 
         try {
-            await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
+            const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -172,14 +214,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 body: JSON.stringify({
                     quiz_id: currentQuiz.id,
-                    score,
-                    completed,
+                    score: score,
+                    completed: completed,
                     xp_earned: xpEarned,
                     answers: userAnswers
                 })
             });
+            
+            if (!response.ok) {
+                console.error('Failed to save quiz attempt');
+            } else {
+                console.log(completed ? 'Attempt finalized' : 'Progress saved');
+            }
         } catch (e) {
-            console.error('Failed to save attempt:', e);
+            console.error('Error saving attempt:', e);
         }
     }
 
@@ -188,11 +236,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         nextBtn.disabled = true;
         
         await saveAttempt(true);
-        
+        showResults(false);
+    }
+
+    function showResults(isPrevious) {
         const total = currentQuiz.questions.length;
         const xpEarned = Math.round((currentQuiz.xp_reward || 20) * (score / total));
 
-        // Show Results
+        quizLoader.style.display = 'none';
         document.getElementById('quiz-container').style.display = 'none';
         const results = document.getElementById('results-container');
         results.style.display = 'flex';
@@ -201,12 +252,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('final-total').textContent = `/ ${total}`;
         document.getElementById('final-xp').textContent = `+${xpEarned}`;
         
-        if (score === total) {
-            document.getElementById('results-message').textContent = "Perfect Score! You're a true geography expert!";
-        } else if (score >= total / 2) {
-            document.getElementById('results-message').textContent = "Good job! You've got a solid understanding of this country.";
+        if (isPrevious) {
+            document.getElementById('results-title').textContent = "Quiz Already Completed";
+            document.getElementById('results-message').textContent = "You have already finished this quiz. Here is your recorded score:";
         } else {
-            document.getElementById('results-message').textContent = "Keep practicing! You'll get better with each try.";
+            if (score === total) {
+                document.getElementById('results-message').textContent = "Perfect Score! You're a true geography expert!";
+            } else if (score >= total / 2) {
+                document.getElementById('results-message').textContent = "Good job! You've got a solid understanding of this country.";
+            } else {
+                document.getElementById('results-message').textContent = "Keep practicing! You'll get better with each try.";
+            }
         }
     }
 
