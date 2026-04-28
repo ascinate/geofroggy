@@ -19,7 +19,8 @@ export default defineConfig({
                 achievements: 'achievements.html',
                 dashboard: 'dashboard.html',
                 profile: 'profile.html',
-                storyDetails: 'story-details.html'
+                storyDetails: 'story-details.html',
+                portal: 'portal-selection.html',
             }
         }
     }
