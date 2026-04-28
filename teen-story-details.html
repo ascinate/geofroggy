@@ -8,8 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,253 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/teen-dashboard.css">
-    <style>
-        :root {
-            --story-purple: #6366f1;
-            --story-purple-light: #eef2ff;
-        }
-
-        .story-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 10px 20px;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--story-purple);
-            text-decoration: none;
-            font-weight: 700;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-
-        .story-header-section {
-            position: relative;
-            display: flex;
-            align-items: center;
-            min-height: 220px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            border-radius: 16px;
-            background: white;
-        }
-
-        .story-info {
-            flex: 1;
-            z-index: 2;
-            /* padding-right: 20px; */
-            padding-right: 50px;
-        }
-
-        .category-badge {
-            background: #f1f0ff;
-            color: #8b5cf6;
-            padding: 4px 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            display: inline-block;
-            margin-bottom: 10px;
-            text-transform: capitalize;
-        }
-
-        .story-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 12px;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        .story-meta-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #475569;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .meta-divider {
-            width: 3px;
-            height: 3px;
-            background: #cbd5e1;
-            border-radius: 50%;
-        }
-
-        .story-image-container {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .story-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            mask-image: linear-gradient(to left, black 60%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
-        }
-
-        .story-tabs {
-            display: flex;
-            gap: 25px;
-            border-bottom: 1px solid #f1f5f9;
-            margin-bottom: 20px;
-            padding-bottom: 5px;
-        }
-
-        .story-tab {
-            padding: 8px 0;
-            font-weight: 700;
-            color: #64748b;
-            cursor: pointer;
-            position: relative;
-            font-size: 1rem;
-        }
-
-        .story-tab.active {
-            color: var(--story-purple);
-        }
-
-        .story-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--story-purple);
-            border-radius: 50px;
-        }
-
-        .story-content-area {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #334155;
-            max-width: 800px;
-        }
-
-        .story-content-area p {
-            margin-bottom: 15px;
-        }
-
-        .quote-block {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 25px 0;
-            display: flex;
-            gap: 15px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quote-icon {
-            color: var(--story-purple);
-            font-size: 2rem;
-            line-height: 1;
-        }
-
-        .quote-text-wrapper {
-            flex: 1;
-        }
-
-        .quote-text {
-            color: var(--story-purple);
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .quote-author {
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        #complete-btn-container {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .btn-complete {
-            background: var(--primary-purple);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            border: none;
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-            transition: all 0.3s;
-        }
-
-        .btn-complete:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
-            background: #4f46e5;
-            color: white;
-        }
-
-        .btn-complete:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .completed-state {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            padding: 20px;
-            border-radius: 16px;
-            color: #166534;
-        }
-
-        .completed-icon {
-            width: 40px;
-            height: 40px;
-            background: #22c55e;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 992px) {
-            .story-header-section {
-                flex-direction: column;
-            }
-
-            .story-image-wrapper {
-                flex: none;
-                width: 100%;
-            }
-
-            .story-title {
-                font-size: 2.2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/teen-story-details.css">
 </head>
 
 <body>
@@ -275,63 +28,131 @@
         <div id="header-placeholder"></div>
 
         <main class="dash-content-full">
-            <div class="story-container">
-                <a href="teen-stories.html" class="back-link">
-                    <i class="fa-solid fa-chevron-left"></i> Back to Stories
-                </a>
+            <div class="story-details-layout">
+                <!-- Main Content Column -->
+                <div class="story-main-column">
+                    <!-- Hero Card -->
+                    <section class="story-hero-card">
+                        <div class="story-hero-bg">
+                            <img id="story-banner" src="/assets/story-details-hero.png" alt="Story Hero">
+                        </div>
+                        <div class="story-hero-content">
+                            <a href="teen-stories.html" class="back-to-stories">
+                                <i class="fa-solid fa-chevron-left"></i> Back to Stories
+                            </a>
+                            <br>
+                            <span class="category-pill" id="story-category">History</span>
+                            <h1 class="story-main-title" id="story-title">The Young Leader of India</h1>
+                            <div class="story-stats-row">
+                                <div class="stat-item">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span id="read-time">8</span> min read
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                    <span id="word-count">1,250</span> words
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+                                    <span id="story-rating">4.8 (128)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-                <div class="story-header-section">
-                    <div class="story-info">
-                        <span class="category-badge" id="story-category">History</span>
-                        <h1 class="story-title" id="story-title">Loading Story...</h1>
-                        <div class="story-meta-row">
-                            <div class="meta-item">
-                                <i class="fa-regular fa-clock"></i>
-                                <span id="read-time">--</span> min read
-                            </div>
-                            <div class="meta-divider"></div>
-                            <div class="meta-item">
-                                <i class="fa-regular fa-file-lines"></i>
-                                <span id="word-count">--</span> words
-                            </div>
-                            <div class="meta-divider"></div>
-                            <div class="meta-item">
-                                <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
-                                <span id="story-rating">4.8 (128)</span>
+                    <!-- Tabs Nav -->
+                    <nav class="story-tabs-nav">
+                        <button class="tab-btn active">Story</button>
+                        <button class="tab-btn">Key Facts</button>
+                        <button class="tab-btn">Think & Reflect</button>
+                        <button class="tab-btn">Quiz (5)</button>
+                    </nav>
+
+                    <!-- Story Text Card -->
+                    <div class="story-text-card" id="story-content">
+                        <!-- Dynamic content loaded here -->
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading story...</span>
                             </div>
                         </div>
                     </div>
-                    <div class="story-image-container">
-                        <img id="story-banner" src="/assets/mascot_landscape.png" alt="Story Hero">
+
+                    <!-- Complete Button Container -->
+                    <div id="complete-btn-container" style="display: none; margin-top: 20px;">
+                        <button id="mark-complete-btn" class="btn btn-primary w-100 py-3" style="border-radius: 12px; font-weight: 800;">
+                            Complete Story & Earn XP
+                        </button>
                     </div>
                 </div>
 
-                <div class="story-tabs">
-                    <div class="story-tab active">Story</div>
-                    <div class="story-tab">Key Facts</div>
-                    <div class="story-tab">Think & Reflect</div>
-                    <div class="story-tab">Quiz (5)</div>
-                </div>
-
-                <div class="story-content-area" id="story-content">
-                    <!-- Dynamic content will be loaded here -->
-                    <div class="text-center py-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading content...</span>
+                <!-- Right Sidebar Panel -->
+                <aside class="story-side-panel">
+                    <!-- About Widget -->
+                    <div class="side-widget">
+                        <div class="widget-title">About the Story</div>
+                        <div class="widget-info-list">
+                            <div class="info-item">
+                                <div class="info-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                                <div class="info-content">
+                                    <span class="info-label">Theme</span>
+                                    <span class="info-val" id="story-theme">Courage & Leadership</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon-box"><i class="fa-regular fa-calendar"></i></div>
+                                <div class="info-content">
+                                    <span class="info-label">Time Period</span>
+                                    <span class="info-val" id="story-period">20th Century</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon-box"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="info-content">
+                                    <span class="info-label">Place</span>
+                                    <span class="info-val" id="story-place">India</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon-box"><i class="fa-solid fa-tags"></i></div>
+                                <div class="info-content">
+                                    <span class="info-label">Tags</span>
+                                    <div class="tag-pills" id="story-tags">
+                                        <span class="tag-pill">Freedom</span>
+                                        <span class="tag-pill">Inspiration</span>
+                                        <span class="tag-pill">Leadership</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-illust">
+                            <img src="/assets/story-landmark.png" alt="Landmark">
                         </div>
                     </div>
-                </div>
 
-                <!-- Complete Button Container -->
-                <div id="complete-btn-container" style="display: none;">
-                    <button id="mark-complete-btn" class="btn-complete">
-                        Complete Story & Earn XP
-                    </button>
-                </div>
+                    <!-- Learning Goals Widget -->
+                    <div class="side-widget learning-goals-widget">
+                        <div class="widget-title">What You'll Learn</div>
+                        <div class="goals-list">
+                            <div class="goal-item">
+                                <div class="goal-icon"><i class="fa-solid fa-bullseye"></i></div>
+                                <div class="goal-text">Understand the importance of leadership and determination.</div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-icon"><i class="fa-solid fa-users"></i></div>
+                                <div class="goal-text">Learn how one person's actions can inspire millions.</div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-icon"><i class="fa-solid fa-star"></i></div>
+                                <div class="goal-text">Discover the value of courage and selflessness.</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </main>
 
-        <!-- Footer Component -->
+        <!-- Footer Placeholder -->
         <div id="footer-placeholder"></div>
     </div>
 

@@ -128,21 +128,39 @@ function updateUI(story) {
     document.getElementById('word-count').textContent = words.toLocaleString();
     
     // Banner image
-    if (story.image_url) {
+    if (story.image_url && !story.image_url.includes('mascot')) {
         document.getElementById('story-banner').src = story.image_url;
     }
     
+    // Dynamic Sidebar Info
+    if (document.getElementById('story-theme')) {
+        document.getElementById('story-theme').textContent = story.theme || (story.category === 'Culture' ? 'Heritage & Art' : 'Courage & Leadership');
+    }
+    if (document.getElementById('story-period')) {
+        document.getElementById('story-period').textContent = story.period || (story.category === 'History' ? '20th Century' : 'Modern Era');
+    }
+    if (document.getElementById('story-place')) {
+        document.getElementById('story-place').textContent = story.place || 'Global';
+    }
+    
+    // Tags
+    const tagsContainer = document.getElementById('story-tags');
+    if (tagsContainer && story.tags) {
+        const tags = Array.isArray(story.tags) ? story.tags : story.tags.split(',').map(t => t.trim());
+        tagsContainer.innerHTML = tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('');
+    }
+
     // Content parsing for premium look
     let contentHtml = story.content || '<p>No content available for this story.</p>';
     
     // Add a quote block if it's the specific Subhas Chandra Bose story for demo
-    if (story.title && story.title.includes('Subhas Chandra Bose')) {
+    if (story.title && (story.title.includes('Subhas Chandra Bose') || story.title.includes('Leader of India'))) {
         contentHtml += `
-            <div class="quote-block">
-                <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+            <div class="quote-block" style="background: #f8fafc; border-radius: 16px; padding: 20px; margin: 25px 0; display: flex; gap: 15px; border: 1px solid #e2e8f0;">
+                <div class="quote-icon" style="color: #6366f1; font-size: 2rem; line-height: 1;"><i class="fa-solid fa-quote-left"></i></div>
                 <div class="quote-text-wrapper">
-                    <div class="quote-text">"Give me blood, and I will give you freedom."</div>
-                    <div class="quote-author">— Subhas Chandra Bose</div>
+                    <div class="quote-text" style="color: #6366f1; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">"Give me blood, and I will give you freedom."</div>
+                    <div class="quote-author" style="color: #64748b; font-weight: 600; font-size: 0.95rem;">— Subhas Chandra Bose</div>
                 </div>
             </div>
             <p>From leading student movements to inspiring millions, his story is a reminder that when you stand up for what is right, you can change the world.</p>
@@ -151,6 +169,24 @@ function updateUI(story) {
 
     document.getElementById('story-content').innerHTML = contentHtml;
     document.title = `${story.title || 'Story'} | Geofroggy`;
+
+    // Initialize tabs
+    initTabs();
+}
+
+function initTabs() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // For now, we only have one content area, but this structure allows expansion
+            if (tab.textContent.includes('Quiz')) {
+                // Potential to load quiz dynamically here
+            }
+        });
+    });
 }
 
 function showError(message) {
