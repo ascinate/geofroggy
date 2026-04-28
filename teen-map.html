@@ -225,8 +225,10 @@
                 const countryId = countryMap[name] || country.id;
                 if (countryId) {
                     fetchStories(countryId);
+                    document.getElementById('btn-try-quiz').href = `teen-quiz.html?id=${countryId}`;
                 } else {
                     document.getElementById('detail-stories-list').innerHTML = '<div class="text-center py-4 text-muted">No stories available for this country.</div>';
+                    document.getElementById('btn-try-quiz').href = '#';
                 }
 
             } catch (err) {
@@ -305,13 +307,6 @@
             document.getElementById('detail-mission-count').textContent = `${country.missions_completed || 0} / ${country.total_missions || 5} Missions Completed`;
             document.getElementById('detail-pbar-fill').style.width = `${country.progress || 0}%`;
             
-            // Set quiz button link
-            const countryId = countryMap[country.name] || country.id;
-            const quizBtn = document.getElementById('btn-try-quiz');
-            if (quizBtn && countryId) {
-                quizBtn.href = `teen-quiz.html?id=${countryId}`;
-            }
-
             // Random Unsplash image for the country
             document.getElementById('detail-img').src = `https://source.unsplash.com/featured/?${encodeURIComponent(country.name)},landscape`;
         }

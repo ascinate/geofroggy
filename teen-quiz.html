@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz - GeoFroggy</title>
+    <title>Country Quiz - GeoFroggy</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,90 +27,87 @@
         <!-- Header Component -->
         <div id="header-placeholder"></div>
 
-        <main class="quiz-page-content">
-            <div class="quiz-container" id="quiz-container">
-                <!-- Loader -->
-                <div class="panel-loader" id="quiz-loader" style="display: flex;">
+        <main class="quiz-page-container">
+            <div class="quiz-card" id="quiz-container">
+                <!-- Loader Overlay -->
+                <div class="quiz-loader-overlay" id="quiz-loader">
                     <div class="spinner-border text-primary" role="status"></div>
+                    <p style="font-weight: 700; color: #64748b;">Loading your quiz...</p>
                 </div>
 
                 <!-- Quiz Header -->
                 <div class="quiz-header">
-                    <div class="quiz-info">
-                        <h2 id="quiz-title">Country Quiz</h2>
-                        <p id="quiz-subtitle">Test your knowledge!</p>
+                    <div class="quiz-header-left">
+                        <img src="" alt="Flag" class="quiz-country-flag" id="quiz-flag" style="display: none;">
+                        <div class="quiz-header-info">
+                            <h2 id="quiz-country-name">Loading...</h2>
+                            <p id="quiz-title">Knowledge Challenge</p>
+                        </div>
                     </div>
-                    <div class="quiz-timer">
-                        <i class="fa-regular fa-clock"></i>
-                        <span id="timer-text">00:00</span>
+                    <div class="quiz-stats">
+                        <div class="quiz-stat-item">
+                            <span class="quiz-stat-label">Potential XP</span>
+                            <span class="quiz-stat-value" id="potential-xp">+20</span>
+                        </div>
+                        <div class="quiz-stat-item">
+                            <span class="quiz-stat-label">Accuracy</span>
+                            <span class="quiz-stat-value" id="current-accuracy">0%</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Quiz Body -->
-                <div class="quiz-body" id="quiz-body" style="display: none;">
-                    <div class="quiz-progress-wrapper">
-                        <div class="progress-labels">
-                            <span id="question-count-text">Question 1 of 5</span>
-                            <span id="xp-indicator">+20 XP Reward</span>
-                        </div>
-                        <div class="quiz-pbar">
-                            <div class="quiz-pbar-fill" id="quiz-pbar-fill" style="width: 20%;"></div>
-                        </div>
-                    </div>
+                <div class="quiz-body" id="quiz-question-area">
+                    <div class="question-badge" id="question-number">Question 1 of 5</div>
+                    <h1 class="question-text" id="question-text">Loading question...</h1>
 
-                    <div class="question-section">
-                        <h3 class="question-text" id="question-text">Loading question...</h3>
-                    </div>
-
-                    <div class="options-grid" id="options-grid">
+                    <div class="options-grid" id="options-container">
                         <!-- Options will be injected here -->
                     </div>
                 </div>
 
-                <!-- Feedback Banner -->
-                <div class="feedback-banner" id="feedback-banner">
-                    <div class="feedback-info">
-                        <div class="feedback-icon" id="feedback-icon">
-                            <i class="fa-solid fa-check"></i>
+                <!-- Quiz Footer -->
+                <div class="quiz-footer">
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span>Your Progress</span>
+                            <span id="progress-text">0% Completed</span>
                         </div>
-                        <div class="feedback-text">
-                            <h4 id="feedback-title">Correct!</h4>
-                            <p id="feedback-desc">Great job on this one.</p>
+                        <div class="quiz-pbar">
+                            <div class="quiz-pbar-fill" id="progress-bar" style="width: 0%;"></div>
                         </div>
                     </div>
-                    <button class="btn-next-question" id="btn-next">
+                    <button class="btn-quiz-next" id="next-btn" disabled>
                         <span>Next Question</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
+            </div>
 
-                <!-- Result Screen -->
-                <div class="result-screen" id="result-screen">
-                    <div class="confetti-container">🎉</div>
-                    <h2 id="result-title">Congratulations!</h2>
-                    <p id="result-desc">You've successfully completed the quiz.</p>
+            <!-- Quiz Results (Hidden by default) -->
+            <div class="quiz-card" id="results-container" style="display: none;">
+                <div class="results-container">
+                    <img src="/assets/Teen-frog.png" alt="Mascot" class="results-mascot">
+                    <h1 class="results-title">Quiz Completed!</h1>
+                    <p class="results-subtitle" id="results-message">Great job! You've successfully finished the quiz.</p>
                     
-                    <div class="result-score">
-                        You scored <span id="final-score">5</span> / <span id="total-questions">5</span>
+                    <div class="score-circle">
+                        <span class="score-value" id="final-score">0</span>
+                        <span class="score-total" id="final-total">/ 5</span>
                     </div>
 
-                    <div class="xp-won-card">
-                        <span class="xp-won-label">XP Earned</span>
-                        <span class="xp-won-value" id="final-xp">+20</span>
+                    <div class="xp-earned-card">
+                        <i class="fa-solid fa-bolt xp-icon"></i>
+                        <div class="xp-text">
+                            <div class="xp-label">Total XP Gained</div>
+                            <div class="xp-amount" id="final-xp">+0</div>
+                        </div>
                     </div>
 
-                    <div class="result-actions">
-                        <a href="teen-dashboard.html" class="btn-result btn-home">Back to Dashboard</a>
-                        <a href="teen-map.html" class="btn-result btn-map">Explore More</a>
+                    <div class="results-actions">
+                        <a href="teen-map.html" class="btn-results btn-results-secondary">Return to Map</a>
+                        <a href="teen-dashboard.html" class="btn-results btn-results-primary">Go to Dashboard</a>
                     </div>
-                </div>
-
-                <!-- Error State -->
-                <div id="quiz-error" class="h-100 flex-column align-items-center justify-content-center p-4 text-center" style="display: none;">
-                    <div style="font-size: 3rem; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <h3>Oops!</h3>
-                    <p id="error-message" style="color: #64748b;">Something went wrong while loading the quiz.</p>
-                    <a href="teen-map.html" class="btn-primary-dash mt-3" style="display: inline-flex;">Return to Map</a>
                 </div>
             </div>
         </main>

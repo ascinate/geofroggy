@@ -3,150 +3,153 @@ document.addEventListener('DOMContentLoaded', async () => {
     const countryId = urlParams.get('id');
 
     if (!countryId) {
-        showError('No country specified. Please return to the map.');
+        alert('No country specified. Returning to map.');
+        window.location.href = 'teen-map.html';
         return;
     }
 
-    // State
+    // Global State
     let currentQuiz = null;
-    let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    let timer = 0;
-    let timerInterval = null;
     let userAnswers = [];
+    let isSaving = false;
 
-    const loader = document.getElementById('quiz-loader');
-    const quizBody = document.getElementById('quiz-body');
-    const errorState = document.getElementById('quiz-error');
-    const feedbackBanner = document.getElementById('feedback-banner');
-    const resultScreen = document.getElementById('result-screen');
+    // Elements
+    const quizLoader = document.getElementById('quiz-loader');
+    const quizArea = document.getElementById('quiz-question-area');
+    const optionsContainer = document.getElementById('options-container');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
 
-    async function startQuiz() {
+    async function loadQuiz() {
         try {
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/country/${countryId}`);
-            if (!response.ok) throw new Error('Failed to fetch quiz data');
+            if (!response.ok) throw new Error('Failed to fetch quiz');
 
             const quizzes = await response.json();
             if (!quizzes || quizzes.length === 0) {
-                showError('No quizzes found for this country yet.');
+                alert('No quiz available for this country yet.');
+                window.location.href = 'teen-map.html';
                 return;
             }
 
             currentQuiz = quizzes[0];
-
-            // Format questions
-            questions = currentQuiz.questions.map(q => {
-                let data = q.question;
-                if (typeof data === 'string') {
-                    try { data = JSON.parse(data); } catch (e) { console.error("Parse error", e); }
+            
+            // Parse questions if they are JSON strings
+            currentQuiz.questions = currentQuiz.questions.map(q => {
+                if (typeof q.question === 'string') {
+                    try {
+                        return { ...q, data: JSON.parse(q.question) };
+                    } catch (e) {
+                        return { ...q, data: { question: q.question, options: {}, correct: '' } };
+                    }
                 }
-                return { ...q, data };
+                return { ...q, data: q.question };
             });
 
-            if (questions.length === 0) {
-                showError('This quiz has no questions.');
-                return;
-            }
-
-            // Init UI
-            document.getElementById('quiz-title').textContent = currentQuiz.title || 'Country Quiz';
-            document.getElementById('xp-indicator').textContent = `+${currentQuiz.xp_reward || 20} XP Reward`;
-
-            loader.style.display = 'none';
-            quizBody.style.display = 'block';
-
+            // Set Header Info
+            document.getElementById('quiz-country-name').textContent = currentQuiz.country_name || 'Global Challenge';
+            document.getElementById('potential-xp').textContent = `+${currentQuiz.xp_reward || 20}`;
+            
+            fetchCountryFlag(countryId);
+            
             renderQuestion();
-            startTimer();
-
+            quizLoader.style.display = 'none';
         } catch (err) {
-            console.error("Quiz load error:", err);
-            showError('Could not load the quiz. Please try again later.');
+            console.error('Quiz loading error:', err);
+            alert('Error loading quiz. Please try again.');
+            window.location.href = 'teen-map.html';
         }
     }
 
+    async function fetchCountryFlag(id) {
+        try {
+            const res = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/country`);
+            const countries = await res.json();
+            const country = countries.find(c => c.id === id || c.name === id);
+            if (country && country.code) {
+                const flagImg = document.getElementById('quiz-flag');
+                flagImg.src = `https://flagcdn.com/w80/${country.code.toLowerCase()}.png`;
+                flagImg.style.display = 'block';
+            }
+        } catch (e) {}
+    }
+
     function renderQuestion() {
-        const q = questions[currentQuestionIndex];
-        const data = q.data;
+        const question = currentQuiz.questions[currentQuestionIndex];
+        const qData = question.data;
 
-        // Update Progress
-        const total = questions.length;
-        document.getElementById('question-count-text').textContent = `Question ${currentQuestionIndex + 1} of ${total}`;
-        document.getElementById('quiz-pbar-fill').style.width = `${((currentQuestionIndex + 1) / total) * 100}%`;
+        // Update UI
+        document.getElementById('question-number').textContent = `Question ${currentQuestionIndex + 1} of ${currentQuiz.questions.length}`;
+        document.getElementById('question-text').textContent = qData.question;
+        
+        optionsContainer.innerHTML = '';
+        nextBtn.disabled = true;
 
-        // Set Question Text
-        document.getElementById('question-text').textContent = data.question;
-
-        // Render Options
-        const grid = document.getElementById('options-grid');
-        grid.innerHTML = '';
-
-        Object.entries(data.options).forEach(([letter, text]) => {
+        Object.entries(qData.options).forEach(([letter, text]) => {
             const card = document.createElement('div');
             card.className = 'option-card';
             card.innerHTML = `
                 <div class="option-letter">${letter}</div>
                 <div class="option-text">${text}</div>
             `;
-            card.onclick = () => handleAnswer(letter, card);
-            grid.appendChild(card);
+            card.onclick = () => selectOption(card, letter);
+            optionsContainer.appendChild(card);
         });
 
-        // Hide feedback
-        feedbackBanner.classList.remove('show');
+        updateProgress();
     }
 
-    function handleAnswer(selectedLetter, card) {
-        const q = questions[currentQuestionIndex];
-        const data = q.data;
-        const correctLetter = data.correct;
-        const isCorrect = selectedLetter === correctLetter;
+    function selectOption(card, letter) {
+        if (nextBtn.disabled === false) return; // Already answered
 
-        // Disable all options
-        document.querySelectorAll('.option-card').forEach(c => c.style.pointerEvents = 'none');
+        const qData = currentQuiz.questions[currentQuestionIndex].data;
+        const isCorrect = letter === qData.correct;
 
+        // Visual feedback
+        const allCards = document.querySelectorAll('.option-card');
+        allCards.forEach(c => c.classList.remove('selected'));
+        
         if (isCorrect) {
-            score++;
             card.classList.add('correct');
-            showFeedback(true, 'Correct!', 'You nailed it!');
+            score++;
         } else {
             card.classList.add('incorrect');
             // Highlight correct one
-            document.querySelectorAll('.option-card').forEach(c => {
-                if (c.querySelector('.option-letter').textContent === correctLetter) {
+            allCards.forEach(c => {
+                if (c.querySelector('.option-letter').textContent === qData.correct) {
                     c.classList.add('correct');
                 }
             });
-            showFeedback(false, 'Oops!', `The correct answer was ${correctLetter}: ${data.options[correctLetter]}`);
         }
 
         userAnswers.push({
-            question_id: q.id,
-            selected_option: selectedLetter,
+            question_id: currentQuiz.questions[currentQuestionIndex].id,
+            selected_option: letter,
             is_correct: isCorrect
         });
+
+        // Save partial progress
+        saveAttempt(false);
+
+        nextBtn.disabled = false;
+        
+        // Update accuracy stat
+        const currentAccuracy = Math.round((score / userAnswers.length) * 100);
+        document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
     }
 
-    function showFeedback(isCorrect, title, desc) {
-        feedbackBanner.classList.remove('correct-bg', 'incorrect-bg');
-        feedbackBanner.classList.add(isCorrect ? 'correct-bg' : 'incorrect-bg');
-
-        document.getElementById('feedback-title').textContent = title;
-        document.getElementById('feedback-desc').textContent = desc;
-        document.getElementById('feedback-icon').innerHTML = isCorrect ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark"></i>';
-
-        const btn = document.getElementById('btn-next');
-        if (currentQuestionIndex === questions.length - 1) {
-            btn.querySelector('span').textContent = 'Finish Quiz';
-        } else {
-            btn.querySelector('span').textContent = 'Next Question';
-        }
-
-        feedbackBanner.classList.add('show');
+    function updateProgress() {
+        const total = currentQuiz.questions.length;
+        const percent = Math.round((currentQuestionIndex / total) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressText.textContent = `${percent}% Completed`;
     }
 
-    document.getElementById('btn-next').onclick = () => {
-        if (currentQuestionIndex < questions.length - 1) {
+    nextBtn.onclick = () => {
+        if (currentQuestionIndex < currentQuiz.questions.length - 1) {
             currentQuestionIndex++;
             renderQuestion();
         } else {
@@ -154,73 +157,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    async function finishQuiz() {
-        clearInterval(timerInterval);
-        quizBody.style.display = 'none';
-        feedbackBanner.classList.remove('show');
-        loader.style.display = 'flex';
+    async function saveAttempt(completed) {
+        const token = localStorage.getItem('token');
+        if (!token) return;
 
-        const total = questions.length;
-        const xpEarned = Math.round((currentQuiz.xp_reward || 20) * (score / total));
+        const xpEarned = completed ? Math.round((currentQuiz.xp_reward || 20) * (score / currentQuiz.questions.length)) : 0;
 
         try {
-            const token = localStorage.getItem('token');
-            if (token) {
-                await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        quiz_id: currentQuiz.id,
-                        score: score,
-                        completed: true,
-                        xp_earned: xpEarned,
-                        answers: userAnswers
-                    })
-                });
-            }
+            await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    quiz_id: currentQuiz.id,
+                    score,
+                    completed,
+                    xp_earned: xpEarned,
+                    answers: userAnswers
+                })
+            });
         } catch (e) {
-            console.error("Failed to save attempt:", e);
+            console.error('Failed to save attempt:', e);
         }
+    }
+
+    async function finishQuiz() {
+        quizArea.style.opacity = '0.5';
+        nextBtn.disabled = true;
+        
+        await saveAttempt(true);
+        
+        const total = currentQuiz.questions.length;
+        const xpEarned = Math.round((currentQuiz.xp_reward || 20) * (score / total));
 
         // Show Results
-        loader.style.display = 'none';
-        resultScreen.style.display = 'block';
-
+        document.getElementById('quiz-container').style.display = 'none';
+        const results = document.getElementById('results-container');
+        results.style.display = 'flex';
+        
         document.getElementById('final-score').textContent = score;
-        document.getElementById('total-questions').textContent = total;
+        document.getElementById('final-total').textContent = `/ ${total}`;
         document.getElementById('final-xp').textContent = `+${xpEarned}`;
-
+        
         if (score === total) {
-            document.getElementById('result-title').textContent = 'Perfect Score!';
-            document.getElementById('result-desc').textContent = 'You are a true Geography Genius!';
-        } else if (score > total / 2) {
-            document.getElementById('result-title').textContent = 'Well Done!';
-            document.getElementById('result-desc').textContent = "Great effort! You're almost there.";
+            document.getElementById('results-message').textContent = "Perfect Score! You're a true geography expert!";
+        } else if (score >= total / 2) {
+            document.getElementById('results-message').textContent = "Good job! You've got a solid understanding of this country.";
         } else {
-            document.getElementById('result-title').textContent = 'Keep Practicing!';
-            document.getElementById('result-desc').textContent = "Geography is hard, but you're getting better!";
+            document.getElementById('results-message').textContent = "Keep practicing! You'll get better with each try.";
         }
     }
 
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            timer++;
-            const mins = Math.floor(timer / 60).toString().padStart(2, '0');
-            const secs = (timer % 60).toString().padStart(2, '0');
-            document.getElementById('timer-text').textContent = `${mins}:${secs}`;
-        }, 1000);
-    }
-
-    function showError(msg) {
-        loader.style.display = 'none';
-        quizBody.style.display = 'none';
-        errorState.style.display = 'flex';
-        document.getElementById('error-message').textContent = msg;
-    }
-
-    // Start
-    startQuiz();
+    loadQuiz();
 });
