@@ -29,6 +29,7 @@ export default defineConfig({
                 teenStoryDetails: 'teen-story-details.html',
                 teenLeaderboard: 'teen-leaderboard.html',
                 teenChallenges: 'teen-challenges.html',
+                teenAchievements: 'teen-achievements.html',
             }
         }
     }

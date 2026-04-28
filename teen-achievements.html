@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - GeoFroggy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-achievements.css">
+</head>
+
+<body>
+    <!-- Sidebar Component -->
+    <div id="sidebar-placeholder"></div>
+
+    <div class="main-wrapper">
+        <!-- Header Component -->
+        <div id="header-placeholder"></div>
+
+        <main class="dash-content">
+            <!-- Left Column -->
+            <div class="content-left">
+                <!-- Hero Section -->
+                <section class="achievements-hero">
+                    <img src="/assets/achievements-hero.png" alt="Achievements Hero" class="achievements-hero-bg">
+                    <div class="achievements-hero-content">
+                        <h1>Achievements</h1>
+                        <p>Track your progress and celebrate your victories!</p>
+                    </div>
+                </section>
+
+                <!-- Category Tabs -->
+                <div class="achive-tabs-container">
+                    <button class="achive-tab active">All Badges</button>
+                    <button class="achive-tab">Map</button>
+                    <button class="achive-tab">Quiz</button>
+                    <button class="achive-tab">Social</button>
+                    <button class="achive-tab">Special</button>
+                </div>
+
+                <!-- Achievements Grid -->
+                <div class="achievements-grid-main">
+                    <!-- Badge 1: World Traveler -->
+                    <div class="achievement-card">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg" style="background: #e0f2fe;"></div>
+                            <img src="https://img.icons8.com/color/96/globe.png" alt="World Traveler" class="achievement-icon">
+                        </div>
+                        <div class="achievement-title">World Traveler</div>
+                        <div class="achievement-date">Earned on April 20, 2024</div>
+                        <div class="achievement-xp">+500 XP</div>
+                    </div>
+
+                    <!-- Badge 2: Quiz Master -->
+                    <div class="achievement-card">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg" style="background: #fef3c7;"></div>
+                            <img src="https://img.icons8.com/color/96/brainstormy.png" alt="Quiz Master" class="achievement-icon">
+                        </div>
+                        <div class="achievement-title">Quiz Master</div>
+                        <div class="achievement-date">Earned on April 25, 2024</div>
+                        <div class="achievement-xp">+300 XP</div>
+                    </div>
+
+                    <!-- Badge 3: Streak Star -->
+                    <div class="achievement-card">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg" style="background: #ffedd5;"></div>
+                            <img src="https://img.icons8.com/color/96/fire-element.png" alt="Streak Star" class="achievement-icon">
+                        </div>
+                        <div class="achievement-title">Streak Star</div>
+                        <div class="achievement-date">Earned on April 27, 2024</div>
+                        <div class="achievement-xp">+200 XP</div>
+                    </div>
+
+                    <!-- Badge 4: Social Butterfly -->
+                    <div class="achievement-card">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg" style="background: #fdf2f8;"></div>
+                            <img src="https://img.icons8.com/color/96/conference-call.png" alt="Social Butterfly" class="achievement-icon">
+                        </div>
+                        <div class="achievement-title">Social Butterfly</div>
+                        <div class="achievement-date">Earned on April 15, 2024</div>
+                        <div class="achievement-xp">+150 XP</div>
+                    </div>
+
+                    <!-- Badge 5: Flag Expert -->
+                    <div class="achievement-card">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg" style="background: #f0fdf4;"></div>
+                            <img src="https://img.icons8.com/color/96/flag.png" alt="Flag Expert" class="achievement-icon">
+                        </div>
+                        <div class="achievement-title">Flag Expert</div>
+                        <div class="achievement-date">Earned on April 10, 2024</div>
+                        <div class="achievement-xp">+250 XP</div>
+                    </div>
+
+                    <!-- Badge 6: Landmark Hunter (Locked) -->
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg"></div>
+                            <img src="https://img.icons8.com/color/96/pagoda.png" alt="Landmark Hunter" class="achievement-icon">
+                            <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                        </div>
+                        <div class="achievement-title">Landmark Hunter</div>
+                        <div class="achievement-date">Locked</div>
+                    </div>
+
+                    <!-- Badge 7: Speed Demon (Locked) -->
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg"></div>
+                            <img src="https://img.icons8.com/color/96/speed.png" alt="Speed Demon" class="achievement-icon">
+                            <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                        </div>
+                        <div class="achievement-title">Speed Demon</div>
+                        <div class="achievement-date">Locked</div>
+                    </div>
+
+                    <!-- Badge 8: Legend (Locked) -->
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon-bg"></div>
+                            <img src="https://img.icons8.com/color/96/crown.png" alt="Legend" class="achievement-icon">
+                            <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+                        </div>
+                        <div class="achievement-title">Legend</div>
+                        <div class="achievement-date">Locked</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="content-right">
+                <!-- Achievement Stats Summary -->
+                <section class="stat-summary-card">
+                    <div class="stat-header">Your Milestone</div>
+                    <div class="stat-list">
+                        <div class="stat-row">
+                            <div class="stat-info">
+                                <div class="stat-icon-box" style="background: #fef3c7; color: #d97706;"><i class="fa-solid fa-award"></i></div>
+                                <span class="stat-name">Total Badges</span>
+                            </div>
+                            <span class="stat-value">5/24</span>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-info">
+                                <div class="stat-icon-box" style="background: #e0f2fe; color: #0284c7;"><i class="fa-solid fa-bolt"></i></div>
+                                <span class="stat-name">XP from Badges</span>
+                            </div>
+                            <span class="stat-value">1,400 XP</span>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-info">
+                                <div class="stat-icon-box" style="background: #f0fdf4; color: #16a34a;"><i class="fa-solid fa-calendar-check"></i></div>
+                                <span class="stat-name">Streak Days</span>
+                            </div>
+                            <span class="stat-value">12 Days</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Badge Showcase -->
+                <section class="badge-showcase-card">
+                    <div class="showcase-title">Elite Achievement</div>
+                    <img src="https://img.icons8.com/color/96/diamond.png" alt="Elite" class="showcase-badge-icon">
+                    <div class="showcase-name">Diamond Explorer</div>
+                    <div class="showcase-desc">Visit 50 countries and score 100% on all quizzes.</div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer Placeholder -->
+        <div id="footer-placeholder"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+</body>
+
+</html>
