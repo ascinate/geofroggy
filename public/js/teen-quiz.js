@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // Auth Check
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.warn('No authentication token found. Redirecting to login...');
+        window.location.href = 'teen-login.html';
+        return;
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const countryId = urlParams.get('id');
 
@@ -194,8 +202,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     async function checkPreviousAttempt(quizId) {
-        const token = localStorage.getItem('token');
-        if (!token) return null;
         try {
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt/${quizId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -208,12 +214,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function saveAttempt(completed) {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.warn('No token found, cannot save attempt');
-            return;
-        }
-
         const xpEarned = completed ? Math.round((currentQuiz.xp_reward || 20) * (score / currentQuiz.questions.length)) : 0;
 
         try {
