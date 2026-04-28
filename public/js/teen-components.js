@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!token) return;
 
         try {
-            const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) 
-                ? window.APP_CONFIG.API_BASE_URL.replace(/\/$/, "") 
+            const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL)
+                ? window.APP_CONFIG.API_BASE_URL.replace(/\/$/, "")
                 : 'https://geo-froggy-backend.devhhtk.workers.dev';
-            
+
             const res = await fetch(`${baseUrl}/api/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const headerAvatar = document.getElementById("header-avatar");
         if (headerAvatar) {
-            headerAvatar.src = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username || 'User')}&background=random&color=fff`;
+            headerAvatar.src = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.username || 'User')}&background=random&color=fff`;
         }
     }
 
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initial population from existing storage
     populateDynamicData();
-    
+
     // Sync with backend
     await syncSession();
 
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     await Promise.all(loadPromises);
-    
+
     // Refresh dynamic data once header is in the DOM
     const stats = JSON.parse(localStorage.getItem("stats") || "{}");
     const profile = JSON.parse(localStorage.getItem("profile") || "{}");
