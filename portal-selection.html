@@ -26,7 +26,8 @@
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
-            padding: 120px 0 80px 0; /* Space for header */
+            padding: 120px 0 80px 0;
+            /* Space for header */
             position: relative;
             z-index: 1;
             display: flex;
@@ -55,8 +56,10 @@
             gap: 15px;
         }
 
-        .portal-title::before, .portal-title::after {
-            content: "🌿"; /* Fallback leaf emoji or icon */
+        .portal-title::before,
+        .portal-title::after {
+            content: "🌿";
+            /* Fallback leaf emoji or icon */
             font-size: 2rem;
             color: #558B2F;
         }
@@ -72,7 +75,8 @@
             gap: 15px;
         }
 
-        .portal-subtitle::before, .portal-subtitle::after {
+        .portal-subtitle::before,
+        .portal-subtitle::after {
             content: "";
             height: 1px;
             width: 40px;
@@ -96,27 +100,36 @@
             max-width: 100%;
             transition: transform 0.3s ease, filter 0.3s ease;
             cursor: pointer;
-            margin-top: 80px; /* Space for the frog sticking out */
+            margin-top: 80px;
+            /* Space for the frog sticking out */
         }
 
         .portal-card-container:hover {
             transform: translateY(-10px);
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
         }
 
         .portal-frog {
             position: absolute;
-            top: -160px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
             z-index: 5;
             pointer-events: none;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        .kid-frog {
+            top: -140px;
+            left: -30px;
+            width: 260px;
+        }
+
+        .teen-frog {
+            top: -140px;
+            right: -30px;
+            width: 260px;
+        }
         
         .portal-card-container:hover .portal-frog {
-            transform: translateX(-50%) translateY(-10px) scale(1.05);
+            transform: translateY(-10px) scale(1.05);
         }
 
         .portal-card-bg {
@@ -130,11 +143,14 @@
 
         .portal-card-content {
             position: absolute;
-            bottom: 20px; /* Offset from bottom of the frame */
+            bottom: 20px;
+            /* Offset from bottom of the frame */
             left: 50%;
             transform: translateX(-50%);
-            width: 90%; /* Inner paper card width */
-            height: 75%; /* Inner paper card height */
+            width: 90%;
+            /* Inner paper card width */
+            height: 75%;
+            /* Inner paper card height */
             z-index: 3;
             display: flex;
             flex-direction: column;
@@ -154,24 +170,37 @@
             margin-bottom: 10px;
         }
 
-        .kids-title { color: #2E7D32; }
-        .teen-title { color: #1565C0; }
+        .kids-title {
+            color: #2E7D32;
+        }
+
+        .teen-title {
+            color: #1565C0;
+        }
 
         .portal-badge {
             font-family: 'Nunito', sans-serif;
             font-weight: 700;
             font-size: 0.85rem;
             padding: 4px 15px;
-            border-radius: 5px; /* More squared as seen in image */
+            border-radius: 5px;
+            /* More squared as seen in image */
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .kids-badge { background-color: #4CAF50; color: white; }
-        .teen-badge { background-color: #0D47A1; color: white; }
+        .kids-badge {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .teen-badge {
+            background-color: #0D47A1;
+            color: white;
+        }
 
         .portal-features {
             list-style: none;
@@ -183,10 +212,11 @@
 
         .feature-item {
             display: flex;
-            align-items: center; /* Centered icons as in image */
+            align-items: center;
+            /* Centered icons as in image */
             gap: 12px;
             margin-bottom: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             padding-bottom: 8px;
         }
 
@@ -204,16 +234,32 @@
             flex-shrink: 0;
             font-size: 0.9rem;
             color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .kids-icon-1 { background-color: #9575CD; }
-        .kids-icon-2 { background-color: #4DB6AC; }
-        .kids-icon-3 { background-color: #FFB74D; }
+        .kids-icon-1 {
+            background-color: #9575CD;
+        }
 
-        .teen-icon-1 { background-color: #5C6BC0; }
-        .teen-icon-2 { background-color: #26A69A; }
-        .teen-icon-3 { background-color: #AFB42B; }
+        .kids-icon-2 {
+            background-color: #4DB6AC;
+        }
+
+        .kids-icon-3 {
+            background-color: #FFB74D;
+        }
+
+        .teen-icon-1 {
+            background-color: #5C6BC0;
+        }
+
+        .teen-icon-2 {
+            background-color: #26A69A;
+        }
+
+        .teen-icon-3 {
+            background-color: #AFB42B;
+        }
 
         .feature-text h4 {
             font-family: 'Nunito', sans-serif;
@@ -247,12 +293,12 @@
             margin-top: auto;
         }
 
-        .kids-btn { 
+        .kids-btn {
             background: linear-gradient(to right, #689F38, #558B2F);
             box-shadow: 0 5px 15px rgba(85, 139, 47, 0.4);
         }
 
-        .teen-btn { 
+        .teen-btn {
             background: linear-gradient(to right, #1565C0, #0D47A1);
             box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
         }
@@ -260,7 +306,7 @@
         .portal-btn:hover {
             transform: scale(1.05);
             color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         .portal-footer-notice {
@@ -272,17 +318,18 @@
             display: inline-flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 2;
-            border: 1px solid rgba(255,255,255,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        
+
         .notice-content {
             display: flex;
             align-items: center;
             gap: 15px;
-            background-color: rgba(248, 241, 227, 0.9); /* Parchment color overlay if bg is too dark */
+            background-color: rgba(248, 241, 227, 0.9);
+            /* Parchment color overlay if bg is too dark */
             padding: 10px 20px;
             border-radius: 10px;
             border: 1px dashed #C8B89E;
@@ -313,6 +360,7 @@
             .portals-container {
                 gap: 30px;
             }
+
             .portal-card-container {
                 width: 420px;
             }
@@ -322,14 +370,17 @@
             .portal-title {
                 font-size: 2.5rem;
             }
+
             .portal-card-container {
                 width: 90%;
                 margin-top: 100px;
             }
+
             .portal-frog {
                 width: 200px;
                 top: -120px;
             }
+
             .portals-container {
                 flex-direction: column;
                 align-items: center;
@@ -346,7 +397,7 @@
 
     <!-- Main Content -->
     <div class="portal-selection-wrapper">
-        
+
         <!-- Title Section -->
         <div class="portal-header" data-aos="fade-down">
             <h1 class="portal-title">Choose Your Adventure</h1>
@@ -355,15 +406,15 @@
 
         <!-- Cards Section -->
         <div class="portals-container">
-            
+
             <!-- Kids Portal Card -->
             <div class="portal-card-container" data-aos="fade-up" data-aos-delay="100">
-                <img src="/assets/kid-frog.png" alt="Kids Frog" class="portal-frog" />
+                <img src="/assets/kid-frog.png" alt="Kids Frog" class="portal-frog kid-frog" />
                 <img src="/assets/card-kid.png" alt="Kids Portal" class="portal-card-bg" />
-                
+
                 <div class="portal-card-content">
                     <h2 class="portal-card-title kids-title">Kids Portal</h2>
-                    
+
                     <div class="portal-badge kids-badge">
                         <i class="fa-solid fa-star"></i>
                         Fun & Easy Learning
@@ -402,12 +453,12 @@
 
             <!-- Teen Portal Card -->
             <div class="portal-card-container" data-aos="fade-up" data-aos-delay="200">
-                <img src="/assets/Teen-frog.png" alt="Teen Frog" class="portal-frog" />
+                <img src="/assets/Teen-frog.png" alt="Teen Frog" class="portal-frog teen-frog" />
                 <img src="/assets/teen-card.png" alt="Teen Portal" class="portal-card-bg" />
-                
+
                 <div class="portal-card-content">
                     <h2 class="portal-card-title teen-title">Teen Portal</h2>
-                    
+
                     <div class="portal-badge teen-badge">
                         <i class="fa-solid fa-star"></i>
                         Challenge. Explore. Achieve.
@@ -473,7 +524,7 @@
     <script src="/js/components.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/demo.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         AOS.init({
@@ -484,4 +535,5 @@
         });
     </script>
 </body>
+
 </html>
