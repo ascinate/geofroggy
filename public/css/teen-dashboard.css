@@ -154,6 +154,7 @@ body {
 }
 
 .header-nav ul {
+    margin-top: 20px;
     display: flex;
     list-style: none;
     gap: 20px;
@@ -932,6 +933,7 @@ body {
     .dash-content {
         grid-template-columns: 1fr;
     }
+
     .content-right {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -942,12 +944,18 @@ body {
     #sidebar-placeholder {
         width: 70px;
     }
-    .sidebar-nav span, .sidebar-logo, .sidebar-quote, .sidebar-mascot {
+
+    .sidebar-nav span,
+    .sidebar-logo,
+    .sidebar-quote,
+    .sidebar-mascot {
         display: none;
     }
+
     .sidebar-container {
         padding: 15px 10px;
     }
+
     .content-right {
         grid-template-columns: 1fr;
     }
