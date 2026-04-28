@@ -49,11 +49,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const previousAttempt = await checkPreviousAttempt(quizData.id);
             if (previousAttempt && previousAttempt.id) {
                 console.log('Previous attempt found:', previousAttempt);
-                parseQuizQuestions(quizData); // Parse questions even for results
-                
                 if (previousAttempt.completed) {
-                    currentQuiz = quizData;
                     score = previousAttempt.score;
+                    initializeQuiz(quizData, true);
                     showResults(true); // Already completed
                     return;
                 } else {
@@ -63,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     currentQuestionIndex = userAnswers.length;
                     
                     if (currentQuestionIndex >= quizData.questions.length) {
-                        currentQuiz = quizData;
+                        initializeQuiz(quizData, true);
                         showResults(false);
                         return;
                     }
@@ -72,15 +70,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             initializeQuiz(quizData);
         } catch (err) {
-            console.error('Quiz loading error details:', err);
-            alert('Error loading quiz: ' + err.message);
+            console.error('Quiz loading error:', err);
+            alert('Error loading quiz. Please try again.');
             window.location.href = 'teen-map.html';
         }
     }
 
-    function parseQuizQuestions(quiz) {
-        if (!quiz || !quiz.questions) return;
-        quiz.questions = quiz.questions.map(q => {
+    function initializeQuiz(quizData, isCompleted = false) {
+        currentQuiz = quizData;
+        
+        // Parse questions
+        currentQuiz.questions = currentQuiz.questions.map(q => {
             if (typeof q.question === 'string') {
                 try {
                     return { ...q, data: JSON.parse(q.question) };
@@ -90,13 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             return { ...q, data: q.question };
         });
-    }
-
-    function initializeQuiz(quizData) {
-        currentQuiz = quizData;
-        
-        // Parse questions
-        parseQuizQuestions(currentQuiz);
 
         // Set Header Info - Prefer title if available, otherwise country_name
         document.getElementById('quiz-country-name').textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
@@ -110,7 +103,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
         }
         
-        renderQuestion();
+        if (!isCompleted) {
+            renderQuestion();
+        }
+        
         quizLoader.style.display = 'none';
         console.log("Quiz Initialized:", currentQuiz);
     }
@@ -272,28 +268,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showResults(isPrevious) {
-        if (!currentQuiz || !currentQuiz.questions) {
-            console.error('Cannot show results: quiz data missing');
-            return;
-        }
         const total = currentQuiz.questions.length;
-        const xpEarned = total > 0 ? Math.round((currentQuiz.xp_reward || 20) * (score / total)) : 0;
+        const xpEarned = Math.round((currentQuiz.xp_reward || 20) * (score / total));
 
         quizLoader.style.display = 'none';
-        const quizContainer = document.getElementById('quiz-container');
-        if (quizContainer) quizContainer.style.display = 'none';
-        
+        document.getElementById('quiz-container').style.display = 'none';
         const results = document.getElementById('results-container');
-        if (results) results.style.display = 'flex';
+        results.style.display = 'flex';
         
-        const scoreEl = document.getElementById('final-score');
-        if (scoreEl) scoreEl.textContent = score;
-        
-        const totalEl = document.getElementById('final-total');
-        if (totalEl) totalEl.textContent = `/ ${total}`;
-        
-        const xpEl = document.getElementById('final-xp');
-        if (xpEl) xpEl.textContent = `+${xpEarned}`;
+        document.getElementById('final-score').textContent = score;
+        document.getElementById('final-total').textContent = `/ ${total}`;
+        document.getElementById('final-xp').textContent = `+${xpEarned}`;
         
         if (isPrevious) {
             document.getElementById('results-title').textContent = "Quiz Already Completed";
