@@ -4,184 +4,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teen Portal - Authentication</title>
+    <title>Teen Portal - GeoFroggy</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Global CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/style.css">
     
     <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-green: #16a34a;
+            --dark-bg: rgba(15, 23, 42, 0.8);
+            --light-bg: rgba(255, 255, 255, 0.9);
+            --text-dark: #1e293b;
+            --text-light: #f8fafc;
+        }
+
         body {
             background-image: url('/assets/hills-bg.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            font-family: 'Nunito', sans-serif;
-        }
-
-        .auth-container {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            display: flex;
-            min-height: 700px;
-        }
-
-        .auth-section {
-            flex: 1;
-            padding: 50px;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
             display: flex;
             flex-direction: column;
-            transition: all 0.5s ease;
+            color: var(--text-light);
+            overflow-x: hidden;
         }
 
-        /* Login Side (Dark) */
-        .login-section {
-            background: rgba(13, 27, 42, 0.9);
-            color: white;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        /* Header Styles */
+        header {
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
         }
 
-        /* Register Side (Light) */
-        .register-section {
-            background: rgba(255, 255, 255, 0.95);
-            color: #1a1a1a;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .auth-header {
-            margin-bottom: 30px;
+        .logo-container img {
+            height: 40px;
         }
 
-        .auth-header span {
+        .portal-badge {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 680px;
+            background: transparent;
+            border-radius: 40px;
+            overflow: visible;
+            position: relative;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Left Side - Login */
+        .login-side {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(25px);
+            padding: 50px 60px;
+            border-radius: 40px 0 0 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Right Side - Register */
+        .register-side {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(25px);
+            padding: 50px 60px;
+            border-radius: 0 40px 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-header {
+            margin-bottom: 35px;
+        }
+
+        .side-header .welcome-text {
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 400;
             opacity: 0.8;
-        }
-
-        .auth-header h2 {
-            font-family: 'Playfair', serif;
-            font-size: 2.8rem;
-            font-weight: 900;
-            margin: 5px 0;
-        }
-
-        .frog-avatar {
-            width: 150px;
-            margin: 20px auto;
+            margin-bottom: 5px;
             display: block;
         }
 
-        /* Forms */
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+        .side-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.1;
         }
 
-        .form-label {
+        .side-header p {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-top: 15px;
+            max-width: 320px;
+            line-height: 1.5;
+        }
+
+        .mascot-container {
+            position: absolute;
+            top: 70px;
+            right: -60px;
+            width: 280px;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .mascot-container img {
+            width: 100%;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        }
+
+        /* Form Controls */
+        .form-section-title {
+            font-size: 0.95rem;
             font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             display: block;
         }
 
         .input-group {
+            margin-bottom: 18px;
             position: relative;
         }
 
         .input-group i {
             position: absolute;
-            left: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
+            font-size: 1.1rem;
+            opacity: 0.5;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .input-group .eye-toggle {
+            position: absolute;
+            right: 18px;
+            left: auto;
+            cursor: pointer;
             opacity: 0.6;
         }
 
         .form-control {
-            height: 50px;
-            padding-left: 45px !important;
-            border-radius: 12px;
-            border: 2px solid rgba(0,0,0,0.1);
-            background: rgba(255, 255, 255, 0.05);
-            font-weight: 600;
-            transition: all 0.3s;
+            height: 56px;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            padding-left: 50px !important;
+            padding-right: 50px !important;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .login-section .form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
+        .login-side .form-control {
+            background: rgba(255, 255, 255, 0.08);
             color: white;
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .login-section .form-control::placeholder { color: rgba(255,255,255,0.4); }
+        .login-side .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .register-side .form-control {
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #e2e8f0;
+        }
 
         .form-control:focus {
-            outline: none;
             box-shadow: none;
-            border-color: #1565C0;
-            background: white;
-            color: #1a1a1a;
+            border-color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .auth-options {
+        .register-side .form-control:focus {
+            background: white;
+            border-color: var(--primary-blue);
+        }
+
+        .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
         }
 
-        .auth-options a {
-            color: #1565C0;
+        .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .form-options a {
+            color: var(--primary-blue);
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
         }
 
-        .btn-auth {
-            height: 55px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 800;
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            height: 58px;
+            border-radius: 16px;
+            font-weight: 700;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            transition: all 0.3s;
+            gap: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
             width: 100%;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-login {
-            background: #1565C0;
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
             color: white;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
         }
 
         .btn-register {
-            background: #2E7D32;
+            background: linear-gradient(135deg, #15803d, #16a34a);
             color: white;
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
         }
 
-        .btn-auth:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            opacity: 0.9;
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
         }
 
         /* OR Divider */
@@ -190,183 +298,201 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: #1a1a1a;
-            color: white;
+            width: 56px;
+            height: 56px;
+            background: #0f172a;
+            border: 4px solid #3b82f6;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 900;
-            border: 4px solid rgba(255,255,255,0.2);
-            z-index: 10;
-        }
-
-        /* Mobile Switcher */
-        .mobile-toggle {
-            display: none;
-            background: rgba(0,0,0,0.8);
-            border-radius: 50px;
-            padding: 5px;
-            margin-bottom: 30px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .toggle-btn {
-            padding: 8px 25px;
-            border-radius: 50px;
-            border: none;
-            background: transparent;
             color: white;
-            font-weight: 700;
-            transition: all 0.3s;
+            font-weight: 800;
+            font-size: 0.9rem;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
 
-        .toggle-btn.active {
-            background: #1565C0;
+        /* Footer links */
+        .form-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .form-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1150px) {
+            .mascot-container {
+                display: none;
+            }
         }
 
         @media (max-width: 992px) {
-            .auth-container {
+            header {
+                padding: 20px;
+            }
+            .auth-card {
                 flex-direction: column;
-                max-width: 500px;
-                min-height: auto;
+                max-width: 550px;
             }
-
+            .login-side {
+                border-radius: 40px 40px 0 0;
+                padding: 40px 30px;
+            }
+            .register-side {
+                border-radius: 0 0 40px 40px;
+                padding: 40px 30px;
+            }
             .or-divider {
+                top: auto;
+                bottom: -28px;
+                left: 50%;
                 display: none;
             }
-
-            .mobile-toggle {
-                display: flex;
+            .side-header h1 {
+                font-size: 2.8rem;
             }
+        }
 
-            .auth-section {
-                display: none;
-            }
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-            .auth-section.active {
-                display: flex;
-            }
+        /* Custom scrollbar for glass */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="d-flex flex-column align-items-center w-100">
-        
-        <!-- Mobile Toggle -->
-        <div class="mobile-toggle">
-            <button class="toggle-btn active" onclick="switchTab('login')">Log In</button>
-            <button class="toggle-btn" onclick="switchTab('register')">Register</button>
+    <header>
+        <div class="logo-container">
+            <img src="/assets/logo.svg" alt="GeoFroggy">
         </div>
+        <div class="portal-badge">Teen Portal</div>
+    </header>
 
-        <div class="auth-container">
-            
-            <!-- Login Section -->
-            <div class="auth-section login-section active" id="login-panel">
-                <div class="auth-header">
-                    <span>Welcome Back,</span>
-                    <h2>Explorer!</h2>
+    <main>
+        <div class="auth-card">
+            <!-- OR Divider -->
+            <div class="or-divider">OR</div>
+
+            <!-- Login Side -->
+            <div class="login-side">
+                <div class="mascot-container">
+                    <img src="/assets/Teen-frog.png" alt="Teen Frog Mascot">
+                </div>
+
+                <div class="side-header">
+                    <span class="welcome-text">Welcome Back,</span>
+                    <h1>Explorer!</h1>
                     <p>Continue your journey and explore the world like never before.</p>
                 </div>
 
-                <img src="/assets/Teen-frog.png" alt="Teen Frog" class="frog-avatar">
-
                 <form id="teenLoginForm">
-                    <h5 class="mb-4 fw-bold">Log In To Your Account</h5>
+                    <span class="form-section-title">Log In To Your Account</span>
                     
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-regular fa-envelope"></i>
-                            <input type="email" class="form-control" placeholder="Email address" id="login-email" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" class="form-control" placeholder="Email address" id="login-email" required>
                     </div>
 
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" placeholder="Password" id="login-password" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" class="form-control" placeholder="Password" id="login-password" required>
+                        <i class="fa-regular fa-eye eye-toggle" onclick="togglePassword('login-password')"></i>
                     </div>
 
-                    <div class="auth-options">
-                        <label class="d-flex align-items-center gap-2">
+                    <div class="form-options">
+                        <label>
                             <input type="checkbox" checked> Remember me
                         </label>
                         <a href="#">Forgot password?</a>
                     </div>
 
-                    <button type="submit" class="btn-auth btn-login">
+                    <button type="submit" class="btn-submit btn-login">
                         Log In <i class="fa-solid fa-arrow-right"></i>
                     </button>
+
+                    <div class="form-footer">
+                        By logging in, you agree to our <a href="#">Terms of Service</a><br>
+                        and <a href="#">Privacy Policy</a>.
+                    </div>
                 </form>
             </div>
 
-            <!-- OR Divider -->
-            <div class="or-divider">OR</div>
-
-            <!-- Register Section -->
-            <div class="auth-section register-section" id="register-panel">
-                <div class="auth-header">
-                    <span>Start Your Adventure,</span>
-                    <h2>Explorer!</h2>
+            <!-- Register Side -->
+            <div class="register-side">
+                <div class="side-header">
+                    <span class="welcome-text">Start Your Adventure,</span>
+                    <h1>Explorer!</h1>
                     <p>Create your account and begin your exploration today.</p>
                 </div>
 
                 <form id="teenRegisterForm">
-                    <h5 class="mb-4 fw-bold">Create New Account</h5>
+                    <span class="form-section-title">Create New Account</span>
                     
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-regular fa-user"></i>
-                            <input type="text" class="form-control" placeholder="Full name" id="reg-username" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" class="form-control" placeholder="Full name" id="reg-username" required>
                     </div>
 
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-regular fa-envelope"></i>
-                            <input type="email" class="form-control" placeholder="Email address" id="reg-email" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" class="form-control" placeholder="Email address" id="reg-email" required>
                     </div>
 
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-solid fa-lock"></i>
-                            <input type="password" class="form-control" placeholder="Password" id="reg-password" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" class="form-control" placeholder="Password" id="reg-password" required>
+                        <i class="fa-regular fa-eye eye-toggle" onclick="togglePassword('reg-password')"></i>
                     </div>
 
-                    <div class="form-group">
-                        <div class="input-group">
-                            <i class="fa-solid fa-shield"></i>
-                            <input type="password" class="form-control" placeholder="Confirm password" id="reg-confirm" required>
-                        </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" class="form-control" placeholder="Confirm password" id="reg-confirm" required>
+                        <i class="fa-regular fa-eye eye-toggle" onclick="togglePassword('reg-confirm')"></i>
                     </div>
 
-                    <div class="form-group mb-4">
-                        <label class="d-flex align-items-center gap-2 small opacity-75">
-                            <input type="checkbox" required> I agree to the <a href="#" class="text-primary text-decoration-none">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.
+                    <div class="form-options mb-4">
+                        <label style="font-size: 0.85rem; align-items: flex-start;">
+                            <input type="checkbox" required style="margin-top: 3px;">
+                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn-auth btn-register">
+                    <button type="submit" class="btn-submit btn-register">
                         Create Account <i class="fa-solid fa-arrow-right"></i>
                     </button>
 
-                    <div class="text-center mt-4 d-lg-none">
-                        Already have an account? <a href="#" onclick="switchTab('login')" class="text-primary fw-bold text-decoration-none">Log in</a>
+                    <div class="form-footer mt-4">
+                        Already have an account? <a href="#" onclick="focusLogin()" style="color: var(--primary-blue); font-weight: 700;">Log in</a>
                     </div>
                 </form>
             </div>
-
         </div>
-    </div>
+    </main>
 
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -374,22 +500,22 @@
     <script src="/js/alert.js"></script>
 
     <script>
-        // Tab switching logic
-        function switchTab(tab) {
-            const loginPanel = document.getElementById('login-panel');
-            const registerPanel = document.getElementById('register-panel');
-            const btns = document.querySelectorAll('.toggle-btn');
-
-            if (tab === 'login') {
-                loginPanel.classList.add('active');
-                registerPanel.classList.remove('active');
-                btns[0].classList.add('active');
-                btns[1].classList.remove('active');
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling.nextElementSibling || input.nextElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
-                loginPanel.classList.remove('active');
-                registerPanel.classList.add('active');
-                btns[0].classList.remove('active');
-                btns[1].classList.add('active');
+                input.type = "password";
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function focusLogin() {
+            document.getElementById('login-email').focus();
+            if (window.innerWidth <= 992) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
@@ -413,7 +539,7 @@
                     showAlert("success", "Login Successful. Redirecting...");
                     localStorage.setItem("token", data.session.access_token);
                     localStorage.setItem("user", JSON.stringify(data.user));
-                    setTimeout(() => window.location.href = "/dashboard.html", 2000);
+                    setTimeout(() => window.location.href = "/dashboard.html", 1500);
                 } else {
                     showAlert("error", data.error || "Login Failed");
                 }
@@ -449,7 +575,7 @@
                 const data = await res.json();
                 if (res.ok) {
                     showAlert("success", "Account Created! Please login.");
-                    switchTab('login');
+                    focusLogin();
                 } else {
                     showAlert("error", data.error || "Registration Failed");
                 }
@@ -461,3 +587,4 @@
 </body>
 
 </html>
+
