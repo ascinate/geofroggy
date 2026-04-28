@@ -22,14 +22,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     let score = 0;
     let userAnswers = [];
     let isQuizCompleted = false;
+    let timerInterval = null;
+    let timeLeft = 600; // 10 minutes default
 
     // Elements
     const quizLoader = document.getElementById('quiz-loader');
-    const quizArea = document.getElementById('quiz-question-area');
     const optionsContainer = document.getElementById('options-container');
     const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
     const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
+    const timerValue = document.getElementById('quiz-timer-value');
 
     async function loadQuiz() {
         try {
@@ -44,10 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // 1. Prepare Data Immediately
+            // 1. Prepare Data
             currentQuiz = quizzes[0];
             
-            // Safety check for questions
             if (!currentQuiz.questions || !Array.isArray(currentQuiz.questions) || currentQuiz.questions.length === 0) {
                 throw new Error('Quiz has no questions data');
             }
@@ -65,37 +66,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return { ...q, data: parsedData || {} };
             });
 
-            // 2. Check for previous attempt (Resuming logic)
+            // 2. Check for previous attempt
             const previousAttempt = await checkPreviousAttempt(currentQuiz.id);
             
             // Set basic UI info early
-            const nameEl = document.getElementById('quiz-country-name');
-            if (nameEl) nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
-            fetchCountryFlag(countryId);
+            const catEl = document.getElementById('quiz-category');
+            if (catEl) catEl.textContent = currentQuiz.title || 'Geography Challenge';
 
             if (previousAttempt && previousAttempt.id) {
-                console.log('Previous attempt found:', previousAttempt);
-                
-                // Parse answers if they are in string format
                 let parsedAnswers = previousAttempt.answers;
                 if (typeof parsedAnswers === 'string') {
-                    try {
-                        parsedAnswers = JSON.parse(parsedAnswers);
-                    } catch (e) {
-                        console.error('Failed to parse previous attempt answers:', e);
-                        parsedAnswers = [];
-                    }
+                    try { parsedAnswers = JSON.parse(parsedAnswers); } catch (e) { parsedAnswers = []; }
                 }
                 userAnswers = Array.isArray(parsedAnswers) ? parsedAnswers : [];
                 score = previousAttempt.score || 0;
 
                 if (previousAttempt.completed) {
-                    showResults(true); // Already completed
+                    showResults(true);
                     return;
                 } else {
-                    // Resume progress
                     currentQuestionIndex = userAnswers.length;
-                    
                     if (currentQuestionIndex >= currentQuiz.questions.length) {
                         showResults(false);
                         return;
@@ -103,8 +93,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
 
-            // 3. Initialize UI only if playing
             initializeQuizUI();
+            startTimer();
         } catch (err) {
             console.error('Quiz loading error:', err);
             alert(`Error loading quiz: ${err.message || 'Unknown error'}`);
@@ -113,62 +103,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function initializeQuizUI() {
-        // Set Header Info
-        const nameEl = document.getElementById('quiz-country-name');
-        const xpEl = document.getElementById('potential-xp');
-        
-        if (nameEl && !nameEl.textContent.includes(currentQuiz.title)) {
-            nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
-        }
-        if (xpEl) xpEl.textContent = `+${currentQuiz.xp_reward || 20}`;
+        const xpPerQ = Math.floor((currentQuiz.xp_reward || 20) / currentQuiz.questions.length);
+        const xpPerQEl = document.getElementById('xp-per-question');
+        if (xpPerQEl) xpPerQEl.textContent = `+${xpPerQ} XP`;
 
-        // Update UI for resumed attempts
-        if (userAnswers.length > 0) {
-            const currentAccuracy = Math.round((score / userAnswers.length) * 100);
-            const accuracyEl = document.getElementById('current-accuracy');
-            if (accuracyEl) accuracyEl.textContent = `${currentAccuracy}%`;
-        }
-        
+        const stats = JSON.parse(localStorage.getItem('stats') || '{}');
+        const totalXpEl = document.getElementById('sidebar-total-xp');
+        if (totalXpEl) totalXpEl.textContent = (stats.xp || 0).toLocaleString();
+
+        updateSidebar();
         renderQuestion();
         if (quizLoader) quizLoader.style.display = 'none';
-        console.log("Quiz UI Initialized");
     }
 
-    async function fetchCountryFlag(id) {
-        try {
-            const res = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/country`);
-            const countries = await res.json();
-            const country = countries.find(c => c.id == id || c.name === id); // Use == for loose match if ID is string/num
-            if (country && country.code) {
-                const flagImg = document.getElementById('quiz-flag');
-                flagImg.src = `https://flagcdn.com/w80/${country.code.toLowerCase()}.png`;
-                flagImg.style.display = 'block';
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                finishQuiz();
+                return;
             }
-        } catch (e) {}
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            if (timerValue) timerValue.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
     }
 
     function renderQuestion() {
         const question = currentQuiz.questions[currentQuestionIndex];
         const qData = question.data;
 
-        // Update UI
+        // Update Text
         document.getElementById('question-number').textContent = `Question ${currentQuestionIndex + 1} of ${currentQuiz.questions.length}`;
         document.getElementById('question-text').textContent = qData.question;
         
-        optionsContainer.innerHTML = '';
-        nextBtn.disabled = true;
+        // Did You Know
+        const dykText = document.getElementById('dyk-text');
+        if (dykText) dykText.textContent = qData.fun_fact || "The world is full of amazing geography facts waiting for you to discover!";
 
+        optionsContainer.innerHTML = '';
+        
+        // Handle Resumed Question Visuals
+        const existingAnswer = userAnswers[currentQuestionIndex];
+        
         Object.entries(qData.options).forEach(([letter, text]) => {
             const card = document.createElement('div');
             card.className = 'option-card';
+            if (existingAnswer && existingAnswer.selected_option === letter) {
+                card.classList.add('selected');
+                if (existingAnswer.is_correct) card.classList.add('correct');
+                else card.classList.add('incorrect');
+            }
+
             card.innerHTML = `
-                <div class="option-letter">${letter}</div>
-                <div class="option-text">${text}</div>
+                <div class="option-left">
+                    <div class="option-radio"></div>
+                    <div class="option-text">${text}</div>
+                </div>
+                ${existingAnswer && existingAnswer.selected_option === letter ? '<span class="selected-badge">Selected</span>' : ''}
             `;
-            card.onclick = () => selectOption(card, letter);
+            
+            if (!existingAnswer) {
+                card.onclick = () => selectOption(card, letter);
+            }
             optionsContainer.appendChild(card);
         });
 
+        // Navigation state
+        nextBtn.disabled = !existingAnswer;
+        prevBtn.disabled = currentQuestionIndex === 0;
+        
         updateProgress();
     }
 
@@ -180,42 +186,73 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Visual feedback
         const allCards = document.querySelectorAll('.option-card');
-        allCards.forEach(c => c.onclick = null); // Disable all clicks
+        allCards.forEach(c => c.onclick = null);
         
+        card.classList.add('selected');
+        card.innerHTML += '<span class="selected-badge">Selected</span>';
+
         if (isCorrect) {
             card.classList.add('correct');
             score++;
         } else {
             card.classList.add('incorrect');
-            // Highlight correct one
+            // Show correct answer
             allCards.forEach(c => {
-                if (c.querySelector('.option-letter').textContent === qData.correct) {
-                    c.classList.add('correct');
-                }
+                const optText = c.querySelector('.option-text').textContent;
+                const correctText = qData.options[qData.correct];
+                if (optText === correctText) c.classList.add('correct');
             });
         }
 
-        userAnswers.push({
+        userAnswers[currentQuestionIndex] = {
             question_id: currentQuiz.questions[currentQuestionIndex].id,
             selected_option: letter,
             is_correct: isCorrect
-        });
+        };
 
-        // Update accuracy stat immediately
-        const currentAccuracy = Math.round((score / userAnswers.length) * 100);
-        document.getElementById('current-accuracy').textContent = `${currentAccuracy}%`;
-
-        // Save progress (Partial)
+        updateSidebar();
         await saveAttempt(false);
-
         nextBtn.disabled = false;
     }
 
     function updateProgress() {
         const total = currentQuiz.questions.length;
         const percent = Math.round((currentQuestionIndex / total) * 100);
-        progressBar.style.width = `${percent}%`;
-        progressText.textContent = `${percent}% Completed`;
+        if (progressBar) progressBar.style.width = `${percent}%`;
+    }
+
+    function updateSidebar() {
+        const total = currentQuiz.questions.length;
+        const answered = userAnswers.filter(a => a !== undefined).length;
+        const correct = userAnswers.filter(a => a && a.is_correct).length;
+        const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+        // Progress Card
+        const circle = document.getElementById('circle-progress');
+        if (circle) circle.style.setProperty('--percent', percent);
+        const percentText = document.getElementById('percent-text');
+        if (percentText) percentText.textContent = `${percent}%`;
+        
+        const answeredEl = document.getElementById('answered-count');
+        if (answeredEl) answeredEl.textContent = `${answered} / ${total}`;
+        
+        const correctEl = document.getElementById('correct-count');
+        if (correctEl) correctEl.innerHTML = `<i class="fa-regular fa-circle-check"></i> ${correct}`;
+
+        // Streak (Simple logic: consecutive correct answers in current session)
+        let streak = 0;
+        for (let i = userAnswers.length - 1; i >= 0; i--) {
+            if (userAnswers[i] && userAnswers[i].is_correct) streak++;
+            else if (userAnswers[i] && !userAnswers[i].is_correct) break;
+        }
+        const streakEl = document.getElementById('streak-value');
+        if (streakEl) streakEl.textContent = streak;
+        
+        const dots = document.querySelectorAll('.streak-dot');
+        dots.forEach((dot, idx) => {
+            if (idx < streak) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
     }
 
     nextBtn.onclick = () => {
@@ -227,23 +264,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    prevBtn.onclick = () => {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+        }
+    };
+
     async function checkPreviousAttempt(quizId) {
         try {
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt/${quizId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) return await response.json();
-        } catch (e) {
-            console.error('Error checking attempt:', e);
-        }
+        } catch (e) { console.error('Error checking attempt:', e); }
         return null;
     }
 
     async function saveAttempt(completed) {
         const xpEarned = completed ? Math.round((currentQuiz.xp_reward || 20) * (score / currentQuiz.questions.length)) : 0;
-
         try {
-            console.log(`Saving attempt (completed: ${completed})...`);
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/quiz/attempt`, {
                 method: 'POST',
                 headers: {
@@ -255,64 +295,52 @@ document.addEventListener('DOMContentLoaded', async () => {
                     score: score,
                     completed: completed,
                     xp_earned: xpEarned,
-                    answers: userAnswers
+                    answers: userAnswers.filter(a => a !== undefined)
                 })
             });
-            
             const result = await response.json();
-
-            if (!response.ok) {
-                console.error('Failed to save quiz attempt:', result.error || 'Unknown error');
-            } else {
-                console.log(completed ? 'Attempt finalized!' : 'Progress saved...', result);
-                
-                // If completed, update the local stats to reflect the rewards immediately
-                if (completed && result.rewards) {
-                    const stats = JSON.parse(localStorage.getItem('stats') || '{}');
-                    stats.xp = (stats.xp || 0) + (result.rewards.xp || 0);
-                    stats.tokens = (stats.tokens || 0) + (result.rewards.tokens || 0);
-                    localStorage.setItem('stats', JSON.stringify(stats));
-                    
-                    // Dispatch event for components to update if needed
-                    window.dispatchEvent(new Event('statsUpdated'));
-                }
+            if (response.ok && completed && result.rewards) {
+                const stats = JSON.parse(localStorage.getItem('stats') || '{}');
+                stats.xp = (stats.xp || 0) + (result.rewards.xp || 0);
+                stats.tokens = (stats.tokens || 0) + (result.rewards.tokens || 0);
+                localStorage.setItem('stats', JSON.stringify(stats));
+                window.dispatchEvent(new Event('statsUpdated'));
             }
-        } catch (e) {
-            console.error('Error saving attempt:', e);
-        }
+        } catch (e) { console.error('Error saving attempt:', e); }
     }
 
     async function finishQuiz() {
-        quizArea.style.opacity = '0.5';
-        nextBtn.disabled = true;
-        
+        if (timerInterval) clearInterval(timerInterval);
+        if (quizLoader) {
+            quizLoader.style.display = 'flex';
+            quizLoader.querySelector('p').textContent = "Finishing your quiz...";
+        }
         await saveAttempt(true);
         showResults(false);
     }
 
     function showResults(isPrevious) {
-        if (!currentQuiz) {
-            console.error('Cannot show results: currentQuiz is null');
-            return;
-        }
-
+        if (timerInterval) clearInterval(timerInterval);
         const total = (currentQuiz.questions && currentQuiz.questions.length) || 0;
         const xpEarned = total > 0 ? Math.round((currentQuiz.xp_reward || 20) * (score / total)) : 0;
 
         if (quizLoader) quizLoader.style.display = 'none';
-        const quizContainer = document.getElementById('quiz-container');
-        if (quizContainer) quizContainer.style.display = 'none';
+        const quizLayout = document.querySelector('.quiz-layout');
+        // Hide sidebar and main column to show results clearly
+        if (quizLayout) {
+            const sidebar = document.querySelector('.quiz-sidebar');
+            const mainCol = document.querySelector('.quiz-main-column');
+            if (sidebar) sidebar.style.display = 'none';
+            // Results is already inside mainCol, so we just hide other things in mainCol
+            document.getElementById('quiz-container').style.display = 'none';
+        }
         
         const results = document.getElementById('results-container');
         if (results) results.style.display = 'flex';
         
-        const scoreEl = document.getElementById('final-score');
-        const totalEl = document.getElementById('final-total');
-        const xpEl = document.getElementById('final-xp');
-        
-        if (scoreEl) scoreEl.textContent = score;
-        if (totalEl) totalEl.textContent = `/ ${total}`;
-        if (xpEl) xpEl.textContent = `+${xpEarned}`;
+        if (document.getElementById('final-score')) document.getElementById('final-score').textContent = score;
+        if (document.getElementById('final-total')) document.getElementById('final-total').textContent = `/ ${total}`;
+        if (document.getElementById('final-xp')) document.getElementById('final-xp').textContent = `+${xpEarned}`;
         
         const titleEl = document.getElementById('results-title');
         const msgEl = document.getElementById('results-message');
@@ -322,16 +350,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (msgEl) msgEl.textContent = "You have already finished this quiz. Here is your recorded score:";
         } else {
             if (msgEl) {
-                if (score === total && total > 0) {
-                    msgEl.textContent = "Perfect Score! You're a true geography expert!";
-                } else if (score >= total / 2) {
-                    msgEl.textContent = "Good job! You've got a solid understanding of this country.";
-                } else {
-                    msgEl.textContent = "Keep practicing! You'll get better with each try.";
-                }
+                if (score === total && total > 0) msgEl.textContent = "Perfect Score! You're a true geography expert!";
+                else if (score >= total / 2) msgEl.textContent = "Good job! You've got a solid understanding of this country.";
+                else msgEl.textContent = "Keep practicing! You'll get better with each try.";
             }
         }
     }
 
     loadQuiz();
 });
+

@@ -28,85 +28,175 @@
         <div id="header-placeholder"></div>
 
         <main class="quiz-page-container">
-            <div class="quiz-card" id="quiz-container">
-                <!-- Loader Overlay -->
-                <div class="quiz-loader-overlay" id="quiz-loader">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p style="font-weight: 700; color: #64748b;">Loading your quiz...</p>
+            <div class="quiz-layout">
+                <!-- Left Column: Main Quiz -->
+                <div class="quiz-main-column">
+                    <div class="quiz-card" id="quiz-container">
+                        <!-- Top Navigation -->
+                        <div class="quiz-top-nav">
+                            <a href="teen-map.html" class="back-link">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Back to Challenge</span>
+                            </a>
+                            <div class="quiz-timer">
+                                <i class="fa-solid fa-clock"></i>
+                                <span id="quiz-timer-value">08:30</span>
+                                <span class="timer-label">Time Left</span>
+                            </div>
+                        </div>
+
+                        <!-- Loader Overlay -->
+                        <div class="quiz-loader-overlay" id="quiz-loader">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p style="font-weight: 700; color: #64748b;">Loading your quiz...</p>
+                        </div>
+
+                        <!-- Quiz Content -->
+                        <div class="quiz-content-wrapper">
+                            <div class="quiz-header-section">
+                                <span class="quiz-category" id="quiz-category">Geography Quest</span>
+                                <h2 class="question-number-badge" id="question-number">Question 1 of 5</h2>
+                                <h1 class="question-text" id="question-text">Loading question...</h1>
+                                
+                                <div class="question-progress-wrapper">
+                                    <div class="quiz-pbar">
+                                        <div class="quiz-pbar-fill" id="progress-bar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="options-list" id="options-container">
+                                <!-- Options will be injected here -->
+                            </div>
+
+                            <!-- Did You Know Section -->
+                            <div class="did-you-know-card" id="did-you-know">
+                                <div class="dyk-icon">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <div class="dyk-content">
+                                    <h3>Did you know?</h3>
+                                    <p id="dyk-text">The world is full of amazing places waiting to be discovered!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Footer -->
+                        <div class="quiz-footer-new">
+                            <button class="btn-quiz-outline" id="prev-btn" disabled>
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Previous Question</span>
+                            </button>
+                            
+                            <a href="#" class="report-link">
+                                <i class="fa-regular fa-flag"></i>
+                                <span>Report Question</span>
+                            </a>
+
+                            <button class="btn-quiz-primary" id="next-btn" disabled>
+                                <span>Next Question</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Results (Hidden by default) -->
+                    <div class="quiz-card results-card" id="results-container" style="display: none;">
+                        <div class="results-container">
+                            <img src="/assets/Teen-frog.png" alt="Mascot" class="results-mascot">
+                            <h1 class="results-title" id="results-title">Quiz Completed!</h1>
+                            <p class="results-subtitle" id="results-message">Great job! You've successfully finished the quiz.</p>
+                            
+                            <div class="score-circle">
+                                <span class="score-value" id="final-score">0</span>
+                                <span class="score-total" id="final-total">/ 5</span>
+                            </div>
+
+                            <div class="xp-earned-card">
+                                <i class="fa-solid fa-bolt xp-icon"></i>
+                                <div class="xp-text">
+                                    <div class="xp-label">Total XP Gained</div>
+                                    <div class="xp-amount" id="final-xp">+0</div>
+                                </div>
+                            </div>
+
+                            <div class="results-actions">
+                                <a href="teen-map.html" class="btn-results btn-results-secondary">Return to Map</a>
+                                <a href="teen-dashboard.html" class="btn-results btn-results-primary">Go to Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Quiz Header -->
-                <div class="quiz-header">
-                    <div class="quiz-header-left">
-                        <img src="" alt="Flag" class="quiz-country-flag" id="quiz-flag" style="display: none;">
-                        <div class="quiz-header-info">
-                            <h2 id="quiz-country-name">Loading...</h2>
-                            <p id="quiz-title">Knowledge Challenge</p>
-                        </div>
-                    </div>
-                    <div class="quiz-stats">
-                        <div class="quiz-stat-item">
-                            <span class="quiz-stat-label">Potential XP</span>
-                            <span class="quiz-stat-value" id="potential-xp">+20</span>
-                        </div>
-                        <div class="quiz-stat-item">
-                            <span class="quiz-stat-label">Accuracy</span>
-                            <span class="quiz-stat-value" id="current-accuracy">0%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quiz Body -->
-                <div class="quiz-body" id="quiz-question-area">
-                    <div class="question-badge" id="question-number">Question 1 of 5</div>
-                    <h1 class="question-text" id="question-text">Loading question...</h1>
-
-                    <div class="options-grid" id="options-container">
-                        <!-- Options will be injected here -->
-                    </div>
-                </div>
-
-                <!-- Quiz Footer -->
-                <div class="quiz-footer">
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Your Progress</span>
-                            <span id="progress-text">0% Completed</span>
-                        </div>
-                        <div class="quiz-pbar">
-                            <div class="quiz-pbar-fill" id="progress-bar" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                    <button class="btn-quiz-next" id="next-btn" disabled>
-                        <span>Next Question</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Quiz Results (Hidden by default) -->
-            <div class="quiz-card" id="results-container" style="display: none;">
-                <div class="results-container">
-                    <img src="/assets/Teen-frog.png" alt="Mascot" class="results-mascot">
-                    <h1 class="results-title" id="results-title">Quiz Completed!</h1>
-                    <p class="results-subtitle" id="results-message">Great job! You've successfully finished the quiz.</p>
-                    
-                    <div class="score-circle">
-                        <span class="score-value" id="final-score">0</span>
-                        <span class="score-total" id="final-total">/ 5</span>
-                    </div>
-
-                    <div class="xp-earned-card">
-                        <i class="fa-solid fa-bolt xp-icon"></i>
-                        <div class="xp-text">
-                            <div class="xp-label">Total XP Gained</div>
-                            <div class="xp-amount" id="final-xp">+0</div>
+                <!-- Right Column: Sidebar Stats -->
+                <div class="quiz-sidebar">
+                    <!-- Progress Card -->
+                    <div class="sidebar-card progress-card">
+                        <h3>Your Progress</h3>
+                        <div class="progress-circle-wrapper">
+                            <div class="progress-circle" id="circle-progress" style="--percent: 0;">
+                                <span class="percent-text" id="percent-text">0%</span>
+                            </div>
+                            <div class="progress-stats-mini">
+                                <div class="stat-mini">
+                                    <span class="stat-mini-value" id="answered-count">0 / 10</span>
+                                    <span class="stat-mini-label">Questions Answered</span>
+                                </div>
+                                <div class="stat-mini">
+                                    <span class="stat-mini-value color-success" id="correct-count">
+                                        <i class="fa-regular fa-circle-check"></i> 0
+                                    </span>
+                                    <span class="stat-mini-label">Correct Answers</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="results-actions">
-                        <a href="teen-map.html" class="btn-results btn-results-secondary">Return to Map</a>
-                        <a href="teen-dashboard.html" class="btn-results btn-results-primary">Go to Dashboard</a>
+                    <!-- Streak Card -->
+                    <div class="sidebar-card streak-card">
+                        <h3>Current Streak</h3>
+                        <div class="streak-content">
+                            <div class="streak-badge">
+                                <i class="fa-solid fa-fire"></i>
+                                <span id="streak-value">0</span>
+                            </div>
+                            <div class="streak-info">
+                                <p id="streak-message">Keep it up! Answer correctly to build your streak.</p>
+                                <div class="streak-dots" id="streak-dots">
+                                    <div class="streak-dot active"></div>
+                                    <div class="streak-dot"></div>
+                                    <div class="streak-dot"></div>
+                                    <div class="streak-dot"></div>
+                                    <div class="streak-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- XP Card -->
+                    <div class="sidebar-card xp-sidebar-card">
+                        <h3>XP Earning</h3>
+                        <div class="xp-sidebar-content">
+                            <div class="xp-badge-icon">XP</div>
+                            <div class="xp-earning-info">
+                                <span class="xp-plus" id="xp-per-question">+10 XP</span>
+                                <span class="xp-sub">for correct answer</span>
+                            </div>
+                            <div class="total-xp-info">
+                                <span class="total-xp-label">Total XP</span>
+                                <span class="total-xp-value" id="sidebar-total-xp">1,240</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hint Card -->
+                    <div class="sidebar-card hint-card">
+                        <div class="hint-header">
+                            <h3>Need a Hint?</h3>
+                            <p>Use a hint to narrow down your options.</p>
+                        </div>
+                        <img src="/assets/hint-bulb.png" alt="Hint" class="hint-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/427/427735.png'">
+                        <button class="btn-hint" id="use-hint-btn">Use Hint (-5 XP)</button>
                     </div>
                 </div>
             </div>
