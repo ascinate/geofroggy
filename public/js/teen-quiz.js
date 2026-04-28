@@ -67,16 +67,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // 2. Check for previous attempt (Resuming logic)
             const previousAttempt = await checkPreviousAttempt(currentQuiz.id);
+            
+            // Set basic UI info early
+            const nameEl = document.getElementById('quiz-country-name');
+            if (nameEl) nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
+            fetchCountryFlag(countryId);
+
             if (previousAttempt && previousAttempt.id) {
                 console.log('Previous attempt found:', previousAttempt);
+                
+                // Parse answers if they are in string format
+                let parsedAnswers = previousAttempt.answers;
+                if (typeof parsedAnswers === 'string') {
+                    try {
+                        parsedAnswers = JSON.parse(parsedAnswers);
+                    } catch (e) {
+                        console.error('Failed to parse previous attempt answers:', e);
+                        parsedAnswers = [];
+                    }
+                }
+                userAnswers = Array.isArray(parsedAnswers) ? parsedAnswers : [];
+                score = previousAttempt.score || 0;
+
                 if (previousAttempt.completed) {
-                    score = previousAttempt.score;
                     showResults(true); // Already completed
                     return;
                 } else {
                     // Resume progress
-                    score = previousAttempt.score || 0;
-                    userAnswers = Array.isArray(previousAttempt.answers) ? previousAttempt.answers : [];
                     currentQuestionIndex = userAnswers.length;
                     
                     if (currentQuestionIndex >= currentQuiz.questions.length) {
@@ -100,10 +117,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nameEl = document.getElementById('quiz-country-name');
         const xpEl = document.getElementById('potential-xp');
         
-        if (nameEl) nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
+        if (nameEl && !nameEl.textContent.includes(currentQuiz.title)) {
+            nameEl.textContent = currentQuiz.title || currentQuiz.country_name || 'Global Challenge';
+        }
         if (xpEl) xpEl.textContent = `+${currentQuiz.xp_reward || 20}`;
-        
-        fetchCountryFlag(countryId);
 
         // Update UI for resumed attempts
         if (userAnswers.length > 0) {
@@ -274,28 +291,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showResults(isPrevious) {
-        const total = currentQuiz.questions.length;
-        const xpEarned = Math.round((currentQuiz.xp_reward || 20) * (score / total));
+        if (!currentQuiz) {
+            console.error('Cannot show results: currentQuiz is null');
+            return;
+        }
 
-        quizLoader.style.display = 'none';
-        document.getElementById('quiz-container').style.display = 'none';
+        const total = (currentQuiz.questions && currentQuiz.questions.length) || 0;
+        const xpEarned = total > 0 ? Math.round((currentQuiz.xp_reward || 20) * (score / total)) : 0;
+
+        if (quizLoader) quizLoader.style.display = 'none';
+        const quizContainer = document.getElementById('quiz-container');
+        if (quizContainer) quizContainer.style.display = 'none';
+        
         const results = document.getElementById('results-container');
-        results.style.display = 'flex';
+        if (results) results.style.display = 'flex';
         
-        document.getElementById('final-score').textContent = score;
-        document.getElementById('final-total').textContent = `/ ${total}`;
-        document.getElementById('final-xp').textContent = `+${xpEarned}`;
+        const scoreEl = document.getElementById('final-score');
+        const totalEl = document.getElementById('final-total');
+        const xpEl = document.getElementById('final-xp');
         
+        if (scoreEl) scoreEl.textContent = score;
+        if (totalEl) totalEl.textContent = `/ ${total}`;
+        if (xpEl) xpEl.textContent = `+${xpEarned}`;
+        
+        const titleEl = document.getElementById('results-title');
+        const msgEl = document.getElementById('results-message');
+
         if (isPrevious) {
-            document.getElementById('results-title').textContent = "Quiz Already Completed";
-            document.getElementById('results-message').textContent = "You have already finished this quiz. Here is your recorded score:";
+            if (titleEl) titleEl.textContent = "Quiz Already Completed";
+            if (msgEl) msgEl.textContent = "You have already finished this quiz. Here is your recorded score:";
         } else {
-            if (score === total) {
-                document.getElementById('results-message').textContent = "Perfect Score! You're a true geography expert!";
-            } else if (score >= total / 2) {
-                document.getElementById('results-message').textContent = "Good job! You've got a solid understanding of this country.";
-            } else {
-                document.getElementById('results-message').textContent = "Keep practicing! You'll get better with each try.";
+            if (msgEl) {
+                if (score === total && total > 0) {
+                    msgEl.textContent = "Perfect Score! You're a true geography expert!";
+                } else if (score >= total / 2) {
+                    msgEl.textContent = "Good job! You've got a solid understanding of this country.";
+                } else {
+                    msgEl.textContent = "Keep practicing! You'll get better with each try.";
+                }
             }
         }
     }
