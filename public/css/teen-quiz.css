@@ -572,7 +572,7 @@
 
 /* Results Card Adaptation */
 .results-card {
-    padding: 40px;
+    padding: 25px;
 }
 
 .results-container {
@@ -580,65 +580,68 @@
 }
 
 .results-mascot {
-    width: 140px;
-    margin-bottom: 20px;
+    width: 100px;
+    margin-bottom: 15px;
 }
 
 .results-title {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #1e293b;
+    margin-bottom: 5px;
 }
 
 .results-subtitle {
+    font-size: 0.85rem;
     color: #64748b;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .score-circle {
-    width: 130px;
-    height: 130px;
-    border: 10px solid #f1f5f9;
+    width: 100px;
+    height: 100px;
+    border: 8px solid #f1f5f9;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 30px;
+    margin: 0 auto 20px;
 }
 
 .score-value {
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: 900;
     color: #6366f1;
 }
 
 .score-total {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #94a3b8;
     font-weight: 700;
 }
 
 .xp-earned-card {
     background: #f5f3ff;
-    padding: 15px 30px;
-    border-radius: 20px;
+    padding: 12px 25px;
+    border-radius: 16px;
     display: inline-flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 35px;
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
 .results-actions {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .btn-results {
-    padding: 12px 30px;
-    border-radius: 12px;
+    padding: 10px 25px;
+    border-radius: 10px;
     font-weight: 700;
+    font-size: 0.85rem;
     text-decoration: none;
     transition: all 0.2s;
 }
