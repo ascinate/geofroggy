@@ -410,20 +410,16 @@
             .forEach(el => observer.observe(el));
     </script>
     <script>
-        const exploreBtn = document.getElementById("home-explore-btn");
-        if (!localStorage.getItem('token')) {
-            // console.log("token not found");
-            // exploreBtn.href = "/map1";
-            exploreBtn.addEventListener("click", function () {
-                window.location.href = "/login";
-            });
-        } else {
-            // console.log("token found");
-            // exploreBtn.href = "/portal-selection";
-            exploreBtn.addEventListener("click", function () {
-                window.location.href = "/portal-selection";
-            });
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const exploreBtn = document.getElementById("home-explore");
+            if (exploreBtn) {
+                exploreBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const hasToken = localStorage.getItem('token');
+                    window.location.href = hasToken ? "portal-selection.html" : "login.html";
+                });
+            }
+        });
     </script>
 </body>
 
