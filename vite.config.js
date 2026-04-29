@@ -30,6 +30,7 @@ export default defineConfig({
                 teenLeaderboard: 'teen-leaderboard.html',
                 teenChallenges: 'teen-challenges.html',
                 teenAchievements: 'teen-achievements.html',
+                teenCompare: 'teen-compare.html',
             }
         }
     }
