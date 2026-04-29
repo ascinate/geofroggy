@@ -1,32 +1,34 @@
 <div class="header-inner">
     <div class="header-left">
-        <div class="teen-portal-badge">Teen Portal</div>
+        <a href="teen-dashboard.html" class="header-logo">
+            <span class="logo-geo">geo</span><span class="logo-froggy">froggy</span>
+        </a>
     </div>
 
     <nav class="header-nav">
         <ul>
             <li class="active">
                 <a href="teen-dashboard.html">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <span>Explore</span>
                 </a>
             </li>
             <li>
-                <a href="teen-map.html">
-                    <i class="fa-solid fa-map"></i>
-                    <span>Map</span>
+                <a href="#">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <span>Compare</span>
                 </a>
             </li>
             <li>
                 <a href="teen-challenges.html">
-                    <i class="fa-solid fa-trophy"></i>
-                    <span>Challenges</span>
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Missions</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Projects</span>
                 </a>
             </li>
             <li>
@@ -35,31 +37,32 @@
                     <span>Stories</span>
                 </a>
             </li>
-            <li>
-                <a href="teen-leaderboard.html">
-                    <i class="fa-solid fa-ranking-star"></i>
-                    <span>Leaderboard</span>
-                </a>
-            </li>
         </ul>
     </nav>
 
     <div class="header-right">
-        <div class="stat-badge xp-badge">
-            <i class="fa-solid fa-bolt"></i>
-            <span id="header-xp">0 XP</span>
-        </div>
-        <div class="stat-badge level-badge">
-            <div class="level-icon">
-                <i class="fa-solid fa-shield-halved"></i>
+        <div class="user-info">
+            <div class="mascot-avatar">
+                <img src="https://raw.githubusercontent.com/Soumya-K-9/geofroggy-assets/main/frog-explorer.png" alt="Mascot">
             </div>
-            <div class="level-text">
-                <span class="level-label" id="header-level">Level 1</span>
-                <span class="level-name" id="header-rank">Explorer</span>
+            <div class="user-details">
+                <span class="user-greeting">Hi, Alex</span>
+                <span class="user-role">Student</span>
             </div>
+            <i class="fa-solid fa-chevron-down profile-dropdown-icon"></i>
         </div>
-        <div class="user-profile">
-            <img src="/assets/default-avatar.png" alt="User Profile" id="header-avatar">
+        <div class="header-stats">
+            <div class="stat-item streak-stat">
+                <i class="fa-solid fa-fire"></i>
+                <span id="header-streak">12</span>
+            </div>
+            <div class="stat-item level-stat">
+                <div class="level-badge-mini">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <span id="header-level">Level 4</span>
+            </div>
         </div>
     </div>
 </div>
+

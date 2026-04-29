@@ -19,297 +19,229 @@
 </head>
 
 <body>
-    <!-- Sidebar Component -->
-    <div id="sidebar-placeholder"></div>
-
     <div class="main-wrapper">
         <!-- Header Component -->
         <div id="header-placeholder"></div>
 
         <main class="dash-content">
-            <!-- Left Column -->
-            <div class="content-left">
-                <!-- Hero Section -->
-                <section class="hero-card">
-                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000" alt="Mountains" class="hero-bg">
-                    <div class="hero-overlay"></div>
-                    <h3>Welcome back,</h3>
-                    <h1 id="hero-username">Explorer!</h1>
-                    <p id="hero-subtitle">You're 2 missions away from Level 6 <i class="fa-solid fa-hexagon-nodes" style="color: #8b5cf6;"></i></p>
-                    <div class="hero-btns">
-                        <a href="#" class="btn-primary-dash">Continue Mission <i class="fa-solid fa-arrow-right"></i></a>
-                        <a href="#" class="btn-glass-dash"><i class="fa-solid fa-earth-americas"></i> Explore New Country</a>
-                    </div>
-                    <div class="recommended-pill">
-                        <img src="https://flagcdn.com/w80/br.png" alt="Brazil" style="width: 30px; border-radius: 4px;">
-                        <div class="recommended-info">
-                            <span class="rec-label">Recommended for you</span>
-                            <span class="rec-name">Brazil <span style="font-weight: 400; font-size: 0.7rem; color: #64748b; margin-left: 5px;">Based on progress</span></span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94a3b8;"></i>
-                    </div>
-                </section>
-
-                <!-- Level Progress Section -->
-                <section class="progress-stats-card">
-                    <div class="lvl-box">
-                        <div class="lvl-badge-large">
-                            <span class="lvl-num" id="dash-level-num">5</span>
-                            <span class="lvl-txt">Level</span>
-                        </div>
-                        <div class="lvl-progress-col">
-                            <div class="lvl-progress-header">
-                                <span id="dash-level-title">Level 5 Explorer</span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" id="dash-progress-fill" style="width: 65%;"></div>
-                            </div>
-                            <div class="xp-needed" id="dash-progress-xp">650 XP / 1,000 XP to Level 6</div>
-                        </div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-icon" style="color: #f97316;"><i class="fa-solid fa-fire"></i></div>
-                            <div class="stat-val">
-                                <span class="stat-number" id="stat-streak">5</span>
-                                <span class="stat-label">Day Streak</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon" style="color: #ef4444;"><i class="fa-solid fa-bullseye"></i></div>
-                            <div class="stat-val">
-                                <span class="stat-number" id="stat-accuracy">82%</span>
-                                <span class="stat-label">Accuracy</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon" style="color: #6366f1;"><i class="fa-solid fa-book"></i></div>
-                            <div class="stat-val">
-                                <span class="stat-number" id="stat-missions">12/50</span>
-                                <span class="stat-label">Missions Completed</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon" style="color: #10b981;"><i class="fa-solid fa-globe"></i></div>
-                            <div class="stat-val">
-                                <span class="stat-number" id="stat-countries">8</span>
-                                <span class="stat-label">Countries Explored</span>
-                            </div>
+            <div class="dash-inner-container">
+                <!-- Hero & Search Section -->
+                <section class="research-hero">
+                    <div class="hero-text-content">
+                        <h1>Explore the world.<br>Build knowledge. Create impact.</h1>
+                        <p>Compare countries, investigate trends, and build school-ready projects with real-world data.</p>
+                        
+                        <div class="search-container-dash">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" placeholder="Search a country, topic, year, or question..." id="dash-search-input">
+                            <button class="filter-btn"><i class="fa-solid fa-sliders"></i></button>
                         </div>
                     </div>
                 </section>
 
-                <!-- Active Missions -->
-                <section class="active-missions-section">
-                    <div class="section-header">
-                        <h2>Active Missions</h2>
-                        <a href="#" class="view-all">View all</a>
-                    </div>
-                    <div class="missions-grid">
-                        <!-- Japan -->
-                        <div class="mission-card">
-                            <div class="mission-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=400" alt="Japan" class="mission-img">
-                                <img src="https://flagcdn.com/w80/jp.png" alt="JP" class="mission-flag">
+                <div class="research-grid-layout">
+                    <!-- Left Side: Topic Packs & Projects -->
+                    <div class="research-left-col">
+                        <!-- Topic Packs -->
+                        <section class="topic-packs-section">
+                            <div class="section-header-dash">
+                                <h2>Explore Topic Packs</h2>
+                                <a href="#" class="view-all-dash">View all packs <i class="fa-solid fa-arrow-right"></i></a>
                             </div>
-                            <div class="mission-body">
-                                <div class="mission-title">Japan</div>
-                                <div class="mission-progress">
-                                    <div class="mission-progress-fill" style="width: 60%;"></div>
+                            <p class="section-subtitle">Dive into key global themes and build understanding.</p>
+                            
+                            <div class="topic-packs-grid">
+                                <div class="topic-card pack-purple">
+                                    <div class="topic-icon"><i class="fa-solid fa-users-line"></i></div>
+                                    <h3>Population & Migration</h3>
+                                    <p>Explore how people move, grow, and change communities.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
-                                <div class="mission-footer">
-                                    <div class="difficulty-tag medium"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Medium</div>
-                                    <div class="xp-reward">+120 XP</div>
+                                <div class="topic-card pack-orange">
+                                    <div class="topic-icon"><i class="fa-solid fa-chart-line"></i></div>
+                                    <h3>Economy & Trade</h3>
+                                    <p>Understand markets, wealth, jobs, and global connections.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
-                                <a href="#" class="btn-continue">Continue</a>
-                            </div>
-                        </div>
-                        <!-- France -->
-                        <div class="mission-card">
-                            <div class="mission-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=400" alt="France" class="mission-img">
-                                <img src="https://flagcdn.com/w80/fr.png" alt="FR" class="mission-flag">
-                            </div>
-                            <div class="mission-body">
-                                <div class="mission-title">France</div>
-                                <div class="mission-progress">
-                                    <div class="mission-progress-fill" style="width: 30%;"></div>
+                                <div class="topic-card pack-green">
+                                    <div class="topic-icon"><i class="fa-solid fa-wind"></i></div>
+                                    <h3>Climate & Energy</h3>
+                                    <p>Examine climate patterns, resources, and sustainability.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
-                                <div class="mission-footer">
-                                    <div class="difficulty-tag easy"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Easy</div>
-                                    <div class="xp-reward">+100 XP</div>
+                                <div class="topic-card pack-indigo">
+                                    <div class="topic-icon"><i class="fa-solid fa-building-columns"></i></div>
+                                    <h3>Government & Society</h3>
+                                    <p>Discover how governments work and societies evolve.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
-                                <a href="#" class="btn-continue">Continue</a>
-                            </div>
-                        </div>
-                        <!-- Egypt -->
-                        <div class="mission-card">
-                            <div class="mission-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=400" alt="Egypt" class="mission-img">
-                                <img src="https://flagcdn.com/w80/eg.png" alt="EG" class="mission-flag">
-                            </div>
-                            <div class="mission-body">
-                                <div class="mission-title">Egypt</div>
-                                <div class="mission-progress">
-                                    <div class="mission-progress-fill" style="width: 10%;"></div>
+                                <div class="topic-card pack-red">
+                                    <div class="topic-icon"><i class="fa-solid fa-masks-theater"></i></div>
+                                    <h3>Culture & People</h3>
+                                    <p>Learn about languages, traditions, beliefs, and lifestyles.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
-                                <div class="mission-footer">
-                                    <div class="difficulty-tag hard"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Hard</div>
-                                    <div class="xp-reward">+150 XP</div>
-                                </div>
-                                <a href="#" class="btn-continue">Continue</a>
-                            </div>
-                        </div>
-                        <!-- Brazil (Locked) -->
-                        <div class="mission-card locked">
-                            <div class="mission-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&q=80&w=400" alt="Brazil" class="mission-img">
-                                <div class="lock-overlay">
-                                    <div class="lock-circle"><i class="fa-solid fa-lock"></i></div>
+                                <div class="topic-card pack-teal">
+                                    <div class="topic-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                                    <h3>Geography & Environment</h3>
+                                    <p>Study landscapes, ecosystems, and human impact.</p>
+                                    <i class="fa-solid fa-arrow-right card-arrow"></i>
                                 </div>
                             </div>
-                            <div class="mission-body">
-                                <div class="mission-title">Brazil</div>
-                                <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 15px;">Complete Egypt mission to unlock</p>
-                                <a href="#" class="btn-continue" style="pointer-events: none; opacity: 0.5;">Locked</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                        </section>
 
-                <!-- Quick Challenges -->
-                <section class="quick-challenges-section">
-                    <div class="section-header">
-                        <h2>Quick Challenges</h2>
-                        <a href="#" class="view-all">View all</a>
+                        <!-- Recent Projects -->
+                        <section class="recent-projects-section">
+                            <div class="section-header-dash">
+                                <h2>Recent Projects</h2>
+                                <span class="header-hint">Pick up where you left off.</span>
+                                <a href="#" class="view-all-dash">View all projects <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            
+                            <div class="projects-grid-dash">
+                                <div class="project-card-dash">
+                                    <div class="project-thumb">
+                                        <img src="https://images.unsplash.com/photo-1466611653911-95282fc3656b?auto=format&fit=crop&q=80&w=400" alt="Renewable Energy">
+                                    </div>
+                                    <div class="project-info-dash">
+                                        <div class="project-title-row">
+                                            <h3>Renewable Energy Around The World</h3>
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </div>
+                                        <span class="project-update">Updated 2 days ago</span>
+                                        <div class="project-progress-container">
+                                            <div class="project-progress-bar" style="width: 73%;"></div>
+                                        </div>
+                                        <span class="progress-percent">73%</span>
+                                    </div>
+                                </div>
+                                <div class="project-card-dash">
+                                    <div class="project-thumb">
+                                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=400" alt="Urbanization">
+                                    </div>
+                                    <div class="project-info-dash">
+                                        <div class="project-title-row">
+                                            <h3>Urbanization Trends 1990-2020</h3>
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </div>
+                                        <span class="project-update">Updated 5 days ago</span>
+                                        <div class="project-progress-container">
+                                            <div class="project-progress-bar" style="width: 46%;"></div>
+                                        </div>
+                                        <span class="progress-percent">46%</span>
+                                    </div>
+                                </div>
+                                <div class="project-card-dash">
+                                    <div class="project-thumb">
+                                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=400" alt="Climate Change">
+                                    </div>
+                                    <div class="project-info-dash">
+                                        <div class="project-title-row">
+                                            <h3>Climate Change Indicators</h3>
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </div>
+                                        <span class="project-update">Updated 1 week ago</span>
+                                        <div class="project-progress-container">
+                                            <div class="project-progress-bar" style="width: 28%;"></div>
+                                        </div>
+                                        <span class="progress-percent">28%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                    <div class="challenges-grid">
-                        <div class="challenge-item">
-                            <div class="challenge-icon-box orange-bg"><i class="fa-solid fa-bolt"></i></div>
-                            <div class="challenge-info">
-                                <span class="challenge-name">Capital Blitz</span>
-                                <div class="challenge-meta">
-                                    <span>1 min</span>
-                                    <span>+10 XP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="challenge-item">
-                            <div class="challenge-icon-box green-bg"><i class="fa-solid fa-flag"></i></div>
-                            <div class="challenge-info">
-                                <span class="challenge-name">Flag Frenzy</span>
-                                <div class="challenge-meta">
-                                    <span>1 min</span>
-                                    <span>+10 XP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="challenge-item">
-                            <div class="challenge-icon-box purple-bg"><i class="fa-solid fa-users"></i></div>
-                            <div class="challenge-info">
-                                <span class="challenge-name">Population Match</span>
-                                <div class="challenge-meta">
-                                    <span>2 min</span>
-                                    <span>+15 XP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="challenge-item">
-                            <div class="challenge-icon-box blue-bg"><i class="fa-solid fa-globe"></i></div>
-                            <div class="challenge-info">
-                                <span class="challenge-name">Geo Sprint</span>
-                                <div class="challenge-meta">
-                                    <span>2 min</span>
-                                    <span>+15 XP</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
 
-            <!-- Right Column -->
-            <div class="content-right">
-                <!-- Daily Challenge -->
-                <section class="right-card daily-challenge-card">
-                    <div class="daily-header">
-                        <h2 style="font-size: 1.1rem; font-weight: 800;">Daily Challenge</h2>
-                        <span class="timer">07h : 32m : 15s</span>
-                    </div>
-                    <div class="daily-content">
-                        <div class="daily-icon"><i class="fa-regular fa-flag"></i></div>
-                        <div class="daily-title">Capital Blitz</div>
-                        <div class="daily-desc">Answer 5 questions correctly</div>
-                    </div>
-                    <div class="daily-rewards">
-                        <div class="reward-item" style="color: #10b981;"><i class="fa-solid fa-hexagon-nodes"></i> 20 XP</div>
-                        <div class="reward-item" style="color: #f59e0b;"><i class="fa-solid fa-coins"></i> 5</div>
-                    </div>
-                    <a href="#" class="btn-start-challenge">Start Challenge <i class="fa-solid fa-arrow-right"></i></a>
-                </section>
+                    <!-- Right Side: Featured & Map -->
+                    <div class="research-right-col">
+                        <!-- Featured Mission -->
+                        <section class="featured-mission-dash">
+                            <span class="featured-label">FEATURED MISSION</span>
+                            <div class="featured-card-dash">
+                                <div class="mission-tag-dash">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <span>DATA DETECTIVE</span>
+                                    <span class="difficulty-pill-dash">Intermediate</span>
+                                </div>
+                                <div class="featured-content-dash">
+                                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800" alt="Water Scarcity" class="featured-img-dash">
+                                    <h3>Water Stress: A Growing Global Challenge</h3>
+                                    <p>Investigate global water scarcity, compare countries, and uncover patterns behind an essential resource.</p>
+                                    <div class="mission-meta-dash">
+                                        <span><i class="fa-regular fa-clock"></i> 45-60 min</span>
+                                        <span><i class="fa-solid fa-graduation-cap"></i> Grades 8+</span>
+                                        <span>1,250 students completed</span>
+                                    </div>
+                                    <button class="btn-start-mission-dash">Start Mission <i class="fa-solid fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </section>
 
-                <!-- Leaderboard -->
-                <section class="right-card">
-                    <div class="section-header">
-                        <h2 style="font-size: 1.1rem; font-weight: 800;">Leaderboard</h2>
-                        <a href="teen-leaderboard.html" class="view-all">View all</a>
+                        <!-- Mini Map -->
+                        <section class="explore-world-mini">
+                            <div class="mini-map-header">
+                                <h2>EXPLORE THE WORLD</h2>
+                                <a href="teen-map.html" class="fullscreen-link">Fullscreen <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <div class="mini-map-container">
+                                <div class="mini-map-overlay">
+                                    <div class="map-controls-mini">
+                                        <button><i class="fa-solid fa-globe"></i></button>
+                                        <div class="zoom-controls">
+                                            <button>+</button>
+                                            <button>-</button>
+                                        </div>
+                                        <button><i class="fa-solid fa-crosshairs"></i></button>
+                                    </div>
+                                    <img src="https://images.unsplash.com/photo-1589519160732-57fc498494f8?auto=format&fit=crop&q=80&w=800" alt="Mini Map" class="mini-map-img">
+                                    <!-- Map Markers -->
+                                    <div class="map-marker-dash marker-trending" style="top: 30%; left: 20%;"></div>
+                                    <div class="map-marker-dash marker-new" style="top: 45%; left: 45%;"></div>
+                                    <div class="map-marker-dash marker-focus" style="top: 60%; left: 75%;"></div>
+                                    <div class="map-marker-dash marker-trending" style="top: 25%; left: 80%;"></div>
+                                </div>
+                                <div class="map-legend-dash">
+                                    <div class="legend-item"><span class="dot trending"></span> Trending</div>
+                                    <div class="legend-item"><span class="dot new"></span> New Data</div>
+                                    <div class="legend-item"><span class="dot focus"></span> In Focus</div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                    <div class="leaderboard-list">
-                        <div class="leader-item">
-                            <span class="leader-rank" style="color: #f59e0b;">1</span>
-                            <img src="https://i.pravatar.cc/150?u=1" alt="Avatar" class="leader-avatar">
-                            <span class="leader-name">Arjun Verma</span>
-                            <span class="leader-xp">2,340 XP</span>
-                        </div>
-                        <div class="leader-item">
-                            <span class="leader-rank" style="color: #94a3b8;">2</span>
-                            <img src="https://i.pravatar.cc/150?u=2" alt="Avatar" class="leader-avatar">
-                            <span class="leader-name">Sara Khan</span>
-                            <span class="leader-xp">1,890 XP</span>
-                        </div>
-                        <div class="leader-item">
-                            <span class="leader-rank" style="color: #b45309;">3</span>
-                            <img src="https://i.pravatar.cc/150?u=3" alt="Avatar" class="leader-avatar">
-                            <span class="leader-name">Vivaan Mehta</span>
-                            <span class="leader-xp">1,560 XP</span>
-                        </div>
-                        <div class="leader-item user-row">
-                            <span class="leader-rank">4</span>
-                            <img src="https://i.pravatar.cc/150?u=explorer" alt="Avatar" class="leader-avatar">
-                            <span class="leader-name">You</span>
-                            <span class="leader-xp">1,240 XP</span>
-                        </div>
-                        <div class="leader-item">
-                            <span class="leader-rank">5</span>
-                            <img src="https://i.pravatar.cc/150?u=5" alt="Avatar" class="leader-avatar">
-                            <span class="leader-name">Aarav Singh</span>
-                            <span class="leader-xp">980 XP</span>
-                        </div>
-                    </div>
-                </section>
+                </div>
 
-                <!-- Recent Achievements -->
-                <section class="right-card">
-                    <div class="section-header">
-                        <h2 style="font-size: 1.1rem; font-weight: 800;">Recent Achievements</h2>
-                        <a href="#" class="view-all">View all</a>
+                <!-- Bottom Progress Bar -->
+                <section class="bottom-progress-section">
+                    <div class="progress-left">
+                        <span class="progress-label">Your Learning Path</span>
+                        <div class="path-steps">
+                            <span class="step-label">Level 4</span>
+                            <div class="path-bar">
+                                <div class="path-fill" style="width: 60%;"></div>
+                                <div class="path-node active" style="left: 0%;"></div>
+                                <div class="path-node active" style="left: 33%;"></div>
+                                <div class="path-node active" style="left: 66%;"></div>
+                                <div class="path-node" style="left: 100%;"></div>
+                            </div>
+                            <span class="xp-count">350 / 600 XP to Level 5</span>
+                        </div>
                     </div>
-                    <div class="achievements-grid">
-                        <div class="badge-item">
-                            <div class="badge-icon" style="background: #eef2ff; color: #6366f1;"><i class="fa-solid fa-shield-halved"></i></div>
-                            <span class="badge-name">First Steps</span>
+                    <div class="progress-right">
+                        <div class="goal-item">
+                            <div class="goal-icon"><i class="fa-solid fa-bullseye"></i></div>
+                            <div class="goal-info">
+                                <span class="goal-label">This Week's Goal</span>
+                                <div class="goal-progress-row">
+                                    <span class="goal-stat">2 / 3 missions completed</span>
+                                    <div class="goal-bar"><div class="goal-fill" style="width: 66%;"></div></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="badge-item">
-                            <div class="badge-icon" style="background: #f0fdf4; color: #22c55e;"><i class="fa-solid fa-earth-americas"></i></div>
-                            <span class="badge-name">World Scout</span>
-                        </div>
-                        <div class="badge-item">
-                            <div class="badge-icon" style="background: #fffbeb; color: #f59e0b;"><i class="fa-solid fa-star"></i></div>
-                            <span class="badge-name">Quiz Master</span>
-                        </div>
-                        <div class="badge-item locked">
-                            <div class="badge-icon" style="background: #f1f5f9; color: #94a3b8;"><i class="fa-solid fa-lock"></i></div>
-                            <span class="badge-name">Geo Genius</span>
+                        <div class="streak-item-dash">
+                            <i class="fa-solid fa-fire streak-fire"></i>
+                            <div class="streak-info">
+                                <span class="streak-label">Streak</span>
+                                <span class="streak-days">12 days</span>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -319,6 +251,7 @@
         <!-- Footer Placeholder -->
         <div id="footer-placeholder"></div>
     </div>
+
 
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

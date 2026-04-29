@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadFavicon();
 
     const components = [
-        { id: 'sidebar-placeholder', file: '/components/teen-dash-sidebar.html' },
         { id: 'header-placeholder', file: '/components/teen-dash-header.html' },
         { id: 'footer-placeholder', file: '/components/teen-dash-footer.html' }
     ];
@@ -92,19 +91,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function updateHeaderDynamic(stats, profile, user) {
-        const headerXP = document.getElementById("header-xp");
-        if (headerXP) headerXP.textContent = `${(stats.xp || 0).toLocaleString()} XP`;
+        const headerStreak = document.getElementById("header-streak");
+        if (headerStreak) headerStreak.textContent = stats.streak || 12;
 
         const headerLevel = document.getElementById("header-level");
-        if (headerLevel) headerLevel.textContent = `Level ${profile.level || 1}`;
+        if (headerLevel) headerLevel.textContent = `Level ${profile.level || 4}`;
 
-        const headerRank = document.getElementById("header-rank");
-        if (headerRank) headerRank.textContent = profile.role || 'Explorer';
-
-        const headerAvatar = document.getElementById("header-avatar");
-        if (headerAvatar) {
-            headerAvatar.src = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.username || 'User')}&background=random&color=fff`;
+        const headerAvatar = document.querySelector(".mascot-avatar img");
+        if (headerAvatar && user.avatar_url) {
+            headerAvatar.src = user.avatar_url;
         }
+
+        const userGreeting = document.querySelector(".user-greeting");
+        if (userGreeting) userGreeting.textContent = `Hi, ${user.username || 'Alex'}`;
     }
 
     function setActiveLinks() {
