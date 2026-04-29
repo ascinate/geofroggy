@@ -100,13 +100,31 @@ body {
 
 /* Country Cards Grid */
 .country-selector-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr) 180px;
+    display: flex;
     gap: 15px;
     margin-bottom: 30px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-blue) transparent;
+}
+
+.country-selector-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.country-selector-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.country-selector-grid::-webkit-scrollbar-thumb {
+    background-color: var(--accent-blue);
+    border-radius: 10px;
 }
 
 .country-card {
+    min-width: 280px;
+    flex: 0 0 280px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 12px;
@@ -188,6 +206,8 @@ body {
 
 /* Add Country Slot */
 .add-country-slot {
+    min-width: 180px;
+    flex: 0 0 180px;
     border: 2px dashed var(--glass-border);
     border-radius: 12px;
     display: flex;
