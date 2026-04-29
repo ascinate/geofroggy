@@ -56,11 +56,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Main Dashboard Data
         const heroName = document.getElementById("hero-username");
-        if (heroName && user.username) heroName.textContent = `${user.username}!`;
+        if (heroName) {
+            heroName.textContent = profile.username || user.username || 'Explorer';
+        }
 
         const levelNum = document.getElementById("dash-level-num");
         const levelTitle = document.getElementById("dash-level-title");
-        const currentLevel = profile.level || 1;
+        const currentLevel = stats.level || profile.level || 1;
         if (levelNum) levelNum.textContent = currentLevel;
         if (levelTitle) levelTitle.textContent = `Level ${currentLevel} Explorer`;
 
@@ -95,18 +97,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (headerTokens) headerTokens.textContent = (stats.tokens || 0).toLocaleString();
 
         const headerStreak = document.getElementById("header-streak");
-        if (headerStreak) headerStreak.textContent = stats.streak || 12;
+        if (headerStreak) headerStreak.textContent = stats.streak || 0;
 
         const headerLevel = document.getElementById("header-level");
-        if (headerLevel) headerLevel.textContent = `Level ${profile.level || 4}`;
+        if (headerLevel) headerLevel.textContent = `Level ${stats.level || profile.level || 1}`;
 
         const headerAvatar = document.querySelector(".mascot-avatar img");
-        if (headerAvatar && user.avatar_url) {
-            headerAvatar.src = user.avatar_url;
+        if (headerAvatar) {
+            if (profile.avatar_url) {
+                headerAvatar.src = profile.avatar_url;
+            } else if (user.avatar_url) {
+                headerAvatar.src = user.avatar_url;
+            }
+            // If both null, it stays as the default frog explorer
         }
 
         const userGreeting = document.querySelector(".user-greeting");
-        if (userGreeting) userGreeting.textContent = `Hi, ${user.username || 'Alex'}`;
+        if (userGreeting) userGreeting.textContent = `Hi, ${profile.username || 'Explorer'}`;
+
+        const userRole = document.querySelector(".user-role");
+        if (userRole) userRole.textContent = profile.role || 'Student';
     }
 
     function setActiveLinks() {
