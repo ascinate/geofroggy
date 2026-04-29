@@ -31,6 +31,7 @@ export default defineConfig({
                 teenChallenges: 'teen-challenges.html',
                 teenAchievements: 'teen-achievements.html',
                 teenCompare: 'teen-compare.html',
+                teenTimeline: 'teen-timeline.html',
             }
         }
     }

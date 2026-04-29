@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Trend Explorer | geoFroggy</title>
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-timeline.css">
+</head>
+<body class="teen-portal-body">
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <main class="timeline-page">
+        <div class="timeline-main-container">
+            <!-- Header Section -->
+            <div class="timeline-header">
+                <h1>Timeline Trend Explorer</h1>
+                <p>Understand how the world has changed between 2000 and 2024. Move through time, discover major events, and analyze the connections between different global metrics.</p>
+            </div>
+
+            <!-- Interactive Timeline Controls -->
+            <div class="timeline-controls-card">
+                <div class="timeline-slider-row">
+                    <div class="year-display-big">
+                        <span class="current-year-focus" id="year-val">2024</span>
+                        <div class="timeline-play-controls">
+                            <button class="btn-play-timeline" id="play-btn"><i class="fa-solid fa-play"></i></button>
+                        </div>
+                    </div>
+                    <input type="range" min="2000" max="2024" value="2024" class="timeline-slider-input" id="timeline-slider">
+                    <div class="slider-labels">
+                        <span>2000</span>
+                        <span>2004</span>
+                        <span>2008</span>
+                        <span>2012</span>
+                        <span>2016</span>
+                        <span>2020</span>
+                        <span>2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="timeline-data-grid">
+                <!-- Data Visualization -->
+                <div class="data-visualization-card">
+                    <div class="card-title-group">
+                        <h3>Global Trends: <span class="active-metric-name">Urbanization</span></h3>
+                        <p>How this metric evolved up to <span class="active-year-label">2024</span></p>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Event Markers -->
+                <div class="data-visualization-card">
+                    <div class="card-title-group">
+                        <h3>Key Change Markers</h3>
+                        <p>Major events around <span class="active-year-label">2024</span></p>
+                    </div>
+                    <div class="timeline-events" id="event-list">
+                        <!-- Events will be populated by JS -->
+                        <div class="event-item">
+                            <div class="event-year">2020</div>
+                            <div class="event-info">
+                                <h4>Global Connectivity Shift</h4>
+                                <p>Major surge in digital infrastructure and remote work adoption worldwide.</p>
+                            </div>
+                        </div>
+                        <div class="event-item" style="border-left-color: var(--accent-blue);">
+                            <div class="event-year">2024</div>
+                            <div class="event-info">
+                                <h4>Renewable Energy Milestone</h4>
+                                <p>Solar and wind power combined surpass coal in global electricity generation capacity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis & Critical Thinking -->
+            <div class="analysis-prompts-section">
+                <div class="prompt-card">
+                    <h4><i class="fa-solid fa-brain"></i> What Changed?</h4>
+                    <p id="analysis-text">The rapid urbanization seen between 2010 and 2024 has led to significant changes in land use and resource consumption.</p>
+                    <div class="prompt-suggest">
+                        What other data would help explain this shift in urbanization?
+                    </div>
+                </div>
+
+                <div class="prompt-card" style="background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.1);">
+                    <h4 style="color: var(--accent-blue);"><i class="fa-solid fa-magnifying-glass"></i> Investigate Connections</h4>
+                    <p>This trend <strong>may connect to</strong> shifts in global trade routes and the rise of digital economies.</p>
+                    <div class="prompt-suggest">
+                        Compare this with the GDP growth rates of the same period.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+    <script>
+        const slider = document.getElementById('timeline-slider');
+        const yearVal = document.getElementById('year-val');
+        const yearLabels = document.querySelectorAll('.active-year-label');
+
+        slider.addEventListener('input', (e) => {
+            const year = e.target.value;
+            yearVal.textContent = year;
+            yearLabels.forEach(label => label.textContent = year);
+            // In a real app, updateChart(year) and updateEvents(year) would be called here
+        });
+
+        // Initialize a dummy chart
+        const ctx = document.getElementById('timelineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 25}, (_, i) => 2000 + i),
+                datasets: [{
+                    label: 'Urbanization %',
+                    data: [46, 47, 47.5, 48, 49, 49.5, 50, 51, 51.5, 52, 52.5, 53, 54, 54.5, 55, 56, 56.5, 57, 57.5, 58, 58.5, 59, 59.5, 60, 61],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
