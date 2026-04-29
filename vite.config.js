@@ -32,6 +32,9 @@ export default defineConfig({
                 teenAchievements: 'teen-achievements.html',
                 teenCompare: 'teen-compare.html',
                 teenTimeline: 'teen-timeline.html',
+                teenProjects: 'teen-projects.html',
+                teenExport: 'teen-export.html',
+                teenPassport: 'teen-passport.html',
             }
         }
     }

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Passport | geoFroggy Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-passport.css">
+</head>
+<body class="teen-portal-body">
+    <div id="header-placeholder"></div>
+
+    <main class="passport-page">
+        <div class="passport-layout">
+            <!-- Hero Profile Section -->
+            <section class="passport-hero">
+                <div class="profile-visual-box">
+                    <div class="profile-avatar-large">
+                        <img src="/assets/Teen-frog.png" alt="Mascot">
+                    </div>
+                    <div class="level-badge-large">4</div>
+                </div>
+
+                <div class="profile-info-box">
+                    <span class="profile-role-tag">Global Research Analyst</span>
+                    <h1 id="passport-username">Alex Thompson</h1>
+                    <p style="color: var(--text-muted); max-width: 500px;">Analyzing global data trends and investigating sustainable development across Oceania and Asia since April 2024.</p>
+                    
+                    <div class="passport-stats-row">
+                        <div class="p-stat-item">
+                            <span class="p-stat-val" id="passport-tokens">1,240</span>
+                            <span class="p-stat-label">AnuraTokens</span>
+                        </div>
+                        <div class="p-stat-item">
+                            <span class="p-stat-val">12</span>
+                            <span class="p-stat-label">Day Streak</span>
+                        </div>
+                        <div class="p-stat-item">
+                            <span class="p-stat-val">8</span>
+                            <span class="p-stat-label">Missions</span>
+                        </div>
+                        <div class="p-stat-item">
+                            <span class="p-stat-val">5</span>
+                            <span class="p-stat-label">Projects</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-actions" style="margin-left: auto; display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn-primary" style="padding: 10px 20px; border-radius: 12px; border: none; background: var(--accent-blue); color: white; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-share-nodes"></i> Share Profile</button>
+                    <button class="btn-secondary" style="padding: 10px 20px; border-radius: 12px; border: 1px solid var(--glass-border); background: transparent; color: white; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-gear"></i> Settings</button>
+                </div>
+            </section>
+
+            <!-- Passport Records Grid -->
+            <div class="passport-grid">
+                <!-- Countries Researched -->
+                <div class="record-section-card">
+                    <div class="section-header-row">
+                        <h3><i class="fa-solid fa-earth-americas" style="color: var(--accent-blue);"></i> Countries Researched</h3>
+                        <a href="#" class="view-all-link">View Map</a>
+                    </div>
+                    <div class="tags-cloud">
+                        <div class="record-tag"><img src="https://flagcdn.com/au.svg" width="16" alt=""> Australia</div>
+                        <div class="record-tag"><img src="https://flagcdn.com/br.svg" width="16" alt=""> Brazil</div>
+                        <div class="record-tag"><img src="https://flagcdn.com/in.svg" width="16" alt=""> India</div>
+                        <div class="record-tag"><img src="https://flagcdn.com/ke.svg" width="16" alt=""> Kenya</div>
+                        <div class="record-tag"><img src="https://flagcdn.com/no.svg" width="16" alt=""> Norway</div>
+                        <div class="record-tag"><img src="https://flagcdn.com/jp.svg" width="16" alt=""> Japan</div>
+                        <div class="record-tag" style="opacity: 0.5;">+ 12 more</div>
+                    </div>
+                </div>
+
+                <!-- Topics Explored -->
+                <div class="record-section-card">
+                    <div class="section-header-row">
+                        <h3><i class="fa-solid fa-brain" style="color: var(--accent-green);"></i> Topics Explored</h3>
+                        <a href="#" class="view-all-link">Topic Library</a>
+                    </div>
+                    <div class="tags-cloud">
+                        <div class="record-tag"><i class="fa-solid fa-users" style="color: var(--accent-green);"></i> Urbanization</div>
+                        <div class="record-tag"><i class="fa-solid fa-bolt" style="color: var(--accent-blue);"></i> Renewable Energy</div>
+                        <div class="record-tag"><i class="fa-solid fa-chart-line" style="color: var(--accent-orange);"></i> GDP Growth</div>
+                        <div class="record-tag"><i class="fa-solid fa-graduation-cap" style="color: var(--accent-purple);"></i> Literacy Rates</div>
+                        <div class="record-tag"><i class="fa-solid fa-cloud-rain" style="color: #60a5fa;"></i> Climate Change</div>
+                    </div>
+                </div>
+
+                <!-- Badges / Achievements -->
+                <div class="record-section-card">
+                    <div class="section-header-row">
+                        <h3><i class="fa-solid fa-award" style="color: var(--accent-gold);"></i> Badges Earned</h3>
+                        <a href="teen-achievements.html" class="view-all-link">All Badges</a>
+                    </div>
+                    <div class="badges-showcase">
+                        <div class="badge-slot earned" title="Data Pioneer">
+                            <i class="fa-solid fa-rocket badge-icon"></i>
+                        </div>
+                        <div class="badge-slot earned" title="Global Citizen">
+                            <i class="fa-solid fa-globe badge-icon"></i>
+                        </div>
+                        <div class="badge-slot earned" title="Economic Analyst">
+                            <i class="fa-solid fa-chart-pie badge-icon"></i>
+                        </div>
+                        <div class="badge-slot earned" title="First Project">
+                            <i class="fa-solid fa-file-signature badge-icon"></i>
+                        </div>
+                        <div class="badge-slot">
+                            <i class="fa-solid fa-lock badge-icon"></i>
+                        </div>
+                        <div class="badge-slot">
+                            <i class="fa-solid fa-lock badge-icon"></i>
+                        </div>
+                        <div class="badge-slot">
+                            <i class="fa-solid fa-lock badge-icon"></i>
+                        </div>
+                        <div class="badge-slot">
+                            <i class="fa-solid fa-lock badge-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Goals -->
+                <div class="record-section-card">
+                    <div class="section-header-row">
+                        <h3><i class="fa-solid fa-bullseye" style="color: #ef4444;"></i> Weekly Goals</h3>
+                    </div>
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h5>Missions Completed</h5>
+                            <span>2 / 3</span>
+                        </div>
+                        <div class="goal-bar"><div class="goal-fill" style="width: 66%;"></div></div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Complete 1 more mission to reach your weekly target.</p>
+                    </div>
+                    <div class="goal-card" style="background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.1);">
+                        <div class="goal-header">
+                            <h5 style="color: var(--accent-blue);">Countries Explored</h5>
+                            <span style="color: var(--accent-blue);">4 / 5</span>
+                        </div>
+                        <div class="goal-bar" style="background: rgba(59, 130, 246, 0.1);"><div class="goal-fill" style="width: 80%; background: var(--accent-blue);"></div></div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Explore one more country in Africa to complete the set.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+</body>
+</html>

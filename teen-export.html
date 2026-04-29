@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export for School | geoFroggy Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-export.css">
+</head>
+<body class="teen-portal-body">
+    <div id="header-placeholder"></div>
+
+    <main class="export-page">
+        <div class="export-layout">
+            <!-- Left: Preview Section -->
+            <section class="export-preview-section">
+                <div class="export-header">
+                    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 5px;">Export for School</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Generate clean, classroom-ready outputs to turn your research into impact.</p>
+                </div>
+
+                <div class="export-preview-card">
+                    <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;">Export Preview</h4>
+                    
+                    <div class="preview-grid">
+                        <div class="chart-preview-box">
+                            <div style="height: 250px;">
+                                <canvas id="exportChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="project-summary-preview">
+                            <h4>Project</h4>
+                            <h2>Renewable Energy Around the World</h2>
+                            
+                            <div class="selected-countries-row">
+                                <div class="country-tag-mini"><img src="https://flagcdn.com/is.svg" width="14" alt=""> Iceland</div>
+                                <div class="country-tag-mini"><img src="https://flagcdn.com/no.svg" width="14" alt=""> Norway</div>
+                                <div class="country-tag-mini"><img src="https://flagcdn.com/de.svg" width="14" alt=""> Germany</div>
+                                <div class="country-tag-mini"><img src="https://flagcdn.com/us.svg" width="14" alt=""> USA</div>
+                                <div class="country-tag-mini"><img src="https://flagcdn.com/in.svg" width="14" alt=""> India</div>
+                            </div>
+
+                            <div class="summary-text-box">
+                                <h5>Summary</h5>
+                                <p>This project compares the share of renewable energy in total energy consumption across five countries in 2022. Iceland leads with the highest renewable energy share, while India has the lowest in this comparison group.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-preview-grid">
+                    <div class="export-preview-card">
+                        <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px;">3. Add Notes (Optional)</h4>
+                        <textarea style="width: 100%; height: 100px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 8px; color: white; padding: 12px; font-size: 0.85rem; resize: none; outline: none;" placeholder="Add final insights for your teacher...">This chart shows how different countries are using renewable energy. It can help us understand global sustainability progress and where more action is needed.</textarea>
+                        <div style="text-align: right; font-size: 0.65rem; color: var(--text-muted); margin-top: 5px;">156 / 300 characters</div>
+                    </div>
+
+                    <div class="export-preview-card">
+                        <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px;">4. Source / Citation Preview</h4>
+                        <div class="citation-preview-box">
+                            <div class="citation-header">
+                                <h5>MLA (9th ed.)</h5>
+                                <button class="copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <p class="citation-text">"Renewable Energy Share of Total Energy Consumption, 2022." GeoFroggy, 2024, https://www.geofroggy.com/projects/renewable-energy-around-the-world. Accessed 21 May 2024.</p>
+                            <div style="margin-top: 15px; display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--accent-green);">
+                                <i class="fa-solid fa-circle-check"></i> All data sourced from trusted global datasets.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">
+                    <i class="fa-solid fa-lock"></i> Your export will be private unless shared.
+                </div>
+            </section>
+
+            <!-- Right: Options Sidebar -->
+            <aside class="export-options-sidebar">
+                <div class="option-group">
+                    <h3>1. Choose Export Format</h3>
+                    <div class="export-format-grid">
+                        <div class="format-card active">
+                            <i class="fa-solid fa-image"></i>
+                            <span>PNG Chart</span>
+                            <p>High-quality chart image</p>
+                        </div>
+                        <div class="format-card">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span>PDF Summary</span>
+                            <p>Project summary with chart</p>
+                        </div>
+                        <div class="format-card">
+                            <i class="fa-solid fa-code"></i>
+                            <span>Citation Only</span>
+                            <p>Bibliography text only</p>
+                        </div>
+                        <div class="format-card">
+                            <i class="fa-solid fa-link"></i>
+                            <span>Share Link</span>
+                            <p>Web link to project</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="option-group" style="margin-top: 10px;">
+                    <h3>2. Choose Citation Style</h3>
+                    <div class="citation-style-tabs">
+                        <button class="style-tab active">MLA</button>
+                        <button class="style-tab">APA</button>
+                        <button class="style-tab">Chicago</button>
+                    </div>
+                    <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 5px;">
+                        <i class="fa-solid fa-circle-info"></i> We'll format your citations automatically.
+                    </p>
+                </div>
+
+                <div class="option-group" style="margin-top: 20px;">
+                    <h3>Teacher-Ready Share Card (Preview)</h3>
+                    <div class="teacher-card-preview">
+                        <div class="share-card-visual">
+                            <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=400" alt="">
+                        </div>
+                        <div class="share-card-content">
+                            <h4>Renewable Energy Around the World</h4>
+                            <div class="share-card-meta">
+                                <span>By Alex</span>
+                                <span>• 5 countries</span>
+                                <span>• 2022</span>
+                            </div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">Explore this project on GeoFroggy to view data, charts, and key insights.</p>
+                            <div class="share-link-box">
+                                <i class="fa-solid fa-link"></i> geofroggy.com/p/renewable-energy-world
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-generate-export">
+                    Generate Export <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+            </aside>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+    <script>
+        const ctx = document.getElementById('exportChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Iceland', 'Norway', 'Germany', 'United States', 'India'],
+                datasets: [{
+                    label: '% of Total Energy',
+                    data: [85, 70, 46, 21, 17],
+                    backgroundColor: '#22c55e',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { display: false },
+                    title: { display: true, text: 'Renewable Energy Share of Total Energy Consumption (2022)', color: '#f8fafc', font: { size: 14 } }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', callback: v => v + '%' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

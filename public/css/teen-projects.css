@@ -1,0 +1,277 @@
+:root {
+    --bg-dark: #0b1120;
+    --card-bg: rgba(30, 41, 59, 0.4);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --accent-blue: #3b82f6;
+    --accent-green: #22c55e;
+    --accent-orange: #f59e0b;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.project-builder-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 320px;
+    gap: 25px;
+    padding: 20px 25px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* Step Sidebar */
+.project-steps-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    color: var(--text-muted);
+    position: relative;
+}
+
+.step-item.active {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.step-item.active .step-num {
+    background: var(--accent-green);
+    color: white;
+}
+
+.step-text h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.step-text p {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+
+.step-connector {
+    position: absolute;
+    left: 25px;
+    top: 40px;
+    width: 2px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Workspace */
+.project-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.workspace-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header-row h3 { font-size: 1rem; font-weight: 700; }
+
+.question-input-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.question-input-box p { font-size: 0.95rem; font-weight: 600; }
+.btn-edit-mini { color: var(--accent-blue); font-size: 0.8rem; border: none; background: transparent; cursor: pointer; }
+
+.selection-summary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.selection-group h4 { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; }
+
+.selection-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.pill-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-add-mini {
+    background: transparent;
+    border: 1px dashed var(--glass-border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* Data Preview & Evidence */
+.data-preview-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+}
+
+.evidence-list { display: flex; flex-direction: column; gap: 10px; }
+
+.evidence-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.source-icon { width: 32px; height: 32px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; }
+
+.source-info h5 { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
+.source-info p { font-size: 0.7rem; color: var(--text-muted); }
+
+.verified-badge { color: var(--accent-green); font-size: 0.65rem; margin-left: 5px; }
+
+/* Notes Editor */
+.notes-editor-container {
+    margin-top: 20px;
+}
+
+.editor-toolbar {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 15px;
+    color: var(--text-muted);
+}
+
+.editor-textarea {
+    width: 100%;
+    min-height: 150px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    outline: none;
+    resize: none;
+}
+
+/* Action Footer */
+.workspace-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.btn-continue {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* My Projects Sidebar */
+.my-projects-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.projects-list-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.projects-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+.proj-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.proj-tab.active { color: var(--accent-green); }
+
+.mini-project-card {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.mini-project-card:hover { border-color: var(--glass-border); background: rgba(255, 255, 255, 0.05); }
+
+.proj-thumb-mini { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+
+.proj-info-mini h4 { font-size: 0.8rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; }
+.proj-status-mini { font-size: 0.65rem; color: var(--text-muted); }
+
+.proj-progress-mini { width: 100%; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; margin-top: 8px; }
+.proj-progress-fill { height: 100%; background: var(--accent-green); border-radius: 5px; }
