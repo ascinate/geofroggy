@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Compare | geoFroggy Research</title>
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="public/css/teen-dashboard.css">
+    <link rel="stylesheet" href="public/css/teen-compare.css">
+</head>
+<body class="teen-portal-body">
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <main class="compare-main">
+        <div class="compare-container">
+            <!-- Title & Actions -->
+            <div class="compare-header-row">
+                <div class="title-section">
+                    <h1>Country Compare</h1>
+                    <p>Compare up to 4 countries across time and discover how they change, grow, and connect. Use this data as evidence for your research projects.</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-secondary"><i class="fa-regular fa-bookmark"></i> Save Project</button>
+                    <button class="btn-primary"><i class="fa-solid fa-file-export"></i> Export for School</button>
+                </div>
+            </div>
+
+            <!-- Country Selection Cards -->
+            <div class="country-selector-grid">
+                <!-- Country 1 -->
+                <div class="country-card">
+                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="card-header">
+                        <img src="https://flagcdn.com/au.svg" alt="Australia" class="country-flag">
+                        <div class="country-name-info">
+                            <h3>Australia</h3>
+                            <span class="country-region">Oceania</span>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <span class="label">Population</span>
+                            <span class="value">26.6M</span>
+                            <div class="trend-indicator trend-up">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +1.2%
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">GDP (Nominal)</span>
+                            <span class="value">$1.7T</span>
+                        </div>
+                    </div>
+                    <div class="sparkline-container">
+                        <canvas id="sparkline-1"></canvas>
+                    </div>
+                </div>
+
+                <!-- Country 2 -->
+                <div class="country-card">
+                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="card-header">
+                        <img src="https://flagcdn.com/br.svg" alt="Brazil" class="country-flag">
+                        <div class="country-name-info">
+                            <h3>Brazil</h3>
+                            <span class="country-region">South America</span>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <span class="label">Population</span>
+                            <span class="value">216.4M</span>
+                            <div class="trend-indicator trend-up">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +0.7%
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">GDP (Nominal)</span>
+                            <span class="value">$2.2T</span>
+                        </div>
+                    </div>
+                    <div class="sparkline-container">
+                        <canvas id="sparkline-2"></canvas>
+                    </div>
+                </div>
+
+                <!-- Country 3 -->
+                <div class="country-card">
+                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="card-header">
+                        <img src="https://flagcdn.com/jp.svg" alt="Japan" class="country-flag">
+                        <div class="country-name-info">
+                            <h3>Japan</h3>
+                            <span class="country-region">Asia</span>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <span class="label">Population</span>
+                            <span class="value">124.6M</span>
+                            <div class="trend-indicator trend-down">
+                                <i class="fa-solid fa-arrow-trend-down"></i> -0.3%
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">GDP (Nominal)</span>
+                            <span class="value">$4.2T</span>
+                        </div>
+                    </div>
+                    <div class="sparkline-container">
+                        <canvas id="sparkline-3"></canvas>
+                    </div>
+                </div>
+
+                <!-- Country 4 -->
+                <div class="country-card">
+                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="card-header">
+                        <img src="https://flagcdn.com/ke.svg" alt="Kenya" class="country-flag">
+                        <div class="country-name-info">
+                            <h3>Kenya</h3>
+                            <span class="country-region">Africa</span>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-box">
+                            <span class="label">Population</span>
+                            <span class="value">54.1M</span>
+                            <div class="trend-indicator trend-up">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +2.1%
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="label">GDP (Nominal)</span>
+                            <span class="value">$115B</span>
+                        </div>
+                    </div>
+                    <div class="sparkline-container">
+                        <canvas id="sparkline-4"></canvas>
+                    </div>
+                </div>
+
+                <!-- Add Slot -->
+                <div class="add-country-slot">
+                    <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
+                    <span>Add Country</span>
+                    <p>You can add up to 4 countries</p>
+                </div>
+            </div>
+
+            <!-- Metrics Navigation -->
+            <div class="metrics-nav-row">
+                <div class="metric-pills">
+                    <button class="metric-pill active">
+                        <i class="fa-solid fa-users"></i>
+                        <div class="metric-label-group">
+                            <span>Population</span>
+                            <small>Total people</small>
+                        </div>
+                    </button>
+                    <button class="metric-pill">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="metric-label-group">
+                            <span>GDP</span>
+                            <small>Nominal (USD)</small>
+                        </div>
+                    </button>
+                    <button class="metric-pill">
+                        <i class="fa-solid fa-building"></i>
+                        <div class="metric-label-group">
+                            <span>Urbanization</span>
+                            <small>% of population</small>
+                        </div>
+                    </button>
+                    <button class="metric-pill">
+                        <i class="fa-solid fa-book-open"></i>
+                        <div class="metric-label-group">
+                            <span>Literacy</span>
+                            <small>Adult 15+ (%)</small>
+                        </div>
+                    </button>
+                    <button class="metric-pill">
+                        <i class="fa-solid fa-cloud-rain"></i>
+                        <div class="metric-label-group">
+                            <span>Climate</span>
+                            <small>CO₂ per capita</small>
+                        </div>
+                    </button>
+                    <button class="metric-pill">
+                        <span>More Metrics</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+
+                <div class="range-selector">
+                    <span class="range-label">Year Range</span>
+                    <div class="range-slider-container">
+                        <span class="year-tag">2000 — 2024</span>
+                        <input type="range" min="2000" max="2024" value="2024">
+                        <span class="year-tag">2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Charts Row -->
+            <div class="charts-grid">
+                <!-- Comparison Chart -->
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-title-group">
+                            <h2>Population Over Time <i class="fa-solid fa-circle-info"></i></h2>
+                            <p>Total population</p>
+                        </div>
+                        <div class="chart-actions">
+                            <select class="select-mini">
+                                <option>Line View</option>
+                                <option>Area View</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-chart-canvas">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Secondary Chart -->
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <div class="chart-title-group">
+                            <h2>Population in 2024</h2>
+                            <p>Total population</p>
+                        </div>
+                        <div class="chart-actions">
+                            <select class="select-mini">
+                                <option>2024</option>
+                                <option>2020</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-chart-canvas">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insight Row -->
+            <div class="insights-row">
+                <div class="insight-card">
+                    <div class="insight-icon"><i class="fa-regular fa-lightbulb"></i></div>
+                    <div class="insight-content">
+                        <h3>Think About It</h3>
+                        <p>In 2024, which country has the fastest growing population, and how does its growth rate compare to the country with a shrinking population?</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right insight-arrow"></i>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-content">
+                        <p><strong>Tip:</strong> Try changing the metric or year range to see new patterns. Look for trends, then think about why they happen.</p>
+                    </div>
+                    <div class="tip-mascot">
+                        <img src="https://raw.githubusercontent.com/Soumya-K-9/geofroggy-assets/main/frog-explorer.png" alt="Frog Mascot">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="public/js/teen-components.js"></script>
+    <script src="public/js/teen-compare.js"></script>
+</body>
+</html>
