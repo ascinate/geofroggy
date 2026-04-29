@@ -66,14 +66,14 @@ body {
 }
 
 .header-logo {
-    text-decoration: none;
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
 }
 
-.logo-geo { color: #f8fafc; }
-.logo-froggy { color: #22c55e; }
+.header-logo img {
+    height: 32px;
+    width: auto;
+}
 
 .header-nav ul {
     display: flex;
