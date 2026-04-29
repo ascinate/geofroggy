@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function updateHeaderDynamic(stats, profile, user) {
+        const headerTokens = document.getElementById("header-tokens");
+        if (headerTokens) headerTokens.textContent = (stats.tokens || 0).toLocaleString();
+
         const headerStreak = document.getElementById("header-streak");
         if (headerStreak) headerStreak.textContent = stats.streak || 12;
 

@@ -177,6 +177,7 @@ body {
     border: 1px solid var(--glass-border);
 }
 
+.token-stat i { color: #f59e0b; }
 .streak-stat i { color: #f97316; }
 .level-stat { color: #10b981; }
 
