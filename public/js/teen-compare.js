@@ -15,6 +15,7 @@ async function initModal() {
     const countryOptionsGrid = document.querySelector('.country-options-grid');
 
     let allCountries = [];
+    let flagCodes = {};
 
     // Open Modal
     addCountryBtn.addEventListener('click', async () => {
@@ -22,9 +23,33 @@ async function initModal() {
         document.body.style.overflow = 'hidden';
         
         if (allCountries.length === 0) {
-            await fetchCountries();
+            await Promise.all([fetchCountries(), fetchFlagCodes()]);
         }
     });
+
+    async function fetchFlagCodes() {
+        try {
+            const response = await fetch('https://flagcdn.com/en/codes.json');
+            flagCodes = await response.json();
+        } catch (error) {
+            console.error('Error fetching flag codes:', error);
+        }
+    }
+
+    function getCodeFromName(name) {
+        if (!name) return 'un'; // Unknown
+        const searchName = name.toLowerCase().trim();
+        for (const [code, countryName] of Object.entries(flagCodes)) {
+            if (countryName.toLowerCase() === searchName) return code;
+        }
+        // Fallback: partial match
+        for (const [code, countryName] of Object.entries(flagCodes)) {
+            if (countryName.toLowerCase().includes(searchName) || searchName.includes(countryName.toLowerCase())) {
+                return code;
+            }
+        }
+        return 'un';
+    }
 
     async function fetchCountries() {
         try {
@@ -47,15 +72,18 @@ async function initModal() {
     function renderCountries(countries) {
         countryOptionsGrid.innerHTML = '';
         countries.forEach(country => {
+            const code = getCodeFromName(country.country);
             const option = document.createElement('div');
             option.className = 'country-option';
             option.setAttribute('data-country', country.country);
             option.innerHTML = `
-                <img src="https://flagcdn.com/${country.code.toLowerCase()}.svg" alt="${country.country}">
+                <img src="https://flagcdn.com/${code}.svg" alt="${country.country}">
                 <span>${country.country}</span>
             `;
             
             option.addEventListener('click', () => {
+                // Attach the resolved code to the country object for later use
+                country.resolvedCode = code;
                 selectCountry(country);
             });
             
@@ -109,12 +137,13 @@ function renderSelectedCountries() {
     grid.innerHTML = '';
     
     selectedCountries.forEach((country, index) => {
+        const code = (country.resolvedCode || country.code || 'un').toLowerCase();
         const card = document.createElement('div');
         card.className = 'country-card';
         card.innerHTML = `
             <button class="remove-country" data-index="${index}"><i class="fa-solid fa-xmark"></i></button>
             <div class="card-header">
-                <img src="https://flagcdn.com/${country.code.toLowerCase()}.svg" alt="${country.country}" class="country-flag">
+                <img src="https://flagcdn.com/${code}.svg" alt="${country.country}" class="country-flag">
                 <div class="country-name-info">
                     <h3>${country.country}</h3>
                     <span class="country-region">${country.continent}</span>
