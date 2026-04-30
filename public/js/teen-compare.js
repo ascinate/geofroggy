@@ -107,7 +107,7 @@ async function initModal() {
         });
     }
 
-    function selectCountry(country) {
+    async function selectCountry(country) {
         if (selectedCountries.length >= 4) {
             alert('You can only compare up to 4 countries.');
             return;
@@ -116,6 +116,17 @@ async function initModal() {
         if (selectedCountries.find(c => c.id === country.id)) {
             alert('This country is already selected.');
             return;
+        }
+
+        // Fetch detailed stats (People & Society)
+        try {
+            const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${country.id}/stats`);
+            const statData = await response.json();
+            if (statData.status === 'success') {
+                country.historicalStats = statData.data;
+            }
+        } catch (error) {
+            console.error('Error fetching country stats:', error);
         }
 
         selectedCountries.push(country);
@@ -188,7 +199,7 @@ function renderSelectedCountries() {
         });
         
         grid.appendChild(card);
-        initSingleSparkline(`sparkline-${country.id}`);
+        initSingleSparkline(`sparkline-${country.id}`, country);
     });
     
     if (selectedCountries.length < 4) {
@@ -206,20 +217,36 @@ function removeCountry(index) {
     renderSelectedCountries();
 }
 
-function initSingleSparkline(canvasId) {
+function initSingleSparkline(canvasId, country) {
     const ctx = document.getElementById(canvasId).getContext('2d');
-    const mockData = Array.from({length: 6}, () => Math.floor(Math.random() * 10) + 20);
+    
+    // Default mock data
+    let sparklineData = [20, 22, 21, 24, 23, 26];
+    
+    // Use historical data if available
+    if (country.historicalStats && country.historicalStats.length > 0) {
+        const values = country.historicalStats
+            .map(s => parseFloat(s.value.replace(/[^0-9.]/g, '')))
+            .filter(v => !isNaN(v));
+            
+        if (values.length > 0) {
+            sparklineData = values.slice(-8); // Take recent entries
+        }
+    }
+    
+    const isUp = sparklineData[sparklineData.length - 1] >= sparklineData[0];
+    const color = isUp ? '#22c55e' : '#ef4444';
     
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [1,2,3,4,5,6],
+            labels: sparklineData.map((_, i) => i),
             datasets: [{
-                data: mockData,
-                borderColor: '#22c55e',
+                data: sparklineData,
+                borderColor: color,
                 borderWidth: 2,
                 fill: true,
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                backgroundColor: isUp ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
                 tension: 0.4,
                 pointRadius: 0
             }]
