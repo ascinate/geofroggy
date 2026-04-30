@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initModal();
 });
 
+let selectedCountries = [];
+
 async function initModal() {
     const addCountryBtn = document.getElementById('addCountryBtn');
     const countryModal = document.getElementById('countryModal');
@@ -62,8 +64,18 @@ async function initModal() {
     }
 
     function selectCountry(country) {
-        console.log('Selected:', country);
-        alert(`You selected ${country.country}! (Selection logic can be expanded here)`);
+        if (selectedCountries.length >= 4) {
+            alert('You can only compare up to 4 countries.');
+            return;
+        }
+        
+        if (selectedCountries.find(c => c.id === country.id)) {
+            alert('This country is already selected.');
+            return;
+        }
+
+        selectedCountries.push(country);
+        renderSelectedCountries();
         closeModal();
     }
 
@@ -86,6 +98,93 @@ async function initModal() {
             (c.continent && c.continent.toLowerCase().includes(term))
         );
         renderCountries(filtered);
+    });
+}
+
+function renderSelectedCountries() {
+    const grid = document.getElementById('countrySelectionGrid');
+    const addBtn = document.getElementById('addCountryBtn');
+    
+    // Clear and rebuild
+    grid.innerHTML = '';
+    
+    selectedCountries.forEach((country, index) => {
+        const card = document.createElement('div');
+        card.className = 'country-card';
+        card.innerHTML = `
+            <button class="remove-country" data-index="${index}"><i class="fa-solid fa-xmark"></i></button>
+            <div class="card-header">
+                <img src="https://flagcdn.com/${country.code.toLowerCase()}.svg" alt="${country.country}" class="country-flag">
+                <div class="country-name-info">
+                    <h3>${country.country}</h3>
+                    <span class="country-region">${country.continent}</span>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat-box">
+                    <span class="label">Population</span>
+                    <span class="value">${country.population}</span>
+                    <div class="trend-indicator trend-up">
+                        <i class="fa-solid fa-arrow-trend-up"></i> +1.2%
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="label">GDP (Nominal)</span>
+                    <span class="value">${country.economy}</span>
+                </div>
+            </div>
+            <div class="sparkline-container">
+                <canvas id="sparkline-${country.id}"></canvas>
+            </div>
+        `;
+        
+        card.querySelector('.remove-country').addEventListener('click', (e) => {
+            removeCountry(index);
+        });
+        
+        grid.appendChild(card);
+        initSingleSparkline(`sparkline-${country.id}`);
+    });
+    
+    if (selectedCountries.length < 4) {
+        grid.appendChild(addBtn);
+        // We need to re-attach the listener because we moved the element
+        addBtn.onclick = null; // Clear old if any
+        // The listener is actually attached in initModal using addEventListener,
+        // and addBtn is a persistent element in memory?
+        // Actually, grid.appendChild(addBtn) MOVES the element, preserving its listeners.
+    }
+}
+
+function removeCountry(index) {
+    selectedCountries.splice(index, 1);
+    renderSelectedCountries();
+}
+
+function initSingleSparkline(canvasId) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const mockData = Array.from({length: 6}, () => Math.floor(Math.random() * 10) + 20);
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5,6],
+            datasets: [{
+                data: mockData,
+                borderColor: '#22c55e',
+                borderWidth: 2,
+                fill: true,
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                tension: 0.4,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: { x: { display: false }, y: { display: false } }
+        }
     });
 }
 
