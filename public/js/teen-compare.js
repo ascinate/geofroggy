@@ -5,18 +5,67 @@ document.addEventListener('DOMContentLoaded', () => {
     initModal();
 });
 
-function initModal() {
+async function initModal() {
     const addCountryBtn = document.getElementById('addCountryBtn');
     const countryModal = document.getElementById('countryModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const countrySearch = document.getElementById('countrySearch');
-    const countryOptions = document.querySelectorAll('.country-option');
+    const countryOptionsGrid = document.querySelector('.country-options-grid');
+
+    let allCountries = [];
 
     // Open Modal
-    addCountryBtn.addEventListener('click', () => {
+    addCountryBtn.addEventListener('click', async () => {
         countryModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scroll
+        document.body.style.overflow = 'hidden';
+        
+        if (allCountries.length === 0) {
+            await fetchCountries();
+        }
     });
+
+    async function fetchCountries() {
+        try {
+            countryOptionsGrid.innerHTML = '<div class="loading-spinner">Loading countries...</div>';
+            const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country`);
+            const data = await response.json();
+            
+            if (data.status === 'success' && data.data) {
+                allCountries = data.data;
+                renderCountries(allCountries);
+            } else {
+                countryOptionsGrid.innerHTML = '<div class="error-msg">Failed to load countries.</div>';
+            }
+        } catch (error) {
+            console.error('Error fetching countries:', error);
+            countryOptionsGrid.innerHTML = '<div class="error-msg">Error connecting to server.</div>';
+        }
+    }
+
+    function renderCountries(countries) {
+        countryOptionsGrid.innerHTML = '';
+        countries.forEach(country => {
+            const option = document.createElement('div');
+            option.className = 'country-option';
+            option.setAttribute('data-country', country.country);
+            option.innerHTML = `
+                <img src="https://flagcdn.com/${country.code.toLowerCase()}.svg" alt="${country.country}">
+                <span>${country.country}</span>
+            `;
+            
+            option.addEventListener('click', () => {
+                selectCountry(country);
+            });
+            
+            countryOptionsGrid.appendChild(option);
+        });
+    }
+
+    function selectCountry(country) {
+        console.log('Selected:', country);
+        alert(`You selected ${country.country}! (Selection logic can be expanded here)`);
+        closeModal();
+    }
 
     // Close Modal
     const closeModal = () => {
@@ -25,34 +74,18 @@ function initModal() {
     };
 
     closeModalBtn.addEventListener('click', closeModal);
-
-    // Close on overlay click
     countryModal.addEventListener('click', (e) => {
         if (e.target === countryModal) closeModal();
     });
 
-    // Search functionality (simple)
+    // Search functionality
     countrySearch.addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
-        countryOptions.forEach(option => {
-            const country = option.getAttribute('data-country').toLowerCase();
-            const spanText = option.querySelector('span').textContent.toLowerCase();
-            if (country.includes(term) || spanText.includes(term)) {
-                option.style.display = 'flex';
-            } else {
-                option.style.display = 'none';
-            }
-        });
-    });
-
-    // Country selection (static for now as requested)
-    countryOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            const countryName = option.querySelector('span').textContent;
-            console.log(`Selected: ${countryName}`);
-            alert(`You selected ${countryName}! (This is a static demo)`);
-            closeModal();
-        });
+        const filtered = allCountries.filter(c => 
+            c.country.toLowerCase().includes(term) || 
+            (c.continent && c.continent.toLowerCase().includes(term))
+        );
+        renderCountries(filtered);
     });
 }
 

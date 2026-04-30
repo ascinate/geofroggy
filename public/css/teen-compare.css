@@ -699,3 +699,20 @@ input[type=range]::-webkit-slider-thumb {
 .country-option:hover span {
     color: white;
 }
+
+/* Modal Feedback States */
+.loading-spinner {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.error-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #ef4444;
+    font-weight: 600;
+}
