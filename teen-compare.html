@@ -34,124 +34,80 @@
             </div>
 
             <!-- Country Selection Cards -->
-            <div class="country-selector-grid">
-                <!-- Country 1 -->
-                <div class="country-card">
-                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
-                    <div class="card-header">
-                        <img src="https://flagcdn.com/au.svg" alt="Australia" class="country-flag">
-                        <div class="country-name-info">
-                            <h3>Australia</h3>
-                            <span class="country-region">Oceania</span>
-                        </div>
-                    </div>
-                    <div class="card-stats">
-                        <div class="stat-box">
-                            <span class="label">Population</span>
-                            <span class="value">26.6M</span>
-                            <div class="trend-indicator trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i> +1.2%
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <span class="label">GDP (Nominal)</span>
-                            <span class="value">$1.7T</span>
-                        </div>
-                    </div>
-                    <div class="sparkline-container">
-                        <canvas id="sparkline-1"></canvas>
-                    </div>
-                </div>
-
-                <!-- Country 2 -->
-                <div class="country-card">
-                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
-                    <div class="card-header">
-                        <img src="https://flagcdn.com/br.svg" alt="Brazil" class="country-flag">
-                        <div class="country-name-info">
-                            <h3>Brazil</h3>
-                            <span class="country-region">South America</span>
-                        </div>
-                    </div>
-                    <div class="card-stats">
-                        <div class="stat-box">
-                            <span class="label">Population</span>
-                            <span class="value">216.4M</span>
-                            <div class="trend-indicator trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i> +0.7%
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <span class="label">GDP (Nominal)</span>
-                            <span class="value">$2.2T</span>
-                        </div>
-                    </div>
-                    <div class="sparkline-container">
-                        <canvas id="sparkline-2"></canvas>
-                    </div>
-                </div>
-
-                <!-- Country 3 -->
-                <div class="country-card">
-                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
-                    <div class="card-header">
-                        <img src="https://flagcdn.com/jp.svg" alt="Japan" class="country-flag">
-                        <div class="country-name-info">
-                            <h3>Japan</h3>
-                            <span class="country-region">Asia</span>
-                        </div>
-                    </div>
-                    <div class="card-stats">
-                        <div class="stat-box">
-                            <span class="label">Population</span>
-                            <span class="value">124.6M</span>
-                            <div class="trend-indicator trend-down">
-                                <i class="fa-solid fa-arrow-trend-down"></i> -0.3%
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <span class="label">GDP (Nominal)</span>
-                            <span class="value">$4.2T</span>
-                        </div>
-                    </div>
-                    <div class="sparkline-container">
-                        <canvas id="sparkline-3"></canvas>
-                    </div>
-                </div>
-
-                <!-- Country 4 -->
-                <div class="country-card">
-                    <button class="remove-country"><i class="fa-solid fa-xmark"></i></button>
-                    <div class="card-header">
-                        <img src="https://flagcdn.com/ke.svg" alt="Kenya" class="country-flag">
-                        <div class="country-name-info">
-                            <h3>Kenya</h3>
-                            <span class="country-region">Africa</span>
-                        </div>
-                    </div>
-                    <div class="card-stats">
-                        <div class="stat-box">
-                            <span class="label">Population</span>
-                            <span class="value">54.1M</span>
-                            <div class="trend-indicator trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i> +2.1%
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <span class="label">GDP (Nominal)</span>
-                            <span class="value">$115B</span>
-                        </div>
-                    </div>
-                    <div class="sparkline-container">
-                        <canvas id="sparkline-4"></canvas>
-                    </div>
-                </div>
-
+            <div class="country-selector-grid" id="countrySelectionGrid">
                 <!-- Add Slot -->
-                <div class="add-country-slot">
+                <div class="add-country-slot" id="addCountryBtn">
                     <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
                     <span>Add Country</span>
                     <p>You can add up to 4 countries</p>
+                </div>
+            </div>
+
+            <!-- Modal for Selecting Country -->
+            <div id="countryModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Select a Country</h2>
+                        <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="modal-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search for a country..." id="countrySearch">
+                    </div>
+                    <div class="country-list-scroll">
+                        <div class="country-options-grid">
+                            <!-- Australia -->
+                            <div class="country-option" data-country="Australia">
+                                <img src="https://flagcdn.com/au.svg" alt="Australia">
+                                <span>Australia</span>
+                            </div>
+                            <!-- Brazil -->
+                            <div class="country-option" data-country="Brazil">
+                                <img src="https://flagcdn.com/br.svg" alt="Brazil">
+                                <span>Brazil</span>
+                            </div>
+                            <!-- Japan -->
+                            <div class="country-option" data-country="Japan">
+                                <img src="https://flagcdn.com/jp.svg" alt="Japan">
+                                <span>Japan</span>
+                            </div>
+                            <!-- Kenya -->
+                            <div class="country-option" data-country="Kenya">
+                                <img src="https://flagcdn.com/ke.svg" alt="Kenya">
+                                <span>Kenya</span>
+                            </div>
+                            <!-- USA -->
+                            <div class="country-option" data-country="USA">
+                                <img src="https://flagcdn.com/us.svg" alt="USA">
+                                <span>United States</span>
+                            </div>
+                            <!-- UK -->
+                            <div class="country-option" data-country="UK">
+                                <img src="https://flagcdn.com/gb.svg" alt="UK">
+                                <span>United Kingdom</span>
+                            </div>
+                            <!-- India -->
+                            <div class="country-option" data-country="India">
+                                <img src="https://flagcdn.com/in.svg" alt="India">
+                                <span>India</span>
+                            </div>
+                            <!-- Canada -->
+                            <div class="country-option" data-country="Canada">
+                                <img src="https://flagcdn.com/ca.svg" alt="Canada">
+                                <span>Canada</span>
+                            </div>
+                            <!-- Germany -->
+                            <div class="country-option" data-country="Germany">
+                                <img src="https://flagcdn.com/de.svg" alt="Germany">
+                                <span>Germany</span>
+                            </div>
+                            <!-- France -->
+                            <div class="country-option" data-country="France">
+                                <img src="https://flagcdn.com/fr.svg" alt="France">
+                                <span>France</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

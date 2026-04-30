@@ -1,41 +1,57 @@
 document.addEventListener('DOMContentLoaded', () => {
-    initSparklines();
+    // initSparklines(); // Removed as cards are now dynamic/cleared
     initMainChart();
     initBarChart();
+    initModal();
 });
 
-function initSparklines() {
-    const sparklineData = [
-        [22, 23, 24, 25, 26, 26.6],
-        [180, 190, 200, 205, 210, 216.4],
-        [128, 127, 126, 125.5, 125, 124.6],
-        [35, 38, 42, 46, 50, 54.1]
-    ];
+function initModal() {
+    const addCountryBtn = document.getElementById('addCountryBtn');
+    const countryModal = document.getElementById('countryModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const countrySearch = document.getElementById('countrySearch');
+    const countryOptions = document.querySelectorAll('.country-option');
 
-    const colors = ['#22c55e', '#22c55e', '#ef4444', '#22c55e'];
+    // Open Modal
+    addCountryBtn.addEventListener('click', () => {
+        countryModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    });
 
-    sparklineData.forEach((data, index) => {
-        const ctx = document.getElementById(`sparkline-${index + 1}`).getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map((_, i) => i),
-                datasets: [{
-                    data: data,
-                    borderColor: colors[index],
-                    borderWidth: 2,
-                    fill: true,
-                    backgroundColor: `rgba(${index === 2 ? '239, 68, 68' : '34, 197, 94'}, 0.1)`,
-                    tension: 0.4,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                scales: { x: { display: false }, y: { display: false } }
+    // Close Modal
+    const closeModal = () => {
+        countryModal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Close on overlay click
+    countryModal.addEventListener('click', (e) => {
+        if (e.target === countryModal) closeModal();
+    });
+
+    // Search functionality (simple)
+    countrySearch.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        countryOptions.forEach(option => {
+            const country = option.getAttribute('data-country').toLowerCase();
+            const spanText = option.querySelector('span').textContent.toLowerCase();
+            if (country.includes(term) || spanText.includes(term)) {
+                option.style.display = 'flex';
+            } else {
+                option.style.display = 'none';
             }
+        });
+    });
+
+    // Country selection (static for now as requested)
+    countryOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const countryName = option.querySelector('span').textContent;
+            console.log(`Selected: ${countryName}`);
+            alert(`You selected ${countryName}! (This is a static demo)`);
+            closeModal();
         });
     });
 }
