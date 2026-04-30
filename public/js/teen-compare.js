@@ -23,7 +23,8 @@ async function initModal() {
         document.body.style.overflow = 'hidden';
         
         if (allCountries.length === 0) {
-            await Promise.all([fetchCountries(), fetchFlagCodes()]);
+            await fetchFlagCodes(); // Ensure codes are loaded first
+            await fetchCountries(); // Then fetch and render countries
         }
     });
 
@@ -37,14 +38,29 @@ async function initModal() {
     }
 
     function getCodeFromName(name) {
-        if (!name) return 'un'; // Unknown
+        if (!name) return 'un';
         const searchName = name.toLowerCase().trim();
+
+        // 1. Check manual overrides
+        const manualMappings = {
+            'usa': 'us',
+            'uk': 'gb',
+            'uae': 'ae',
+            'russia': 'ru',
+            'south korea': 'kr',
+            'north korea': 'kp'
+        };
+        if (manualMappings[searchName]) return manualMappings[searchName];
+
+        // 2. Exact match
         for (const [code, countryName] of Object.entries(flagCodes)) {
             if (countryName.toLowerCase() === searchName) return code;
         }
-        // Fallback: partial match
+
+        // 3. Partial match
         for (const [code, countryName] of Object.entries(flagCodes)) {
-            if (countryName.toLowerCase().includes(searchName) || searchName.includes(countryName.toLowerCase())) {
+            const cleanName = countryName.toLowerCase();
+            if (cleanName.includes(searchName) || searchName.includes(cleanName)) {
                 return code;
             }
         }
