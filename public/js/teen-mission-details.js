@@ -28,16 +28,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         actionContainer: document.getElementById('action-container')
     };
 
+    const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL)
+        ? window.APP_CONFIG.API_BASE_URL.replace(/\/$/, "")
+        : 'https://geo-froggy-backend.devhhtk.workers.dev';
     let missionData = null;
     let userProgress = null;
 
     async function loadMissionDetails() {
         try {
             const [missionRes, progressRes] = await Promise.all([
-                fetch(`${CONFIG.API_URL}/api/missions/${missionId}`, {
+                fetch(`${baseUrl}/api/missions/${missionId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }),
-                fetch(`${CONFIG.API_URL}/api/missions/user/progress`, {
+                fetch(`${baseUrl}/api/missions/user/progress`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
@@ -110,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function startMission() {
         try {
-            const res = await fetch(`${CONFIG.API_URL}/api/missions/${missionId}/start`, {
+            const res = await fetch(`${baseUrl}/api/missions/${missionId}/start`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`,
@@ -130,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function completeMission() {
         try {
-            const res = await fetch(`${CONFIG.API_URL}/api/missions/${missionId}/update`, {
+            const res = await fetch(`${baseUrl}/api/missions/${missionId}/update`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`,
