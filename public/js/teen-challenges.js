@@ -10,13 +10,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL)
+        ? window.APP_CONFIG.API_BASE_URL.replace(/\/$/, "")
+        : 'https://geo-froggy-backend.devhhtk.workers.dev';
+    
     try {
         // Fetch missions and user progress in parallel
         const [missionsRes, progressRes] = await Promise.all([
-            fetch(`${CONFIG.API_URL}/api/missions`, {
+            fetch(`${baseUrl}/api/missions`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
-            fetch(`${CONFIG.API_URL}/api/missions/user/progress`, {
+            fetch(`${baseUrl}/api/missions/user/progress`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
         ]);
