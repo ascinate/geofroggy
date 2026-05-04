@@ -85,8 +85,7 @@
                         <button class="btn-secondary-mini" style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 4px 10px; border-radius: 6px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Project Tips</button>
                     </div>
                     <div class="question-input-box">
-                        <p id="projectQuestion">What is your research question?</p>
-                        <button class="btn-edit-mini" id="editQuestionBtn">Edit</button>
+                        <input type="text" id="projectQuestion" placeholder="Enter your research question (e.g., How does GDP affect education?)" class="project-title-input">
                     </div>
 
                     <div class="selection-summary-row">
@@ -118,18 +117,18 @@
                             <canvas id="previewChart"></canvas>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.65rem; color: var(--text-muted);">
-                            <span>Source: World Bank • 2023</span>
+                            <span>Source: CIA World Factbook</span>
                             <a href="#" style="color: var(--accent-blue);">View full data</a>
                         </div>
                     </div>
 
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
-                            <h3>Evidence <span id="sourceCount">0 sources</span></h3>
-                            <i class="fa-solid fa-circle-info" style="color: var(--text-muted);"></i>
+                            <h3>Comparison Table</h3>
+                            <i class="fa-solid fa-table" style="color: var(--text-muted);"></i>
                         </div>
-                        <div class="evidence-list" id="evidenceList">
-                            <!-- Evidence sources will appear here -->
+                        <div class="table-container-mini" id="dataTableContainer">
+                            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select countries and metrics to see comparison table</p>
                         </div>
                     </div>
                 </div>

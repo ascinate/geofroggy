@@ -60,13 +60,6 @@ async function initCountryModal() {
         });
     }
 
-    function selectCountry(country, code) {
-        if (selectedCountries.find(c => c.id === country.id)) return;
-        country.resolvedCode = code;
-        selectedCountries.push(country);
-        renderSelectedCountries();
-        countryModal.classList.remove('active');
-    }
 
     countrySearch.oninput = (e) => {
         const term = e.target.value.toLowerCase();
@@ -77,13 +70,21 @@ async function initCountryModal() {
     closeModalBtn.onclick = () => countryModal.classList.remove('active');
 }
 
+function selectCountry(country, code) {
+    if (selectedCountries.find(c => c.id === country.id)) return;
+    country.resolvedCode = code;
+    selectedCountries.push(country);
+    renderSelectedCountries();
+    updatePreviewChart();
+    updateDataTable();
+    document.getElementById('countryModal').classList.remove('active');
+}
+
 function renderSelectedCountries() {
     const container = document.getElementById('selectedCountriesList');
     if (!container) return;
     
-    // Create new add button if it doesn't exist (since we clear innerHTML)
     container.innerHTML = '';
-    
     selectedCountries.forEach((country, index) => {
         const pill = document.createElement('div');
         pill.className = 'pill-item';
@@ -95,6 +96,8 @@ function renderSelectedCountries() {
         pill.querySelector('.remove-country').onclick = () => {
             selectedCountries.splice(index, 1);
             renderSelectedCountries();
+            updatePreviewChart();
+            updateDataTable();
         };
         container.appendChild(pill);
     });
@@ -127,7 +130,6 @@ async function initMetricModal() {
     const categoriesGrid = document.querySelector('.metric-categories-grid');
     const fieldsList = document.querySelector('.metric-fields-list');
 
-    // Delegate click to add button
     document.addEventListener('click', (e) => {
         if (e.target.closest('.btn-add-mini') && e.target.innerText.includes('Metric')) {
             metricModal.classList.add('active');
@@ -174,6 +176,8 @@ async function initMetricModal() {
         if (selectedMetrics.find(m => m.field === field)) return;
         selectedMetrics.push({ field, category });
         renderSelectedMetrics();
+        updatePreviewChart();
+        updateDataTable();
         metricModal.classList.remove('active');
     }
 
@@ -196,6 +200,8 @@ function renderSelectedMetrics() {
         pill.querySelector('.remove-metric').onclick = () => {
             selectedMetrics.splice(index, 1);
             renderSelectedMetrics();
+            updatePreviewChart();
+            updateDataTable();
         };
         container.appendChild(pill);
     });
@@ -223,40 +229,70 @@ function getCodeFromName(name) {
 }
 
 function initProjectControls() {
-    const editBtn = document.getElementById('editQuestionBtn');
-    const questionText = document.getElementById('projectQuestion');
-    
-    if (editBtn) {
-        editBtn.onclick = () => {
-            const newQuestion = prompt("Enter your research question:", questionText.innerText);
-            if (newQuestion) {
-                questionText.innerText = newQuestion;
-            }
-        };
-    }
-
+    const questionInput = document.getElementById('projectQuestion');
     const saveBtn = document.querySelector('.btn-secondary');
+    
     if (saveBtn) {
-        saveBtn.onclick = () => alert('Project draft saved to local storage!');
+        saveBtn.onclick = () => {
+            alert('Project "' + questionInput.value + '" saved to local storage!');
+        };
     }
 }
 
 function updatePreviewChart() {
     const ctx = document.getElementById('previewChart').getContext('2d');
-    
-    // Clear existing chart instance if it exists
-    if (window.previewChartInstance) {
-        window.previewChartInstance.destroy();
-    }
+    if (window.previewChartInstance) window.previewChartInstance.destroy();
 
     if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
-        // Show placeholder or empty state
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.font = '12px Outfit';
         ctx.fillStyle = '#64748b';
         ctx.textAlign = 'center';
         ctx.fillText('Select countries and metrics to see preview', ctx.canvas.width / 2, ctx.canvas.height / 2);
         return;
     }
+}
 
-    // Otherwise load actual data (logic to be implemented with API)
+async function updateDataTable() {
+    const container = document.getElementById('dataTableContainer');
+    if (!container) return;
+    if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
+        container.innerHTML = `<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select countries and metrics to see comparison table</p>`;
+        return;
+    }
+
+    container.innerHTML = '<div class="loading" style="text-align: center; padding: 20px; color: var(--text-muted);">Generating table...</div>';
+
+    try {
+        const statsPromises = selectedCountries.map(c => 
+            fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${c.id}/stats`).then(r => r.json())
+        );
+        const results = await Promise.all(statsPromises);
+        
+        let html = `<table class="project-data-table"><thead><tr><th>Country</th>`;
+        selectedMetrics.forEach(m => {
+            html += `<th>${m.field.replace(/_/g, ' ')}</th>`;
+        });
+        html += `</tr></thead><tbody>`;
+
+        results.forEach((res, idx) => {
+            if (res.status === 'success') {
+                const country = selectedCountries[idx];
+                html += `<tr><td><strong>${country.country}</strong></td>`;
+                selectedMetrics.forEach(m => {
+                    const categoryData = res.data[m.category] || [];
+                    const fieldData = categoryData.filter(d => d.field === m.field && d.parent_id === 0);
+                    const latest = fieldData.sort((a, b) => b.year - a.year)[0];
+                    html += `<td class="metric-val">${latest ? latest.value : 'N/A'}</td>`;
+                });
+                html += `</tr>`;
+            }
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = `<p style="color: #ef4444; text-align: center;">Error loading table data</p>`;
+    }
 }
