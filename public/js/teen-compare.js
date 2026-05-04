@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // initSparklines(); // Removed as cards are now dynamic/cleared
     initMainChart();
     initBarChart();
     initModal();
@@ -72,7 +74,7 @@ async function initModal() {
     addCountryBtn.addEventListener('click', async () => {
         countryModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        
+
         if (allCountries.length === 0) {
             await fetchFlagCodes(); // Ensure codes are loaded first
             await fetchCountries(); // Then fetch and render countries
@@ -123,7 +125,7 @@ async function initModal() {
             countryOptionsGrid.innerHTML = '<div class="loading-spinner">Loading countries...</div>';
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country`);
             const data = await response.json();
-            
+
             if (data.status === 'success' && data.data) {
                 allCountries = data.data;
                 renderCountries(allCountries);
@@ -147,13 +149,13 @@ async function initModal() {
                 <img src="https://flagcdn.com/${code}.svg" alt="${country.country}">
                 <span>${country.country}</span>
             `;
-            
+
             option.addEventListener('click', () => {
                 // Attach the resolved code to the country object for later use
                 country.resolvedCode = code;
                 selectCountry(country);
             });
-            
+
             countryOptionsGrid.appendChild(option);
         });
     }
@@ -163,7 +165,7 @@ async function initModal() {
             alert('You can only compare up to 4 countries.');
             return;
         }
-        
+
         if (selectedCountries.find(c => c.id === country.id)) {
             alert('This country is already selected.');
             return;
@@ -200,8 +202,8 @@ async function initModal() {
     // Search functionality
     countrySearch.addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
-        const filtered = allCountries.filter(c => 
-            c.country.toLowerCase().includes(term) || 
+        const filtered = allCountries.filter(c =>
+            c.country.toLowerCase().includes(term) ||
             (c.continent && c.continent.toLowerCase().includes(term))
         );
         renderCountries(filtered);
@@ -211,10 +213,10 @@ async function initModal() {
 function renderSelectedCountries() {
     const grid = document.getElementById('countrySelectionGrid');
     const addBtn = document.getElementById('addCountryBtn');
-    
+
     // Clear and rebuild
     grid.innerHTML = '';
-    
+
     selectedCountries.forEach((country, index) => {
         const code = (country.resolvedCode || country.code || 'un').toLowerCase();
         const card = document.createElement('div');
@@ -245,15 +247,15 @@ function renderSelectedCountries() {
                 <canvas id="sparkline-${country.id}"></canvas>
             </div>
         `;
-        
+
         card.querySelector('.remove-country').addEventListener('click', (e) => {
             removeCountry(index);
         });
-        
+
         grid.appendChild(card);
         initSingleSparkline(`sparkline-${country.id}`, country);
     });
-    
+
     if (selectedCountries.length < 4) {
         grid.appendChild(addBtn);
         // We need to re-attach the listener because we moved the element
@@ -273,13 +275,13 @@ function removeCountry(index) {
 function parseValue(val) {
     if (typeof val === 'number') return val;
     if (!val || typeof val !== 'string') return 0;
-    
+
     // Remove (2018 est.) and other notes
     let clean = val.split('(')[0]
-                   .replace(/[\$,]/g, '')
-                   .replace(/&lt;.*?&gt;/g, '') // Remove HTML tags if any
-                   .trim();
-    
+        .replace(/[\$,]/g, '')
+        .replace(/&lt;.*?&gt;/g, '') // Remove HTML tags if any
+        .trim();
+
     let multiplier = 1;
     if (clean.toLowerCase().includes('billion')) {
         multiplier = 1000000000;
@@ -290,7 +292,7 @@ function parseValue(val) {
     } else if (clean.includes('%')) {
         clean = clean.replace('%', '');
     }
-    
+
     const num = parseFloat(clean);
     return isNaN(num) ? 0 : num * multiplier;
 }
@@ -298,16 +300,16 @@ function parseValue(val) {
 function getMetricDataForCountry(country, metricName) {
     const config = METRIC_CONFIG[metricName];
     if (!config || !country.historicalStats) return [];
-    
+
     const categoryData = country.historicalStats[config.category] || [];
-    
+
     let filtered;
     if (config.parentField) {
         // Find all parent IDs for the given parent field
         const parentIds = categoryData
             .filter(s => s.field === config.parentField)
             .map(p => p.id);
-            
+
         if (parentIds.length === 0) return [];
         filtered = categoryData.filter(s => s.field === config.field && parentIds.includes(s.parent_id));
     } else {
@@ -322,11 +324,11 @@ function getMetricDataForCountry(country, metricName) {
 
 function initSingleSparkline(canvasId, country) {
     const ctx = document.getElementById(canvasId).getContext('2d');
-    
+
     // Get population trend for sparkline
     const dataPoints = getMetricDataForCountry(country, 'Population');
     let sparklineData = dataPoints.length > 0 ? dataPoints.map(d => d.value) : [20, 22, 21, 24, 23, 26];
-    
+
     // If we only have one point, mock some trend
     if (sparklineData.length === 1) {
         sparklineData = [sparklineData[0] * 0.95, sparklineData[0]];
@@ -334,7 +336,7 @@ function initSingleSparkline(canvasId, country) {
 
     const isUp = sparklineData[sparklineData.length - 1] >= sparklineData[0];
     const color = isUp ? '#22c55e' : '#ef4444';
-    
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -364,7 +366,7 @@ function updateCharts() {
     if (!mainChart || !barChart) return;
 
     const config = METRIC_CONFIG[currentMetric];
-    
+
     // Update Titles in UI
     document.querySelectorAll('.chart-title-group h2').forEach((h2, idx) => {
         if (idx === 0) h2.innerHTML = `${currentMetric} Over Time <i class="fa-solid fa-circle-info"></i>`;
@@ -378,7 +380,7 @@ function updateCharts() {
         const data = getMetricDataForCountry(c, currentMetric);
         data.forEach(d => allYears.add(d.year));
     });
-    
+
     let sortedYears = Array.from(allYears).sort((a, b) => a - b);
     if (sortedYears.length === 0) sortedYears = [2024];
 
@@ -386,7 +388,7 @@ function updateCharts() {
         const countryData = getMetricDataForCountry(c, currentMetric);
         const dataMap = {};
         countryData.forEach(d => dataMap[d.year] = d.value);
-        
+
         return {
             label: c.country,
             data: sortedYears.map(y => dataMap[y] || null),
@@ -420,7 +422,7 @@ function updateCharts() {
 
 function initMainChart() {
     const ctx = document.getElementById('comparisonChart').getContext('2d');
-    
+
     mainChart = new Chart(ctx, {
         type: 'line',
         data: { labels: [], datasets: [] },
@@ -439,7 +441,7 @@ function initMainChart() {
                     padding: 12,
                     displayColors: true,
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             const config = METRIC_CONFIG[currentMetric];
                             return `${context.dataset.label}: ${config.format(context.parsed.y)}`;
                         }
@@ -456,18 +458,18 @@ function initMainChart() {
 
 function initBarChart() {
     const ctx = document.getElementById('barChart').getContext('2d');
-    
+
     barChart = new Chart(ctx, {
         type: 'bar',
         data: { labels: [], datasets: [{ data: [], borderRadius: 6, barThickness: 30 }] },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { 
+            plugins: {
                 legend: { display: false },
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             const config = METRIC_CONFIG[currentMetric];
                             return config.format(context.parsed.y);
                         }
