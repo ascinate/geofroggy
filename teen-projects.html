@@ -104,10 +104,21 @@
                     </div>
                 </div>
 
+                <!-- Comparison Table (Full Width) -->
+                <div class="workspace-card" id="dataTableCard">
+                    <div class="card-header-row">
+                        <h3>Comparison Table</h3>
+                        <i class="fa-solid fa-table" style="color: var(--text-muted);"></i>
+                    </div>
+                    <div class="table-container-mini" id="dataTableContainer">
+                        <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select countries and metrics to see comparison table</p>
+                    </div>
+                </div>
+
                 <div class="data-preview-row">
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
-                            <h3>Data Preview</h3>
+                            <h3>Visual Preview</h3>
                             <select style="background: transparent; border: none; color: white; font-size: 0.75rem;">
                                 <option>Line Chart</option>
                                 <option>Bar Chart</option>
@@ -116,19 +127,15 @@
                         <div style="height: 200px;">
                             <canvas id="previewChart"></canvas>
                         </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.65rem; color: var(--text-muted);">
-                            <span>Source: CIA World Factbook</span>
-                            <a href="#" style="color: var(--accent-blue);">View full data</a>
-                        </div>
                     </div>
 
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
-                            <h3>Comparison Table</h3>
-                            <i class="fa-solid fa-table" style="color: var(--text-muted);"></i>
+                            <h3>Project Evidence</h3>
+                            <i class="fa-solid fa-circle-info" style="color: var(--text-muted);"></i>
                         </div>
-                        <div class="table-container-mini" id="dataTableContainer">
-                            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select countries and metrics to see comparison table</p>
+                        <div class="evidence-list" id="evidenceList">
+                            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select data to see sources</p>
                         </div>
                     </div>
                 </div>

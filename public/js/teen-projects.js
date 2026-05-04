@@ -149,27 +149,53 @@ async function initMetricModal() {
     }
 
     async function loadFieldsForCategory(categoryKey) {
-        fieldsList.innerHTML = '<div class="loading">Loading metrics...</div>';
+        if (selectedCountries.length === 0) {
+            fieldsList.innerHTML = '<div class="loading" style="padding: 20px; text-align: center; color: var(--accent-orange);"><i class="fa-solid fa-triangle-exclamation"></i> Select a country first to see available metrics.</div>';
+            return;
+        }
+
+        fieldsList.innerHTML = '<div class="loading" style="padding: 20px; text-align: center; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Analyzing available data for ' + selectedCountries.length + ' countries...</div>';
+        
         try {
-            const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/1/stats`);
-            const data = await response.json();
-            if (data.status === 'success') {
-                const fields = data.data[categoryKey] || [];
-                const mainFields = fields.filter(f => f.parent_id === 0);
-                
-                fieldsList.innerHTML = '';
-                mainFields.forEach(field => {
-                    const item = document.createElement('div');
-                    item.className = 'metric-field-option';
-                    item.innerHTML = `
-                        <span>${field.field.replace(/_/g, ' ')}</span>
-                        <i class="fa-solid fa-plus"></i>
-                    `;
-                    item.onclick = () => selectMetric(field.field, categoryKey);
-                    fieldsList.appendChild(item);
-                });
+            // Fetch stats for ALL selected countries to find common fields
+            const statsPromises = selectedCountries.map(c => 
+                fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${c.id}/stats`).then(r => r.json())
+            );
+            const results = await Promise.all(statsPromises);
+            
+            // Get fields for each country
+            const countryFieldsSets = results.map(res => {
+                if (res.status !== 'success') return new Set();
+                const categoryData = res.data[categoryKey] || [];
+                return new Set(categoryData.filter(f => f.parent_id === 0).map(f => f.field));
+            });
+
+            // Intersection: Find fields that exist in ALL selected countries
+            let commonFields = countryFieldsSets.length > 0 ? [...countryFieldsSets[0]] : [];
+            for (let i = 1; i < countryFieldsSets.length; i++) {
+                commonFields = commonFields.filter(f => countryFieldsSets[i].has(f));
             }
-        } catch (e) { console.error(e); }
+            
+            if (commonFields.length === 0) {
+                fieldsList.innerHTML = '<div class="loading" style="padding: 20px; text-align: center; color: var(--text-muted);">No common metrics found for these countries in this category.</div>';
+                return;
+            }
+
+            fieldsList.innerHTML = '';
+            commonFields.sort().forEach(field => {
+                const item = document.createElement('div');
+                item.className = 'metric-field-option';
+                item.innerHTML = `
+                    <span>${field.replace(/_/g, ' ')}</span>
+                    <i class="fa-solid fa-plus"></i>
+                `;
+                item.onclick = () => selectMetric(field, categoryKey);
+                fieldsList.appendChild(item);
+            });
+        } catch (e) { 
+            console.error(e);
+            fieldsList.innerHTML = '<div class="loading" style="padding: 20px; text-align: center; color: #ef4444;">Error analyzing metrics.</div>';
+        }
     }
 
     function selectMetric(field, category) {
@@ -209,7 +235,19 @@ function renderSelectedMetrics() {
     const addBtn = document.createElement('button');
     addBtn.className = 'btn-add-mini';
     addBtn.innerText = '+ Add Metric';
-    addBtn.onclick = () => document.getElementById('metricModal').classList.add('active');
+    
+    if (selectedCountries.length === 0) {
+        addBtn.style.opacity = '0.4';
+        addBtn.style.cursor = 'not-allowed';
+        addBtn.title = 'Select a country first';
+        addBtn.onclick = (e) => {
+            e.preventDefault();
+            alert('Please select at least one country first!');
+        };
+    } else {
+        addBtn.onclick = () => document.getElementById('metricModal').classList.add('active');
+    }
+    
     container.appendChild(addBtn);
 
     document.getElementById('metricCount').innerText = `${selectedMetrics.length} metrics`;
