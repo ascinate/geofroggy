@@ -42,17 +42,20 @@ async function loadProject(id) {
             if (questionInput) questionInput.value = p.title || '';
             
             selectedCountries = p.countries || [];
-            selectedMetrics = p.metrics || [];
-            customReferences = p.references || [];
-            selectedGraphMetric = p.graph_metric;
+            
+            // Unpack metrics, graph_metric and references from the metrics JSONB
+            if (p.metrics && typeof p.metrics === 'object' && !Array.isArray(p.metrics)) {
+                selectedMetrics = p.metrics.list || [];
+                selectedGraphMetric = p.metrics.graph || null;
+                customReferences = p.metrics.references || [];
+            } else {
+                selectedMetrics = p.metrics || [];
+                selectedGraphMetric = null;
+                customReferences = [];
+            }
             
             const notesArea = document.getElementById('projectNotes');
             if (notesArea) notesArea.value = p.notes || '';
-            
-            if (p.chart_type) {
-                const select = document.getElementById('chartTypeSelect');
-                if (select) select.value = p.chart_type;
-            }
             
             if (selectedGraphMetric) {
                 const label = document.getElementById('currentGraphLabel');
@@ -406,11 +409,6 @@ function initVisualModals() {
             document.getElementById('refLink').value = '';
         };
     }
-
-    const chartTypeSelect = document.getElementById('chartTypeSelect');
-    if (chartTypeSelect) {
-        chartTypeSelect.onchange = () => updatePreviewChart();
-    }
 }
 
 function renderEvidence() {
@@ -492,20 +490,21 @@ async function saveProject(redirect = false) {
         return;
     }
 
+    // Packing multiple frontend states into schema-compliant columns
     const projectData = {
         title: question,
         countries: selectedCountries,
-        metrics: selectedMetrics,
+        metrics: {
+            list: selectedMetrics,
+            graph: selectedGraphMetric,
+            references: customReferences
+        },
         notes: notes,
-        graph_metric: selectedGraphMetric,
-        chart_type: document.getElementById('chartTypeSelect')?.value || 'line',
-        references: customReferences,
         status: redirect ? 'completed' : 'draft',
         progress: selectedMetrics.length > 0 ? 80 : 40
     };
 
     try {
-        // Logic: If projectId exists, we UPDATE (PUT). If not, we CREATE (POST).
         const isUpdate = (projectId !== null && projectId !== undefined && projectId !== "");
         const url = isUpdate 
             ? `${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}` 
@@ -513,8 +512,6 @@ async function saveProject(redirect = false) {
         
         const method = isUpdate ? 'PUT' : 'POST';
         
-        console.log(`${isUpdate ? 'Updating' : 'Creating'} project...`);
-
         const response = await fetch(url, {
             method: method,
             headers: getAuthHeaders(),
@@ -525,8 +522,6 @@ async function saveProject(redirect = false) {
         
         if (result.status === 'success') {
             const savedProject = result.data;
-            
-            // Critical: Update global projectId with the ID returned from server
             projectId = savedProject.id;
             
             if (redirect) {
@@ -534,8 +529,6 @@ async function saveProject(redirect = false) {
             } else {
                 alert(`Project ${isUpdate ? 'updated' : 'saved'} successfully!`);
                 loadMyProjects();
-                
-                // Sync URL so refreshing doesn't lose the draft context
                 const newUrl = window.location.pathname + '?id=' + projectId;
                 window.history.pushState({ path: newUrl }, '', newUrl);
             }
@@ -544,7 +537,7 @@ async function saveProject(redirect = false) {
         }
     } catch (e) {
         console.error('Save Error:', e);
-        alert('Failed to connect to the server. Project not saved.');
+        alert('Failed to connect to the server.');
     }
 }
 
@@ -563,7 +556,7 @@ async function updatePreviewChart() {
         return;
     }
 
-    const chartType = document.getElementById('chartTypeSelect').value;
+    const chartType = 'line'; // Defaulted to line as per user requirement
 
     try {
         const statsPromises = selectedCountries.map(c => 
@@ -599,10 +592,10 @@ async function updatePreviewChart() {
                 label: country.country,
                 data: timelineData,
                 borderColor: color,
-                backgroundColor: chartType === 'bar' ? color + '80' : color + '20',
+                backgroundColor: color + '20',
                 borderWidth: 2,
                 tension: 0.3,
-                fill: chartType === 'line'
+                fill: true
             };
         });
 
