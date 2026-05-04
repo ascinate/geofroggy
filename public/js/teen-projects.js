@@ -35,6 +35,7 @@ async function initCountryModal() {
     }
 
     async function fetchCountries() {
+        countryOptionsGrid.innerHTML = '<div class="loading" style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Finding countries...</div>';
         try {
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country`);
             const data = await response.json();
@@ -42,11 +43,18 @@ async function initCountryModal() {
                 allCountries = data.data;
                 renderCountries(allCountries);
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { 
+            console.error(e); 
+            countryOptionsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load countries.</div>';
+        }
     }
 
     function renderCountries(countries) {
         countryOptionsGrid.innerHTML = '';
+        if (countries.length === 0) {
+            countryOptionsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No countries found matching your search.</div>';
+            return;
+        }
         countries.forEach(country => {
             const code = getCodeFromName(country.country);
             const option = document.createElement('div');
@@ -299,7 +307,7 @@ async function updateDataTable() {
         return;
     }
 
-    container.innerHTML = '<div class="loading" style="text-align: center; padding: 20px; color: var(--text-muted);">Generating table...</div>';
+    container.innerHTML = '<div class="loading" style="text-align: center; padding: 20px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Generating comparison matrix...</div>';
 
     try {
         const statsPromises = selectedCountries.map(c => 
@@ -307,24 +315,28 @@ async function updateDataTable() {
         );
         const results = await Promise.all(statsPromises);
         
-        let html = `<table class="project-data-table"><thead><tr><th>Country</th>`;
-        selectedMetrics.forEach(m => {
-            html += `<th>${m.field.replace(/_/g, ' ')}</th>`;
+        // Transposed Table: Metrics as Rows, Countries as Columns
+        let html = `<table class="project-data-table"><thead><tr><th>Metric</th>`;
+        selectedCountries.forEach(c => {
+            html += `<th>${c.country}</th>`;
         });
         html += `</tr></thead><tbody>`;
 
-        results.forEach((res, idx) => {
-            if (res.status === 'success') {
-                const country = selectedCountries[idx];
-                html += `<tr><td><strong>${country.country}</strong></td>`;
-                selectedMetrics.forEach(m => {
+        selectedMetrics.forEach(m => {
+            html += `<tr><td style="text-transform: capitalize;"><strong>${m.field.replace(/_/g, ' ')}</strong></td>`;
+            results.forEach(res => {
+                if (res.status === 'success') {
                     const categoryData = res.data[m.category] || [];
                     const fieldData = categoryData.filter(d => d.field === m.field && d.parent_id === 0);
                     const latest = fieldData.sort((a, b) => b.year - a.year)[0];
-                    html += `<td class="metric-val">${latest ? latest.value : 'N/A'}</td>`;
-                });
-                html += `</tr>`;
-            }
+                    
+                    const value = (latest && latest.value && latest.value.trim() !== "") ? latest.value : "N/A";
+                    html += `<td class="metric-val">${value}</td>`;
+                } else {
+                    html += `<td class="metric-val">N/A</td>`;
+                }
+            });
+            html += `</tr>`;
         });
 
         html += `</tbody></table>`;
