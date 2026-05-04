@@ -1,9 +1,18 @@
+let projectId = new URLSearchParams(window.location.search).get('id');
+
 document.addEventListener('DOMContentLoaded', () => {
     initCountryModal();
     initMetricModal();
     initProjectControls();
     initVisualModals();
-    updatePreviewChart();
+    
+    if (projectId) {
+        loadProject(projectId);
+    } else {
+        updatePreviewChart();
+    }
+    
+    loadMyProjects();
 });
 
 let selectedCountries = [];
@@ -12,6 +21,69 @@ let allCountries = [];
 let flagCodes = {};
 let selectedGraphMetric = null;
 let customReferences = [];
+
+async function loadProject(id) {
+    try {
+        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${id}`);
+        const result = await response.json();
+        if (result.status === 'success') {
+            const p = result.data;
+            const questionInput = document.getElementById('projectQuestion');
+            if (questionInput) questionInput.value = p.title || '';
+            
+            selectedCountries = p.countries || [];
+            selectedMetrics = p.metrics || [];
+            customReferences = p.references || [];
+            selectedGraphMetric = p.graph_metric;
+            
+            const notesArea = document.getElementById('projectNotes');
+            if (notesArea) notesArea.value = p.notes || '';
+            
+            if (p.chart_type) {
+                const select = document.getElementById('chartTypeSelect');
+                if (select) select.value = p.chart_type;
+            }
+            
+            if (selectedGraphMetric) {
+                const label = document.getElementById('currentGraphLabel');
+                if (label) label.innerText = `Visualizing: ${selectedGraphMetric.field.replace(/_/g, ' ')}`;
+            }
+
+            renderSelectedCountries();
+            renderSelectedMetrics();
+            renderEvidence();
+            updatePreviewChart();
+            updateDataTable();
+        }
+    } catch (e) {
+        console.error('Error loading project:', e);
+    }
+}
+
+async function loadMyProjects() {
+    const list = document.getElementById('myProjectsList');
+    if (!list) return;
+    try {
+        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects`);
+        const result = await response.json();
+        if (result.status === 'success') {
+            list.innerHTML = '';
+            result.data.forEach(p => {
+                const item = document.createElement('div');
+                item.className = `mini-project-card ${p.id == projectId ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="mini-project-info">
+                        <h5>${p.title || 'Untitled Project'}</h5>
+                        <p>${p.countries ? p.countries.length : 0} countries • Updated ${new Date(p.updated_at).toLocaleDateString()}</p>
+                        <div class="proj-progress-mini"><div class="proj-progress-fill" style="width: ${p.progress || 20}%"></div></div>
+                    </div>
+                `;
+                item.onclick = () => window.location.href = `teen-projects.html?id=${p.id}`;
+                list.appendChild(item);
+            });
+        }
+    } catch (e) { console.error(e); }
+}
 
 // --- Country Selection Logic ---
 
