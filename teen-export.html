@@ -155,31 +155,143 @@
     <script src="/js/config.js"></script>
     <script src="/js/teen-components.js"></script>
     <script>
-        const ctx = document.getElementById('exportChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Iceland', 'Norway', 'Germany', 'United States', 'India'],
-                datasets: [{
-                    label: '% of Total Energy',
-                    data: [85, 70, 46, 21, 17],
-                    backgroundColor: '#22c55e',
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    title: { display: true, text: 'Renewable Energy Share of Total Energy Consumption (2022)', color: '#f8fafc', font: { size: 14 } }
-                },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', callback: v => v + '%' } }
-                }
+        const projectId = new URLSearchParams(window.location.search).get('id');
+
+        async function loadProjectForExport() {
+            if (!projectId) {
+                alert('No project ID found!');
+                return;
             }
-        });
+
+            try {
+                const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}`);
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    const p = result.data;
+                    
+                    // Update Title
+                    document.querySelector('.project-summary-preview h2').innerText = p.title || 'Untitled Project';
+                    document.querySelector('.teacher-card-preview h4').innerText = p.title || 'Untitled Project';
+                    
+                    // Update Countries
+                    const countriesRow = document.querySelector('.selected-countries-row');
+                    countriesRow.innerHTML = '';
+                    if (p.countries && p.countries.length > 0) {
+                        p.countries.forEach(c => {
+                            const tag = document.createElement('div');
+                            tag.className = 'country-tag-mini';
+                            tag.innerHTML = `<img src="https://flagcdn.com/${c.resolvedCode || 'un'}.svg" width="14" alt=""> ${c.country}`;
+                            countriesRow.appendChild(tag);
+                        });
+                    } else {
+                        countriesRow.innerHTML = '<p style="color: var(--text-muted); font-size: 0.7rem;">No countries selected</p>';
+                    }
+                    
+                    // Update Summary/Notes
+                    const notesText = p.notes || 'No final insights recorded for this project yet. You can add them in the editor.';
+                    document.querySelector('.summary-text-box p').innerText = notesText;
+                    document.querySelector('textarea').value = p.notes || '';
+                    
+                    // Update Citation
+                    const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                    const citationText = `"${p.title || 'Untitled'}." GeoFroggy Research Portal, 2024, https://geofroggy.com/projects/${p.id}. Accessed ${dateStr}.`;
+                    document.querySelector('.citation-text').innerText = citationText;
+                    
+                    // Update Teacher Card Meta
+                    const countryCount = p.countries ? p.countries.length : 0;
+                    const createdYear = new Date(p.created_at || Date.now()).getFullYear();
+                    document.querySelector('.share-card-meta').innerHTML = `<span>By Explorer</span> <span>• ${countryCount} countries</span> <span>• ${createdYear}</span>`;
+                    document.querySelector('.share-link-box').innerHTML = `<i class="fa-solid fa-link"></i> geofroggy.com/p/${p.id}`;
+
+                    // Render Chart
+                    if (p.graph_metric) {
+                        renderExportChart(p);
+                    } else {
+                        const canvas = document.getElementById('exportChart');
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#64748b';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('No visualization data available', canvas.width/2, canvas.height/2);
+                    }
+                }
+            } catch (e) {
+                console.error('Export Error:', e);
+                document.querySelector('.export-preview-section').innerHTML += `<p style="color: #ef4444; margin-top: 20px;">Failed to load project details for export.</p>`;
+            }
+        }
+
+        async function renderExportChart(project) {
+            const ctx = document.getElementById('exportChart').getContext('2d');
+            
+            try {
+                // Fetch data for chart
+                const statsPromises = project.countries.map(c => 
+                    fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${c.id}/stats`).then(r => r.json())
+                );
+                const results = await Promise.all(statsPromises);
+                
+                let allYears = new Set();
+                results.forEach(res => {
+                    if (res.status === 'success') {
+                        const categoryData = res.data[project.graph_metric.category] || [];
+                        const fieldData = categoryData.filter(d => d.field === project.graph_metric.field && d.parent_id === 0);
+                        fieldData.forEach(d => { if (d.year) allYears.add(d.year); });
+                    }
+                });
+
+                const sortedYears = Array.from(allYears).sort((a, b) => a - b);
+                const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4', '#14b8a6', '#f43f5e'];
+
+                const datasets = results.map((res, idx) => {
+                    const country = project.countries[idx];
+                    const color = colors[idx % colors.length];
+                    let timelineData = [];
+                    if (res.status === 'success') {
+                        const categoryData = res.data[project.graph_metric.category] || [];
+                        const fieldData = categoryData.filter(d => d.field === project.graph_metric.field && d.parent_id === 0);
+                        timelineData = sortedYears.map(year => {
+                            const dataPoint = fieldData.find(d => d.year === year);
+                            return (dataPoint && dataPoint.value) ? parseFloat(dataPoint.value.replace(/[^0-9.]/g, '')) || null : null;
+                        });
+                    }
+                    return {
+                        label: country.country,
+                        data: timelineData,
+                        borderColor: color,
+                        backgroundColor: project.chart_type === 'bar' ? color + '80' : color + '20',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: project.chart_type === 'line'
+                    };
+                });
+
+                new Chart(ctx, {
+                    type: project.chart_type || 'line',
+                    data: { labels: sortedYears, datasets: datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: project.countries.length > 1, labels: { color: '#64748b', font: { size: 10 } } },
+                            title: { display: true, text: project.graph_metric.field.replace(/_/g, ' ').toUpperCase(), color: '#f8fafc', font: { size: 12 } }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error('Chart Error:', e);
+            }
+        }
+
+        document.querySelector('.btn-generate-export').onclick = () => {
+            window.print();
+        };
+
+        loadProjectForExport();
     </script>
 </body>
 </html>

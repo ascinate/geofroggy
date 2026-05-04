@@ -257,7 +257,8 @@ function renderSelectedMetrics() {
     
     container.appendChild(addBtn);
 
-    document.getElementById('metricCount').innerText = `${selectedMetrics.length} metrics`;
+    const countSpan = document.getElementById('metricCount');
+    if (countSpan) countSpan.innerText = `${selectedMetrics.length} metrics`;
 }
 
 function initVisualModals() {
@@ -278,6 +279,7 @@ function initVisualModals() {
     }
 
     function renderProjectMetricsForGraph() {
+        if (!metricsList) return;
         metricsList.innerHTML = '';
         selectedMetrics.forEach(m => {
             const item = document.createElement('div');
@@ -312,9 +314,7 @@ function initVisualModals() {
             const title = document.getElementById('refTitle').value;
             const link = document.getElementById('refLink').value;
             const type = document.getElementById('refType').value;
-
             if (!title) return alert('Please enter a title!');
-
             customReferences.push({ title, link, type });
             renderEvidence();
             refModal.classList.remove('active');
@@ -380,18 +380,83 @@ function getCodeFromName(name) {
 }
 
 function initProjectControls() {
-    const questionInput = document.getElementById('projectQuestion');
     const saveBtn = document.querySelector('.btn-secondary');
+    const continueBtn = document.querySelector('.btn-continue');
     
     if (saveBtn) {
-        saveBtn.onclick = () => {
-            alert('Project "' + (questionInput.value || 'Untitled') + '" saved to local storage!');
+        saveBtn.onclick = (e) => {
+            e.preventDefault();
+            saveProject(false);
+        };
+    }
+    if (continueBtn) {
+        continueBtn.onclick = (e) => {
+            e.preventDefault();
+            saveProject(true);
         };
     }
 }
 
+async function saveProject(redirect = false) {
+    const questionInput = document.getElementById('projectQuestion');
+    const question = questionInput ? questionInput.value : '';
+    const notesArea = document.getElementById('projectNotes');
+    const notes = notesArea ? notesArea.value : '';
+    
+    if (!question) {
+        alert('Please enter a research question before saving!');
+        return;
+    }
+
+    const projectData = {
+        title: question,
+        countries: selectedCountries,
+        metrics: selectedMetrics,
+        notes: notes,
+        graph_metric: selectedGraphMetric,
+        chart_type: document.getElementById('chartTypeSelect')?.value || 'line',
+        references: customReferences,
+        status: redirect ? 'completed' : 'draft',
+        progress: selectedMetrics.length > 0 ? 80 : 40
+    };
+
+    try {
+        const url = projectId ? `${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}` : `${window.APP_CONFIG.API_BASE_URL}/api/projects`;
+        const method = projectId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(projectData)
+        });
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            const savedProject = result.data;
+            projectId = savedProject.id;
+            
+            if (redirect) {
+                window.location.href = `teen-export.html?id=${projectId}`;
+            } else {
+                alert('Project draft saved successfully!');
+                loadMyProjects();
+                // Update URL without refreshing to allow further saves as PUT
+                const newUrl = window.location.pathname + '?id=' + projectId;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+        } else {
+            alert('Error saving project: ' + result.error);
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Error saving project. Please check your API connection.');
+    }
+}
+
 async function updatePreviewChart() {
-    const ctx = document.getElementById('previewChart').getContext('2d');
+    const canvas = document.getElementById('previewChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (window.previewChartInstance) window.previewChartInstance.destroy();
 
     if (selectedCountries.length === 0 || !selectedGraphMetric) {
@@ -411,43 +476,30 @@ async function updatePreviewChart() {
         );
         const results = await Promise.all(statsPromises);
         
-        // Find all unique years across all countries and metrics
         let allYears = new Set();
         results.forEach(res => {
             if (res.status === 'success') {
                 const categoryData = res.data[selectedGraphMetric.category] || [];
                 const fieldData = categoryData.filter(d => d.field === selectedGraphMetric.field && d.parent_id === 0);
-                fieldData.forEach(d => {
-                    if (d.year) allYears.add(d.year);
-                });
+                fieldData.forEach(d => { if (d.year) allYears.add(d.year); });
             }
         });
 
-        // Sort years for X-axis
         const sortedYears = Array.from(allYears).sort((a, b) => a - b);
-        
         const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4', '#14b8a6', '#f43f5e'];
 
-        // Create datasets for each country
         const datasets = results.map((res, idx) => {
             const country = selectedCountries[idx];
             const color = colors[idx % colors.length];
-            
             let timelineData = [];
             if (res.status === 'success') {
                 const categoryData = res.data[selectedGraphMetric.category] || [];
                 const fieldData = categoryData.filter(d => d.field === selectedGraphMetric.field && d.parent_id === 0);
-                
-                // Map values to sorted years
                 timelineData = sortedYears.map(year => {
                     const dataPoint = fieldData.find(d => d.year === year);
-                    if (dataPoint && dataPoint.value) {
-                        return parseFloat(dataPoint.value.replace(/[^0-9.]/g, '')) || null;
-                    }
-                    return null;
+                    return (dataPoint && dataPoint.value) ? parseFloat(dataPoint.value.replace(/[^0-9.]/g, '')) || null : null;
                 });
             }
-
             return {
                 label: country.country,
                 data: timelineData,
@@ -461,54 +513,27 @@ async function updatePreviewChart() {
 
         window.previewChartInstance = new Chart(ctx, {
             type: chartType,
-            data: {
-                labels: sortedYears,
-                datasets: datasets
-            },
+            data: { labels: sortedYears, datasets: datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: { 
-                        display: selectedCountries.length > 1,
-                        position: 'top',
-                        labels: { color: '#64748b', boxWidth: 12, font: { size: 10, family: 'Outfit' } }
-                    },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        titleFont: { family: 'Outfit', size: 12 },
-                        bodyFont: { family: 'Outfit', size: 11 },
-                        padding: 10,
-                        borderColor: 'rgba(255,255,255,0.1)',
-                        borderWidth: 1
-                    }
+                    legend: { display: selectedCountries.length > 1, position: 'top', labels: { color: '#64748b', boxWidth: 12, font: { size: 10, family: 'Outfit' } } },
+                    tooltip: { backgroundColor: '#1e293b', titleFont: { family: 'Outfit', size: 12 }, bodyFont: { family: 'Outfit', size: 11 }, padding: 10, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1 }
                 },
                 scales: {
-                    y: { 
-                        beginAtZero: false,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#64748b', font: { size: 10 } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#64748b', font: { size: 10 } }
-                    }
+                    y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } }
                 }
             }
         });
-    } catch (e) {
-        console.error(e);
-    }
+    } catch (e) { console.error(e); }
 }
 
 async function updateDataTable() {
     const container = document.getElementById('dataTableContainer');
     if (!container) return;
-    
     renderEvidence();
 
     if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
@@ -525,9 +550,7 @@ async function updateDataTable() {
         const results = await Promise.all(statsPromises);
         
         let html = `<table class="project-data-table"><thead><tr><th>Metric</th>`;
-        selectedCountries.forEach(c => {
-            html += `<th>${c.country}</th>`;
-        });
+        selectedCountries.forEach(c => { html += `<th>${c.country}</th>`; });
         html += `</tr></thead><tbody>`;
 
         selectedMetrics.forEach(m => {
@@ -539,17 +562,12 @@ async function updateDataTable() {
                     const latest = fieldData.sort((a, b) => b.year - a.year)[0];
                     const value = (latest && latest.value && latest.value.trim() !== "") ? latest.value : "N/A";
                     html += `<td class="metric-val">${value}</td>`;
-                } else {
-                    html += `<td class="metric-val">N/A</td>`;
-                }
+                } else { html += `<td class="metric-val">N/A</td>`; }
             });
             html += `</tr>`;
         });
 
         html += `</tbody></table>`;
         container.innerHTML = html;
-    } catch (e) {
-        console.error(e);
-        container.innerHTML = `<p style="color: #ef4444; text-align: center;">Error loading table data</p>`;
-    }
+    } catch (e) { console.error(e); container.innerHTML = `<p style="color: #ef4444; text-align: center;">Error.</p>`; }
 }
