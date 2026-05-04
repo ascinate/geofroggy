@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCountryModal();
     initMetricModal();
     initProjectControls();
+    initVisualModals();
     updatePreviewChart();
 });
 
@@ -9,6 +10,8 @@ let selectedCountries = [];
 let selectedMetrics = [];
 let allCountries = [];
 let flagCodes = {};
+let selectedGraphMetric = null;
+let customReferences = [];
 
 // --- Country Selection Logic ---
 
@@ -67,7 +70,6 @@ async function initCountryModal() {
             countryOptionsGrid.appendChild(option);
         });
     }
-
 
     countrySearch.oninput = (e) => {
         const term = e.target.value.toLowerCase();
@@ -165,20 +167,17 @@ async function initMetricModal() {
         fieldsList.innerHTML = '<div class="loading" style="padding: 20px; text-align: center; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Analyzing available data for ' + selectedCountries.length + ' countries...</div>';
         
         try {
-            // Fetch stats for ALL selected countries to find common fields
             const statsPromises = selectedCountries.map(c => 
                 fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${c.id}/stats`).then(r => r.json())
             );
             const results = await Promise.all(statsPromises);
             
-            // Get fields for each country
             const countryFieldsSets = results.map(res => {
                 if (res.status !== 'success') return new Set();
                 const categoryData = res.data[categoryKey] || [];
                 return new Set(categoryData.filter(f => f.parent_id === 0).map(f => f.field));
             });
 
-            // Intersection: Find fields that exist in ALL selected countries
             let commonFields = countryFieldsSets.length > 0 ? [...countryFieldsSets[0]] : [];
             for (let i = 1; i < countryFieldsSets.length; i++) {
                 commonFields = commonFields.filter(f => countryFieldsSets[i].has(f));
@@ -261,7 +260,113 @@ function renderSelectedMetrics() {
     document.getElementById('metricCount').innerText = `${selectedMetrics.length} metrics`;
 }
 
-// --- Helpers ---
+function initVisualModals() {
+    const openGraphBtn = document.getElementById('openGraphMetricBtn');
+    const graphModal = document.getElementById('graphMetricModal');
+    const closeGraphModalBtn = document.getElementById('closeGraphMetricModalBtn');
+    const metricsList = document.getElementById('projectMetricsListForGraph');
+
+    if (openGraphBtn) {
+        openGraphBtn.onclick = () => {
+            if (selectedMetrics.length === 0) {
+                alert('Please select at least one research metric first!');
+                return;
+            }
+            renderProjectMetricsForGraph();
+            graphModal.classList.add('active');
+        };
+    }
+
+    function renderProjectMetricsForGraph() {
+        metricsList.innerHTML = '';
+        selectedMetrics.forEach(m => {
+            const item = document.createElement('div');
+            item.className = 'metric-category-item';
+            item.style.textAlign = 'left';
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+            item.style.gap = '10px';
+            item.innerHTML = `<i class="fa-solid fa-chart-line" style="color: var(--accent-blue);"></i> <span>${m.field.replace(/_/g, ' ')}</span>`;
+            item.onclick = () => {
+                selectedGraphMetric = m;
+                document.getElementById('currentGraphLabel').innerText = `Visualizing: ${m.field.replace(/_/g, ' ')}`;
+                updatePreviewChart();
+                graphModal.classList.remove('active');
+            };
+            metricsList.appendChild(item);
+        });
+    }
+
+    if (closeGraphModalBtn) closeGraphModalBtn.onclick = () => graphModal.classList.remove('active');
+
+    const openRefBtn = document.getElementById('openReferenceModalBtn');
+    const refModal = document.getElementById('referenceModal');
+    const closeRefBtn = document.getElementById('closeReferenceModalBtn');
+    const saveRefBtn = document.getElementById('saveReferenceBtn');
+
+    if (openRefBtn) openRefBtn.onclick = () => refModal.classList.add('active');
+    if (closeRefBtn) closeRefBtn.onclick = () => refModal.classList.remove('active');
+
+    if (saveRefBtn) {
+        saveRefBtn.onclick = () => {
+            const title = document.getElementById('refTitle').value;
+            const link = document.getElementById('refLink').value;
+            const type = document.getElementById('refType').value;
+
+            if (!title) return alert('Please enter a title!');
+
+            customReferences.push({ title, link, type });
+            renderEvidence();
+            refModal.classList.remove('active');
+            document.getElementById('refTitle').value = '';
+            document.getElementById('refLink').value = '';
+        };
+    }
+
+    const chartTypeSelect = document.getElementById('chartTypeSelect');
+    if (chartTypeSelect) {
+        chartTypeSelect.onchange = () => updatePreviewChart();
+    }
+}
+
+function renderEvidence() {
+    const container = document.getElementById('evidenceList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (selectedMetrics.length === 0 && customReferences.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select data or add references to see evidence</p>';
+        return;
+    }
+
+    if (selectedMetrics.length > 0) {
+        const item = document.createElement('div');
+        item.className = 'evidence-item';
+        item.innerHTML = `
+            <div class="source-icon" style="background: rgba(34, 197, 94, 0.1); color: var(--accent-green);"><i class="fa-solid fa-database"></i></div>
+            <div class="source-info">
+                <h5>CIA World Factbook <i class="fa-solid fa-circle-check verified-badge"></i></h5>
+                <p>Global economic & social statistics</p>
+            </div>
+        `;
+        container.appendChild(item);
+    }
+
+    customReferences.forEach(ref => {
+        const icon = ref.type === 'web' ? 'fa-globe' : (ref.type === 'book' ? 'fa-book' : 'fa-file-lines');
+        const color = ref.type === 'web' ? 'var(--accent-blue)' : 'var(--accent-orange)';
+        const item = document.createElement('div');
+        item.className = 'evidence-item';
+        item.innerHTML = `
+            <div class="source-icon" style="background: rgba(255,255,255,0.05); color: ${color};"><i class="fa-solid ${icon}"></i></div>
+            <div class="source-info">
+                <h5>${ref.title}</h5>
+                <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 200px;">${ref.link || 'Manual reference'}</p>
+            </div>
+        `;
+        container.appendChild(item);
+    });
+}
 
 function getCodeFromName(name) {
     if (!name) return 'un';
@@ -280,28 +385,94 @@ function initProjectControls() {
     
     if (saveBtn) {
         saveBtn.onclick = () => {
-            alert('Project "' + questionInput.value + '" saved to local storage!');
+            alert('Project "' + (questionInput.value || 'Untitled') + '" saved to local storage!');
         };
     }
 }
 
-function updatePreviewChart() {
+async function updatePreviewChart() {
     const ctx = document.getElementById('previewChart').getContext('2d');
     if (window.previewChartInstance) window.previewChartInstance.destroy();
 
-    if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
+    if (selectedCountries.length === 0 || !selectedGraphMetric) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.font = '12px Outfit';
         ctx.fillStyle = '#64748b';
         ctx.textAlign = 'center';
-        ctx.fillText('Select countries and metrics to see preview', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        ctx.fillText('Select data to visualize in the chart', ctx.canvas.width / 2, ctx.canvas.height / 2);
         return;
+    }
+
+    const chartType = document.getElementById('chartTypeSelect').value;
+
+    try {
+        const statsPromises = selectedCountries.map(c => 
+            fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/${c.id}/stats`).then(r => r.json())
+        );
+        const results = await Promise.all(statsPromises);
+        
+        const labels = selectedCountries.map(c => c.country);
+        const dataValues = results.map(res => {
+            if (res.status === 'success') {
+                const categoryData = res.data[selectedGraphMetric.category] || [];
+                const fieldData = categoryData.filter(d => d.field === selectedGraphMetric.field && d.parent_id === 0);
+                const latest = fieldData.sort((a, b) => b.year - a.year)[0];
+                return latest ? parseFloat(latest.value.replace(/[^0-9.]/g, '')) || 0 : 0;
+            }
+            return 0;
+        });
+
+        const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4'];
+
+        window.previewChartInstance = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: selectedGraphMetric.field.replace(/_/g, ' '),
+                    data: dataValues,
+                    backgroundColor: chartType === 'bar' ? colors : 'transparent',
+                    borderColor: colors[0],
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: chartType === 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.dataset.label}: ${context.raw.toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#64748b', font: { size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    } catch (e) {
+        console.error(e);
     }
 }
 
 async function updateDataTable() {
     const container = document.getElementById('dataTableContainer');
     if (!container) return;
+    
+    renderEvidence();
+
     if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
         container.innerHTML = `<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select countries and metrics to see comparison table</p>`;
         return;
@@ -315,7 +486,6 @@ async function updateDataTable() {
         );
         const results = await Promise.all(statsPromises);
         
-        // Transposed Table: Metrics as Rows, Countries as Columns
         let html = `<table class="project-data-table"><thead><tr><th>Metric</th>`;
         selectedCountries.forEach(c => {
             html += `<th>${c.country}</th>`;
@@ -329,7 +499,6 @@ async function updateDataTable() {
                     const categoryData = res.data[m.category] || [];
                     const fieldData = categoryData.filter(d => d.field === m.field && d.parent_id === 0);
                     const latest = fieldData.sort((a, b) => b.year - a.year)[0];
-                    
                     const value = (latest && latest.value && latest.value.trim() !== "") ? latest.value : "N/A";
                     html += `<td class="metric-val">${value}</td>`;
                 } else {

@@ -119,11 +119,15 @@
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
                             <h3>Visual Preview</h3>
-                            <select style="background: transparent; border: none; color: white; font-size: 0.75rem;">
-                                <option>Line Chart</option>
-                                <option>Bar Chart</option>
-                            </select>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button class="btn-secondary-mini" id="openGraphMetricBtn" style="font-size: 0.7rem; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 4px 10px; border-radius: 6px;">Select Data</button>
+                                <select id="chartTypeSelect" style="background: transparent; border: none; color: white; font-size: 0.75rem;">
+                                    <option value="line">Line Chart</option>
+                                    <option value="bar">Bar Chart</option>
+                                </select>
+                            </div>
                         </div>
+                        <div id="currentGraphLabel" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; text-align: right;">No data selected</div>
                         <div style="height: 200px;">
                             <canvas id="previewChart"></canvas>
                         </div>
@@ -132,7 +136,7 @@
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
                             <h3>Project Evidence</h3>
-                            <i class="fa-solid fa-circle-info" style="color: var(--text-muted);"></i>
+                            <button class="btn-secondary-mini" id="openReferenceModalBtn" style="font-size: 0.65rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 4px 10px; border-radius: 6px;">+ Add Reference</button>
                         </div>
                         <div class="evidence-list" id="evidenceList">
                             <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">Select data to see sources</p>
@@ -222,6 +226,49 @@
             </div>
             <div class="metric-fields-list">
                 <!-- Fields for selected category -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Selecting Metric to Graph -->
+    <div id="graphMetricModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2>Select Data to Graph</h2>
+                <button class="close-modal" id="closeGraphMetricModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="project-metrics-list" id="projectMetricsListForGraph" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- User's selected project metrics will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Reference -->
+    <div id="referenceModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Add Reference</h2>
+                <button class="close-modal" id="closeReferenceModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="reference-form">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Title / Source Name</label>
+                    <input type="text" id="refTitle" placeholder="e.g., National Geographic - Climate Change" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; color: white; outline: none;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Link or Details</label>
+                    <input type="text" id="refLink" placeholder="https://example.com or Book Title" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; color: white; outline: none;">
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Type</label>
+                    <select id="refType" style="width: 100%; background: #1e293b; border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; color: white; outline: none;">
+                        <option value="web">Website</option>
+                        <option value="book">Book</option>
+                        <option value="journal">Journal/Article</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button id="saveReferenceBtn" class="btn-continue" style="width: 100%; justify-content: center; border: none; cursor: pointer;">Add to Evidence</button>
             </div>
         </div>
     </div>
