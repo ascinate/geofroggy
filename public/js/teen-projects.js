@@ -421,9 +421,16 @@ async function saveProject(redirect = false) {
     };
 
     try {
-        const url = projectId ? `${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}` : `${window.APP_CONFIG.API_BASE_URL}/api/projects`;
-        const method = projectId ? 'PUT' : 'POST';
+        // Logic: If projectId exists, we UPDATE (PUT). If not, we CREATE (POST).
+        const isUpdate = (projectId !== null && projectId !== undefined && projectId !== "");
+        const url = isUpdate 
+            ? `${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}` 
+            : `${window.APP_CONFIG.API_BASE_URL}/api/projects`;
         
+        const method = isUpdate ? 'PUT' : 'POST';
+        
+        console.log(`${isUpdate ? 'Updating' : 'Creating'} project...`);
+
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
@@ -431,16 +438,20 @@ async function saveProject(redirect = false) {
         });
 
         const result = await response.json();
+        
         if (result.status === 'success') {
             const savedProject = result.data;
+            
+            // Critical: Update global projectId with the ID returned from server
             projectId = savedProject.id;
             
             if (redirect) {
                 window.location.href = `teen-export.html?id=${projectId}`;
             } else {
-                alert('Project draft saved successfully!');
+                alert(`Project ${isUpdate ? 'updated' : 'saved'} successfully!`);
                 loadMyProjects();
-                // Update URL without refreshing to allow further saves as PUT
+                
+                // Sync URL so refreshing doesn't lose the draft context
                 const newUrl = window.location.pathname + '?id=' + projectId;
                 window.history.pushState({ path: newUrl }, '', newUrl);
             }
@@ -448,8 +459,8 @@ async function saveProject(redirect = false) {
             alert('Error saving project: ' + result.error);
         }
     } catch (e) {
-        console.error(e);
-        alert('Error saving project. Please check your API connection.');
+        console.error('Save Error:', e);
+        alert('Failed to connect to the server. Project not saved.');
     }
 }
 
