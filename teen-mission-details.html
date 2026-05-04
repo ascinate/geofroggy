@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Details | geoFroggy</title>
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/teen-dashboard.css">
+    <link rel="stylesheet" href="/css/teen-missions.css">
+    <style>
+        .mission-details-page {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: white;
+        }
+        .mission-hero-large {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 400px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        .mission-hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .mission-hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(11, 17, 32, 0.95), transparent);
+        }
+        .mission-type-tag {
+            background: var(--accent-purple);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        .mission-hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .mission-meta-row {
+            display: flex;
+            gap: 30px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .mission-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .xp-reward-text {
+            color: var(--accent-orange);
+            font-weight: 700;
+        }
+        .mission-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+        }
+        .mission-description-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+        }
+        .mission-description-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
+        .mission-description-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .mission-actions-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .action-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .status-not-started { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+        .status-in-progress { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .status-completed { background: rgba(34, 197, 94, 0.1); color: var(--accent-green); }
+
+        .btn-mission-action {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-start { background: var(--accent-blue); color: white; }
+        .btn-start:hover { background: #2563eb; transform: translateY(-2px); }
+        .btn-complete { background: var(--accent-green); color: white; }
+        .btn-complete:hover { background: #16a34a; transform: translateY(-2px); }
+        .btn-completed { background: rgba(34, 197, 94, 0.1); color: var(--accent-green); cursor: default; }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="teen-portal-body">
+    <div id="header-placeholder"></div>
+
+    <div id="loading-screen" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <main class="mission-details-page">
+        <a href="/teen-challenges.html" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Missions
+        </a>
+
+        <div id="mission-content" style="display: none;">
+            <div class="mission-hero-large">
+                <img id="mission-img" src="" alt="" class="mission-hero-img">
+                <div class="mission-hero-content">
+                    <span id="mission-type" class="mission-type-tag">ONE-TIME</span>
+                    <h1 id="mission-title">Loading...</h1>
+                    <div class="mission-meta-row">
+                        <div class="mission-meta-item">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span class="xp-reward-text">+<span id="mission-xp">0</span> XP</span>
+                        </div>
+                        <div class="mission-meta-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Approx. 30 min</span>
+                        </div>
+                        <div class="mission-meta-item">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            <span id="mission-difficulty">Intermediate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mission-content-grid">
+                <div class="mission-description-section">
+                    <h2>Mission Objective</h2>
+                    <p id="mission-desc">Loading mission details...</p>
+                </div>
+
+                <div class="mission-actions-sidebar">
+                    <div class="action-card">
+                        <div id="mission-status-badge" class="status-badge status-not-started">NOT STARTED</div>
+                        <div id="action-container">
+                            <button class="btn-mission-action btn-start">Start Mission</button>
+                        </div>
+                    </div>
+
+                    <div class="action-card" style="background: rgba(139, 92, 246, 0.05);">
+                        <h3 style="font-size: 0.9rem; margin-bottom: 10px;">Pro Tip</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Completing this mission will unlock new data layers on your global map!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/teen-components.js"></script>
+    <script src="/js/teen-mission-details.js"></script>
+</body>
+</html>

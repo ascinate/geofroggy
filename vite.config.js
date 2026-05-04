@@ -35,6 +35,7 @@ export default defineConfig({
                 teenProjects: 'teen-projects.html',
                 teenExport: 'teen-export.html',
                 teenPassport: 'teen-passport.html',
+                teenMissionDetails: 'teen-mission-details.html',
             }
         }
     }
