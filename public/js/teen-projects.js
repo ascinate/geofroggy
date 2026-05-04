@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCountryModal();
     initMetricModal();
     initProjectControls();
-    loadSampleChart();
+    updatePreviewChart();
 });
 
 let selectedCountries = [];
@@ -78,10 +78,10 @@ async function initCountryModal() {
 }
 
 function renderSelectedCountries() {
-    const container = document.querySelector('.selection-group .selection-pills');
-    const addBtn = container.querySelector('.btn-add-mini');
+    const container = document.getElementById('selectedCountriesList');
+    if (!container) return;
     
-    // Clear current pills except add button
+    // Create new add button if it doesn't exist (since we clear innerHTML)
     container.innerHTML = '';
     
     selectedCountries.forEach((country, index) => {
@@ -99,8 +99,13 @@ function renderSelectedCountries() {
         container.appendChild(pill);
     });
     
+    const addBtn = document.createElement('button');
+    addBtn.className = 'btn-add-mini';
+    addBtn.innerText = '+ Add Country';
+    addBtn.onclick = () => document.getElementById('countryModal').classList.add('active');
     container.appendChild(addBtn);
-    document.querySelector('.selection-group span').innerText = `${selectedCountries.length} countries`;
+
+    document.getElementById('countryCount').innerText = `${selectedCountries.length} countries`;
 }
 
 // --- Metric Selection Logic ---
@@ -117,15 +122,17 @@ const METRIC_CATEGORIES = {
 };
 
 async function initMetricModal() {
-    const addMetricBtn = document.querySelectorAll('.btn-add-mini')[1];
     const metricModal = document.getElementById('metricModal');
     const closeMetricModalBtn = document.getElementById('closeMetricModalBtn');
     const categoriesGrid = document.querySelector('.metric-categories-grid');
     const fieldsList = document.querySelector('.metric-fields-list');
 
-    addMetricBtn.addEventListener('click', () => {
-        metricModal.classList.add('active');
-        renderCategories();
+    // Delegate click to add button
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-add-mini') && e.target.innerText.includes('Metric')) {
+            metricModal.classList.add('active');
+            renderCategories();
+        }
     });
 
     function renderCategories() {
@@ -142,12 +149,10 @@ async function initMetricModal() {
     async function loadFieldsForCategory(categoryKey) {
         fieldsList.innerHTML = '<div class="loading">Loading metrics...</div>';
         try {
-            // Fetch stats for country 1 to get sample keys
             const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/teen-country/1/stats`);
             const data = await response.json();
             if (data.status === 'success') {
                 const fields = data.data[categoryKey] || [];
-                // Only show fields with parent_id 0 (main fields)
                 const mainFields = fields.filter(f => f.parent_id === 0);
                 
                 fieldsList.innerHTML = '';
@@ -176,8 +181,8 @@ async function initMetricModal() {
 }
 
 function renderSelectedMetrics() {
-    const container = document.querySelectorAll('.selection-group .selection-pills')[1];
-    const addBtn = container.querySelector('.btn-add-mini');
+    const container = document.getElementById('selectedMetricsList');
+    if (!container) return;
     
     container.innerHTML = '';
     selectedMetrics.forEach((metric, index) => {
@@ -194,8 +199,14 @@ function renderSelectedMetrics() {
         };
         container.appendChild(pill);
     });
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'btn-add-mini';
+    addBtn.innerText = '+ Add Metric';
+    addBtn.onclick = () => document.getElementById('metricModal').classList.add('active');
     container.appendChild(addBtn);
-    document.querySelectorAll('.selection-group span')[1].innerText = `${selectedMetrics.length} metrics`;
+
+    document.getElementById('metricCount').innerText = `${selectedMetrics.length} metrics`;
 }
 
 // --- Helpers ---
@@ -212,31 +223,40 @@ function getCodeFromName(name) {
 }
 
 function initProjectControls() {
-    // Placeholder for save/export logic
+    const editBtn = document.getElementById('editQuestionBtn');
+    const questionText = document.getElementById('projectQuestion');
+    
+    if (editBtn) {
+        editBtn.onclick = () => {
+            const newQuestion = prompt("Enter your research question:", questionText.innerText);
+            if (newQuestion) {
+                questionText.innerText = newQuestion;
+            }
+        };
+    }
+
     const saveBtn = document.querySelector('.btn-secondary');
-    saveBtn.onclick = () => alert('Project saved as draft!');
+    if (saveBtn) {
+        saveBtn.onclick = () => alert('Project draft saved to local storage!');
+    }
 }
 
-function loadSampleChart() {
+function updatePreviewChart() {
     const ctx = document.getElementById('previewChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [2018, 2019, 2020, 2021, 2022],
-            datasets: [{
-                label: 'Sample Growth',
-                data: [12, 19, 3, 5, 2],
-                borderColor: '#22c55e',
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                x: { grid: { display: false } }
-            }
-        }
-    });
+    
+    // Clear existing chart instance if it exists
+    if (window.previewChartInstance) {
+        window.previewChartInstance.destroy();
+    }
+
+    if (selectedCountries.length === 0 || selectedMetrics.length === 0) {
+        // Show placeholder or empty state
+        ctx.font = '12px Outfit';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        ctx.fillText('Select countries and metrics to see preview', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        return;
+    }
+
+    // Otherwise load actual data (logic to be implemented with API)
 }

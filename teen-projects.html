@@ -85,33 +85,20 @@
                         <button class="btn-secondary-mini" style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 4px 10px; border-radius: 6px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Project Tips</button>
                     </div>
                     <div class="question-input-box">
-                        <p>How has urbanization changed in Brazil, India, and Nigeria since 2000?</p>
-                        <button class="btn-edit-mini">Edit</button>
+                        <p id="projectQuestion">What is your research question?</p>
+                        <button class="btn-edit-mini" id="editQuestionBtn">Edit</button>
                     </div>
 
                     <div class="selection-summary-row">
                         <div class="selection-group">
-                            <h4>Selected Countries <span>3 countries</span></h4>
-                            <div class="selection-pills">
-                                <div class="pill-item">
-                                    <img src="https://flagcdn.com/br.svg" width="16" alt="Brazil"> Brazil <i class="fa-solid fa-xmark" style="font-size: 0.6rem; opacity: 0.5;"></i>
-                                </div>
-                                <div class="pill-item">
-                                    <img src="https://flagcdn.com/in.svg" width="16" alt="India"> India <i class="fa-solid fa-xmark" style="font-size: 0.6rem; opacity: 0.5;"></i>
-                                </div>
-                                <div class="pill-item">
-                                    <img src="https://flagcdn.com/ng.svg" width="16" alt="Nigeria"> Nigeria <i class="fa-solid fa-xmark" style="font-size: 0.6rem; opacity: 0.5;"></i>
-                                </div>
+                            <h4>Selected Countries <span id="countryCount">0 countries</span></h4>
+                            <div class="selection-pills" id="selectedCountriesList">
                                 <button class="btn-add-mini">+ Add Country</button>
                             </div>
                         </div>
                         <div class="selection-group">
-                            <h4>Selected Metrics <span>4 metrics</span></h4>
-                            <div class="selection-pills">
-                                <div class="pill-item"><i class="fa-solid fa-users" style="color: var(--accent-green);"></i> Urban Population (% of total)</div>
-                                <div class="pill-item"><i class="fa-solid fa-building" style="color: var(--accent-blue);"></i> Urban Population (total)</div>
-                                <div class="pill-item"><i class="fa-solid fa-chart-line" style="color: var(--accent-purple);"></i> Population Growth (annual %)</div>
-                                <div class="pill-item"><i class="fa-solid fa-coins" style="color: var(--accent-orange);"></i> GDP per Capita (current US$)</div>
+                            <h4>Selected Metrics <span id="metricCount">0 metrics</span></h4>
+                            <div class="selection-pills" id="selectedMetricsList">
                                 <button class="btn-add-mini">+ Add Metric</button>
                             </div>
                         </div>
@@ -138,34 +125,11 @@
 
                     <div class="workspace-card" style="padding: 20px;">
                         <div class="card-header-row">
-                            <h3>Evidence <span>4 sources</span></h3>
+                            <h3>Evidence <span id="sourceCount">0 sources</span></h3>
                             <i class="fa-solid fa-circle-info" style="color: var(--text-muted);"></i>
                         </div>
-                        <div class="evidence-list">
-                            <div class="evidence-item">
-                                <div class="source-icon"><i class="fa-solid fa-earth-americas"></i></div>
-                                <div class="source-info">
-                                    <h5>World Bank Open Data <i class="fa-solid fa-circle-check verified-badge"></i></h5>
-                                    <p>Urban population (% of total) - World Development Indicators</p>
-                                </div>
-                                <i class="fa-solid fa-ellipsis-vertical" style="margin-left: auto; color: var(--text-muted);"></i>
-                            </div>
-                            <div class="evidence-item">
-                                <div class="source-icon"><i class="fa-solid fa-building-columns"></i></div>
-                                <div class="source-info">
-                                    <h5>UN DESA <i class="fa-solid fa-circle-check verified-badge"></i></h5>
-                                    <p>World Urbanization Prospects 2022 - Highlights</p>
-                                </div>
-                                <i class="fa-solid fa-ellipsis-vertical" style="margin-left: auto; color: var(--text-muted);"></i>
-                            </div>
-                            <div class="evidence-item">
-                                <div class="source-icon"><i class="fa-solid fa-building-columns"></i></div>
-                                <div class="source-info">
-                                    <h5>OECD Data <i class="fa-solid fa-circle-check verified-badge"></i></h5>
-                                    <p>GDP per capita (current US$)</p>
-                                </div>
-                                <i class="fa-solid fa-ellipsis-vertical" style="margin-left: auto; color: var(--text-muted);"></i>
-                            </div>
+                        <div class="evidence-list" id="evidenceList">
+                            <!-- Evidence sources will appear here -->
                         </div>
                     </div>
                 </div>
@@ -184,7 +148,7 @@
                             <i class="fa-solid fa-link"></i>
                             <i class="fa-solid fa-image"></i>
                         </div>
-                        <textarea class="editor-textarea" placeholder="Start typing your research findings and insights here...">Brazil has remained the most urbanized, with over 85% of people living in cities. India has seen steady urban growth, increasing from ~27% in 2000 to over 36% in 2023. Nigeria is urbanizing fastest in percentage terms, but still has the lowest urban share. This suggests different development paths and infrastructure needs.</textarea>
+                        <textarea class="editor-textarea" id="projectNotes" placeholder="Start typing your research findings and insights here..."></textarea>
                         <div style="text-align: right; font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">245 / 1000</div>
                     </div>
                 </div>
@@ -210,31 +174,8 @@
                         <button class="proj-tab active">In Progress</button>
                         <button class="proj-tab">Completed</button>
                     </div>
-                    <div class="mini-projects-list">
-                        <div class="mini-project-card">
-                            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=200" alt="Proj" class="proj-thumb-mini">
-                            <div class="proj-info-mini">
-                                <h4>How has urbanization changed in Brazil, India, and...</h4>
-                                <span class="proj-status-mini">Updated just now</span>
-                                <div class="proj-progress-mini"><div class="proj-progress-fill" style="width: 40%;"></div></div>
-                            </div>
-                        </div>
-                        <div class="mini-project-card">
-                            <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=200" alt="Proj" class="proj-thumb-mini">
-                            <div class="proj-info-mini">
-                                <h4>Renewable energy potential in Canada vs. Norway</h4>
-                                <span class="proj-status-mini">Updated 2 days ago</span>
-                                <div class="proj-progress-mini"><div class="proj-progress-fill" style="width: 25%;"></div></div>
-                            </div>
-                        </div>
-                        <div class="mini-project-card">
-                            <img src="https://images.unsplash.com/photo-1548013146-72479768b921?auto=format&fit=crop&q=80&w=200" alt="Proj" class="proj-thumb-mini">
-                            <div class="proj-info-mini">
-                                <h4>Climate change impacts on coastal cities</h4>
-                                <span class="proj-status-mini">Updated 5 days ago</span>
-                                <div class="proj-progress-mini"><div class="proj-progress-fill" style="width: 60%;"></div></div>
-                            </div>
-                        </div>
+                    <div class="mini-projects-list" id="myProjectsList">
+                        <!-- Projects will be loaded here -->
                     </div>
                     <button style="width: 100%; margin-top: 15px; background: transparent; border: 1px solid var(--glass-border); color: white; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-plus"></i> New Project</button>
                 </div>
