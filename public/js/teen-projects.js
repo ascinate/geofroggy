@@ -399,7 +399,7 @@ async function updatePreviewChart() {
         ctx.font = '12px Outfit';
         ctx.fillStyle = '#64748b';
         ctx.textAlign = 'center';
-        ctx.fillText('Select data to visualize in the chart', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        ctx.fillText('Select data to visualize timeline in the chart', ctx.canvas.width / 2, ctx.canvas.height / 2);
         return;
     }
 
@@ -411,47 +411,85 @@ async function updatePreviewChart() {
         );
         const results = await Promise.all(statsPromises);
         
-        const labels = selectedCountries.map(c => c.country);
-        const dataValues = results.map(res => {
+        // Find all unique years across all countries and metrics
+        let allYears = new Set();
+        results.forEach(res => {
             if (res.status === 'success') {
                 const categoryData = res.data[selectedGraphMetric.category] || [];
                 const fieldData = categoryData.filter(d => d.field === selectedGraphMetric.field && d.parent_id === 0);
-                const latest = fieldData.sort((a, b) => b.year - a.year)[0];
-                return latest ? parseFloat(latest.value.replace(/[^0-9.]/g, '')) || 0 : 0;
+                fieldData.forEach(d => {
+                    if (d.year) allYears.add(d.year);
+                });
             }
-            return 0;
         });
 
-        const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4'];
+        // Sort years for X-axis
+        const sortedYears = Array.from(allYears).sort((a, b) => a - b);
+        
+        const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4', '#14b8a6', '#f43f5e'];
+
+        // Create datasets for each country
+        const datasets = results.map((res, idx) => {
+            const country = selectedCountries[idx];
+            const color = colors[idx % colors.length];
+            
+            let timelineData = [];
+            if (res.status === 'success') {
+                const categoryData = res.data[selectedGraphMetric.category] || [];
+                const fieldData = categoryData.filter(d => d.field === selectedGraphMetric.field && d.parent_id === 0);
+                
+                // Map values to sorted years
+                timelineData = sortedYears.map(year => {
+                    const dataPoint = fieldData.find(d => d.year === year);
+                    if (dataPoint && dataPoint.value) {
+                        return parseFloat(dataPoint.value.replace(/[^0-9.]/g, '')) || null;
+                    }
+                    return null;
+                });
+            }
+
+            return {
+                label: country.country,
+                data: timelineData,
+                borderColor: color,
+                backgroundColor: chartType === 'bar' ? color + '80' : color + '20',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: chartType === 'line'
+            };
+        });
 
         window.previewChartInstance = new Chart(ctx, {
             type: chartType,
             data: {
-                labels: labels,
-                datasets: [{
-                    label: selectedGraphMetric.field.replace(/_/g, ' '),
-                    data: dataValues,
-                    backgroundColor: chartType === 'bar' ? colors : 'transparent',
-                    borderColor: colors[0],
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: chartType === 'line'
-                }]
+                labels: sortedYears,
+                datasets: datasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
                 plugins: {
-                    legend: { display: false },
+                    legend: { 
+                        display: selectedCountries.length > 1,
+                        position: 'top',
+                        labels: { color: '#64748b', boxWidth: 12, font: { size: 10, family: 'Outfit' } }
+                    },
                     tooltip: {
-                        callbacks: {
-                            label: (context) => `${context.dataset.label}: ${context.raw.toLocaleString()}`
-                        }
+                        backgroundColor: '#1e293b',
+                        titleFont: { family: 'Outfit', size: 12 },
+                        bodyFont: { family: 'Outfit', size: 11 },
+                        padding: 10,
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
                     }
                 },
                 scales: {
                     y: { 
-                        beginAtZero: true,
+                        beginAtZero: false,
                         grid: { color: 'rgba(255,255,255,0.05)' },
                         ticks: { color: '#64748b', font: { size: 10 } }
                     },
