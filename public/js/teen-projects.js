@@ -22,9 +22,19 @@ let flagCodes = {};
 let selectedGraphMetric = null;
 let customReferences = [];
 
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+
 async function loadProject(id) {
     try {
-        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${id}`);
+        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${id}`, {
+            headers: getAuthHeaders()
+        });
         const result = await response.json();
         if (result.status === 'success') {
             const p = result.data;
@@ -64,7 +74,9 @@ async function loadMyProjects() {
     const list = document.getElementById('myProjectsList');
     if (!list) return;
     try {
-        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects`);
+        const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects`, {
+            headers: getAuthHeaders()
+        });
         const result = await response.json();
         if (result.status === 'success') {
             list.innerHTML = '';
@@ -505,7 +517,7 @@ async function saveProject(redirect = false) {
 
         const response = await fetch(url, {
             method: method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(projectData)
         });
 

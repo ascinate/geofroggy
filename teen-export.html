@@ -164,7 +164,12 @@
             }
 
             try {
-                const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}`);
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${window.APP_CONFIG.API_BASE_URL}/api/projects/${projectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const result = await response.json();
                 
                 if (result.status === 'success') {
