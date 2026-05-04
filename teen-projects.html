@@ -243,32 +243,45 @@
     </main>
 
     <div id="footer-placeholder"></div>
+    
+    <!-- Modal for Selecting Country -->
+    <div id="countryModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select a Country</h2>
+                <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search for a country..." id="countrySearch">
+            </div>
+            <div class="country-list-scroll">
+                <div class="country-options-grid">
+                    <!-- Dynamic Countries will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Selecting Metrics -->
+    <div id="metricModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Research Metric</h2>
+                <button class="close-modal" id="closeMetricModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="metric-categories-grid">
+                <!-- Dynamic categories will be loaded here -->
+            </div>
+            <div class="metric-fields-list">
+                <!-- Fields for selected category -->
+            </div>
+        </div>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/teen-components.js"></script>
-    <script>
-        const ctx = document.getElementById('previewChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [2000, 2005, 2010, 2015, 2020, 2023],
-                datasets: [
-                    { label: 'Brazil', data: [81, 83, 84, 85, 87, 88], borderColor: '#22c55e', tension: 0.4 },
-                    { label: 'India', data: [27, 29, 31, 33, 35, 36], borderColor: '#3b82f6', tension: 0.4 },
-                    { label: 'Nigeria', data: [34, 38, 43, 47, 52, 54], borderColor: '#a855f7', tension: 0.4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10 } } } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 10 } } }
-                }
-            }
-        });
-    </script>
+    <script src="/js/teen-projects.js"></script>
 </body>
 </html>

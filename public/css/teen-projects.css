@@ -275,3 +275,151 @@
 
 .proj-progress-mini { width: 100%; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; margin-top: 8px; }
 .proj-progress-fill { height: 100%; background: var(--accent-green); border-radius: 5px; }
+
+/* Modal Styles (Reused & Enhanced) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+    background: var(--bg-dark);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    padding: 30px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.modal-header h2 { font-size: 1.5rem; font-weight: 800; }
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-search {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.modal-search i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.modal-search input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    padding: 12px 12px 12px 45px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+}
+
+.country-list-scroll { overflow-y: auto; flex: 1; }
+.country-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.country-option {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.country-option:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-3px); }
+.country-option img { width: 40px; height: 30px; border-radius: 4px; object-fit: cover; }
+.country-option span { font-size: 0.85rem; font-weight: 700; text-align: center; }
+
+/* Metric Modal Specifics */
+.metric-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.metric-category-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.metric-category-item:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
+
+.metric-fields-list {
+    flex: 1;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.metric-field-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.metric-field-option:hover { background: rgba(255, 255, 255, 0.08); }
+.metric-field-option span { font-size: 0.9rem; font-weight: 600; text-transform: capitalize; }
+.metric-field-option i { color: var(--accent-green); font-size: 0.8rem; }
