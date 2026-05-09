@@ -210,8 +210,9 @@
                             <tr>
                                 <th>User</th>
                                 <th>Email</th>
-                                <th>Missions</th>
+                                <th>Level</th>
                                 <th>XP Points</th>
+                                <th>Tokens</th>
                                 <th>Status</th>
                                 <th>Joined Date</th>
                                 <th>Actions</th>
@@ -281,10 +282,23 @@
                         </div>
                     `},
                     { data: 'email' },
-                    { data: 'stats', render: stats => stats && stats.length > 0 ? stats[0].missions_completed || 0 : 0 },
-                    { data: 'stats', render: stats => stats && stats.length > 0 ? (stats[0].xp || 0).toLocaleString() : 0 },
-                    { data: 'role', render: role => `<span class="status-badge status-active">${role === 'admin' ? 'Admin' : 'Active'}</span>` },
-                    { data: 'created_at', render: date => new Date(date).toLocaleDateString() },
+                    { data: 'stats', render: stats => {
+                        const s = Array.isArray(stats) ? stats[0] : stats;
+                        return `<span class="badge bg-primary-subtle text-primary border-0">Lvl ${s ? s.level || 1 : 1}</span>`;
+                    }},
+                    { data: 'stats', render: stats => {
+                        const s = Array.isArray(stats) ? stats[0] : stats;
+                        return `<span class="fw-bold">${(s ? s.xp || 0 : 0).toLocaleString()}</span>`;
+                    }},
+                    { data: 'stats', render: stats => {
+                        const s = Array.isArray(stats) ? stats[0] : stats;
+                        return `<span class="text-warning"><i class="ri-coin-line"></i> ${s ? s.tokens || 0 : 0}</span>`;
+                    }},
+                    { data: 'role', render: role => {
+                        const badgeClass = role === 'admin' ? 'status-active' : 'status-active';
+                        return `<span class="status-badge ${badgeClass}">${role || 'user'}</span>`;
+                    }},
+                    { data: 'created_at', render: date => date ? new Date(date).toLocaleDateString() : 'N/A' },
                     { data: null, render: () => `
                         <div class="d-flex gap-2">
                             <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
@@ -310,10 +324,10 @@
                         </div>
                     `},
                     { data: 'email' },
-                    { data: 'role', render: role => role.toUpperCase() },
-                    { data: 'role', render: () => 'Full Access' },
+                    { data: 'role', render: role => `<span class="text-uppercase small fw-bold">${role}</span>` },
+                    { data: 'role', render: role => role === 'admin' ? 'Super Admin' : 'Staff' },
                     { data: 'role', render: () => `<span class="status-badge status-active">Active</span>` },
-                    { data: 'created_at', render: date => new Date(date).toLocaleDateString() },
+                    { data: 'created_at', render: date => date ? new Date(date).toLocaleDateString() : 'N/A' },
                     { data: null, render: () => `
                         <div class="d-flex gap-2">
                             <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
@@ -326,6 +340,7 @@
             // Fetch users from API
             async function fetchUsers() {
                 try {
+                    console.log('Fetching users from:', apiUrl);
                     const response = await fetch(apiUrl, {
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -333,6 +348,8 @@
                     });
                     const result = await response.json();
                     
+                    console.log('API Response:', result);
+
                     if (result.status === 'success') {
                         const allUsers = result.data;
                         
@@ -348,7 +365,7 @@
                         $('#table-loader').fadeOut(400);
                     } else {
                         console.error('Failed to fetch users:', result.error);
-                        $('#table-loader').html('<div class="text-danger fw-bold">Failed to load users</div>');
+                        $('#table-loader').html(`<div class="text-danger fw-bold">Error: ${result.error}</div>`);
                     }
                 } catch (error) {
                     console.error('Error fetching users:', error);
