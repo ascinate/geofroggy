@@ -8,11 +8,12 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
-    
+
     <style>
         :root {
             --primary: #6366f1;
@@ -89,8 +90,13 @@
         }
 
         @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(100px, 50px) scale(1.1); }
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(100px, 50px) scale(1.1);
+            }
         }
 
         /* Login Card */
@@ -104,14 +110,21 @@
             border-radius: 32px;
             padding: 3.5rem 3rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
             animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
 
         @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .brand {
@@ -120,7 +133,7 @@
         }
 
         .brand img {
-            width: 80px;
+            width: 150px;
             height: auto;
             margin-bottom: 1.25rem;
             filter: drop-shadow(0 0 15px var(--primary-glow));
@@ -208,7 +221,7 @@
             transition: color 0.2s;
         }
 
-        .form-control:focus + .input-icon {
+        .form-control:focus+.input-icon {
             color: var(--primary);
         }
 
@@ -295,7 +308,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 20%);
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 20%);
             pointer-events: none;
             z-index: 1;
         }
@@ -311,7 +324,8 @@
 
     <div class="auth-card">
         <div class="brand">
-            <img src="/assets/admin-frog.png" alt="Geofroggy" onerror="this.src='https://placehold.co/64x64/6366f1/white?text=G'">
+            <img src="/assets/admin-frog.png" alt="Geofroggy"
+                onerror="this.src='https://placehold.co/64x64/6366f1/white?text=G'">
             <h1>Admin Console</h1>
             <p>Access the mission control center</p>
         </div>
@@ -373,7 +387,7 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             // UI Feedback
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Authenticating...</span>';
