@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
@@ -16,90 +16,133 @@
     <style>
         :root {
             --sidebar-width: 280px;
-            --primary-color: #6366f1;
+            --primary: #6366f1;
             --primary-dark: #4f46e5;
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-hover: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --secondary: #8b5cf6;
+            --bg-dark: #020617;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
             color: var(--text-main);
             margin: 0;
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Blobs for consistency */
+        .bg-blobs {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            filter: blur(120px);
+            opacity: 0.5;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob-1 { width: 600px; height: 600px; background: var(--primary); top: -200px; right: -100px; }
+        .blob-2 { width: 500px; height: 500px; background: var(--secondary); bottom: -100px; left: -100px; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 50px) scale(1.05); }
         }
 
         /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: #020617;
-            border-right: 1px solid var(--border-color);
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
             z-index: 100;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .sidebar-brand {
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.875rem;
         }
 
         .sidebar-brand img {
-            width: 32px;
+            width: 36px;
             height: auto;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4));
         }
 
         .sidebar-brand span {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
+            font-size: 1.375rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to bottom right, #fff, var(--text-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-section {
-            padding: 0 1rem;
+            padding: 0 1.25rem;
             flex-grow: 1;
         }
 
         .nav-label {
             font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-weight: 700;
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 1.5rem 1rem 0.5rem;
+            letter-spacing: 0.1em;
+            padding: 2rem 1rem 0.75rem;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            color: var(--text-muted);
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            color: var(--text-dim);
             text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            font-weight: 500;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.938rem;
+            margin-bottom: 0.25rem;
         }
 
         .nav-link:hover {
-            background: var(--bg-hover);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-main);
+            transform: translateX(4px);
         }
 
         .nav-link.active {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
         .nav-link i {
@@ -108,35 +151,42 @@
 
         .sidebar-footer {
             padding: 1.5rem;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
         }
 
         .user-pill {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            background: var(--bg-card);
-            border-radius: 12px;
+            gap: 0.875rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-pill:hover {
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .user-pill img {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             object-fit: cover;
         }
 
         .user-info .name {
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             display: block;
+            color: var(--text-main);
         }
 
         .user-info .role {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--text-dim);
             display: block;
         }
 
@@ -144,21 +194,38 @@
         .main-content {
             margin-left: var(--sidebar-width);
             flex-grow: 1;
-            padding: 2rem;
+            padding: 2.5rem 3rem;
             max-width: calc(100vw - var(--sidebar-width));
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
+            align-items: flex-end;
+            margin-bottom: 3rem;
         }
 
         .header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
             margin: 0;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
         }
 
         .header-actions {
@@ -166,209 +233,276 @@
             gap: 1rem;
         }
 
-        .btn-action {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 0.625rem 1.25rem;
-            border-radius: 10px;
-            font-weight: 500;
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 14px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
+            gap: 0.625rem;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
         }
 
-        .btn-action:hover {
-            background: var(--bg-hover);
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .btn-primary-custom {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
             color: white;
-            padding: 0.625rem 1.25rem;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 14px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary-custom:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.02), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .stat-card:hover::after {
+            transform: translateX(100%);
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.25rem;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
         }
 
         .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.375rem;
+            color: white;
         }
 
         .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-weight: 500;
+            font-size: 0.938rem;
+            color: var(--text-dim);
+            font-weight: 600;
         }
 
         .stat-trend {
-            font-size: 0.75rem;
-            margin-top: 1rem;
+            font-size: 0.813rem;
+            margin-top: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.375rem;
+            font-weight: 700;
         }
 
         .trend-up { color: #10b981; }
         .trend-down { color: #ef4444; }
 
-        /* Tables & Content Cards */
+        /* Content Card */
         .content-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
             overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
         }
 
         .card-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .card-header h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
             margin: 0;
+        }
+
+        /* Custom Table */
+        .table-responsive {
+            padding: 0 1rem 1rem;
         }
 
         .table-custom {
             width: 100%;
-            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
         }
 
         .table-custom th {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text-muted);
-            font-weight: 600;
+            color: var(--text-dim);
+            font-weight: 700;
             font-size: 0.75rem;
             text-transform: uppercase;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.1em;
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+        }
+
+        .table-custom tr {
+            transition: all 0.2s;
         }
 
         .table-custom td {
-            padding: 1rem 1.5rem;
-            vertical-align: middle;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
             color: var(--text-main);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem;
+            font-size: 0.938rem;
+            font-weight: 500;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
         }
+
+        .table-custom tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.005);
+        }
+
+        .table-custom td:first-child { border-radius: 16px 0 0 16px; border-left: 1px solid transparent; }
+        .table-custom td:last-child { border-radius: 0 16px 16px 0; border-right: 1px solid transparent; }
 
         .user-cell {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border);
         }
 
         .badge-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+            padding: 0.375rem 1rem;
+            border-radius: 10px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
         }
 
         .status-active { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .status-active::before { content: ''; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+        
         .status-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .status-pending::before { content: ''; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .sidebar { transform: translateX(-100%); }
-            .main-content { margin-left: 0; max-width: 100%; }
+            .main-content { margin-left: 0; max-width: 100%; padding: 2rem; }
             .sidebar.open { transform: translateX(0); }
         }
     </style>
 </head>
 
 <body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="/assets/geofogy-imgs.png" alt="Logo" onerror="this.src='https://placehold.co/32x32/6366f1/white?text=G'">
+            <img src="/assets/geofogy-imgs.png" alt="Logo" onerror="this.src='https://placehold.co/36x36/6366f1/white?text=G'">
             <span>Geofroggy</span>
         </div>
 
         <nav class="nav-section">
             <div class="nav-label">Core</div>
             <a href="#" class="nav-link active">
-                <i class="ri-dashboard-3-line"></i>
+                <i class="ri-dashboard-fill"></i>
                 Dashboard
             </a>
             <a href="#" class="nav-link">
-                <i class="ri-map-pin-line"></i>
+                <i class="ri-map-pin-2-fill"></i>
                 Missions
             </a>
             <a href="#" class="nav-link">
-                <i class="ri-group-line"></i>
+                <i class="ri-team-fill"></i>
                 Users
             </a>
 
             <div class="nav-label">Analytics</div>
             <a href="#" class="nav-link">
-                <i class="ri-bar-chart-box-line"></i>
+                <i class="ri-pie-chart-2-fill"></i>
                 Reports
             </a>
             <a href="#" class="nav-link">
-                <i class="ri-settings-4-line"></i>
+                <i class="ri-settings-5-fill"></i>
                 Settings
             </a>
         </nav>
 
         <div class="sidebar-footer">
             <div class="user-pill">
-                <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff&bold=true" alt="Avatar">
                 <div class="user-info">
                     <span class="name">Admin User</span>
                     <span class="role">Super Admin</span>
                 </div>
-                <i class="ri-more-2-fill ms-auto"></i>
+                <i class="ri-arrow-up-s-line ms-auto" style="color: var(--text-dim)"></i>
             </div>
         </div>
     </aside>
@@ -377,17 +511,17 @@
     <main class="main-content">
         <header class="header">
             <div>
-                <h1>Dashboard Overview</h1>
-                <p class="text-muted mb-0">Welcome back, here's what's happening today.</p>
+                <h1>Dashboard</h1>
+                <p>Monitor your ecosystem performance and user growth.</p>
             </div>
             <div class="header-actions">
-                <button class="btn-action">
-                    <i class="ri-calendar-line"></i>
-                    Last 30 Days
+                <button class="btn-glass">
+                    <i class="ri-calendar-event-fill"></i>
+                    <span>Last 30 Days</span>
                 </button>
                 <button class="btn-primary-custom">
-                    <i class="ri-add-line"></i>
-                    New Mission
+                    <i class="ri-add-circle-fill"></i>
+                    <span>Create Mission</span>
                 </button>
             </div>
         </header>
@@ -395,68 +529,70 @@
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
-                    <i class="ri-group-fill"></i>
+                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #6366f1;">
+                    <i class="ri-user-heart-fill"></i>
                 </div>
                 <div class="stat-value">12,842</div>
                 <div class="stat-label">Total Users</div>
                 <div class="stat-trend trend-up">
-                    <i class="ri-arrow-right-up-line"></i>
-                    <span>12% from last month</span>
+                    <i class="ri-arrow-up-line"></i>
+                    <span>12% growth</span>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                    <i class="ri-flashlight-fill"></i>
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                    <i class="ri-thunderstorms-fill"></i>
                 </div>
                 <div class="stat-value">458</div>
                 <div class="stat-label">Active Missions</div>
                 <div class="stat-trend trend-up">
-                    <i class="ri-arrow-right-up-line"></i>
-                    <span>5% from last month</span>
+                    <i class="ri-arrow-up-line"></i>
+                    <span>8 new today</span>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <i class="ri-copper-coin-fill"></i>
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                    <i class="ri-copper-diamond-fill"></i>
                 </div>
-                <div class="stat-value">2,400</div>
-                <div class="stat-label">Total XP Earned</div>
+                <div class="stat-value">2.4k</div>
+                <div class="stat-label">XP Distributed</div>
                 <div class="stat-trend trend-down">
-                    <i class="ri-arrow-right-down-line"></i>
-                    <span>2% from last month</span>
+                    <i class="ri-arrow-down-line"></i>
+                    <span>2% from yesterday</span>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                    <i class="ri-shield-user-fill"></i>
+                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">
+                    <i class="ri-shield-check-fill"></i>
                 </div>
                 <div class="stat-value">89%</div>
                 <div class="stat-label">Retention Rate</div>
                 <div class="stat-trend trend-up">
-                    <i class="ri-arrow-right-up-line"></i>
-                    <span>0.5% increase</span>
+                    <i class="ri-arrow-up-line"></i>
+                    <span>Highly Stable</span>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Users Table -->
+        <!-- Recent Activity -->
         <div class="content-card">
             <div class="card-header">
-                <h3>Recent User Activity</h3>
-                <button class="btn btn-sm btn-link text-decoration-none" style="color: var(--primary-color)">View All</button>
+                <h3>Recent Explorer Activity</h3>
+                <button class="btn btn-sm text-dim hover-white" style="font-weight: 700; font-size: 0.813rem;">
+                    View Detailed Logs <i class="ri-arrow-right-s-line"></i>
+                </button>
             </div>
             <div class="table-responsive">
-                <table class="table table-custom">
+                <table class="table-custom">
                     <thead>
                         <tr>
-                            <th>User</th>
+                            <th>Explorer</th>
                             <th>Status</th>
                             <th>Missions</th>
-                            <th>XP Streak</th>
+                            <th>Current Streak</th>
                             <th>Joined</th>
                             <th></th>
                         </tr>
@@ -465,10 +601,10 @@
                         <tr>
                             <td>
                                 <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=random" class="user-avatar" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=6366f1&color=fff" class="user-avatar" alt="">
                                     <div>
-                                        <div class="fw-semibold">Alex Johnson</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">alex@example.com</div>
+                                        <div class="fw-bold">Alex Johnson</div>
+                                        <div class="text-dim" style="font-size: 0.75rem;">alex.j@geofroggy.com</div>
                                     </div>
                                 </div>
                             </td>
@@ -476,15 +612,15 @@
                             <td>24</td>
                             <td>12 Days</td>
                             <td>Oct 12, 2023</td>
-                            <td class="text-end"><i class="ri-more-fill" style="cursor:pointer"></i></td>
+                            <td class="text-end text-dim"><i class="ri-more-2-fill" style="cursor:pointer"></i></td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=random" class="user-avatar" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=8b5cf6&color=fff" class="user-avatar" alt="">
                                     <div>
-                                        <div class="fw-semibold">Sarah Smith</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">sarah@example.com</div>
+                                        <div class="fw-bold">Sarah Smith</div>
+                                        <div class="text-dim" style="font-size: 0.75rem;">sarah.s@geofroggy.com</div>
                                     </div>
                                 </div>
                             </td>
@@ -492,23 +628,23 @@
                             <td>18</td>
                             <td>5 Days</td>
                             <td>Oct 14, 2023</td>
-                            <td class="text-end"><i class="ri-more-fill" style="cursor:pointer"></i></td>
+                            <td class="text-end text-dim"><i class="ri-more-2-fill" style="cursor:pointer"></i></td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=Mike+Ross&background=random" class="user-avatar" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=Mike+Ross&background=3b82f6&color=fff" class="user-avatar" alt="">
                                     <div>
-                                        <div class="fw-semibold">Mike Ross</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">mike@example.com</div>
+                                        <div class="fw-bold">Mike Ross</div>
+                                        <div class="text-dim" style="font-size: 0.75rem;">mike.r@geofroggy.com</div>
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="badge-status status-pending">Inactive</span></td>
+                            <td><span class="badge-status status-pending">Dormant</span></td>
                             <td>2</td>
                             <td>0 Days</td>
                             <td>Oct 15, 2023</td>
-                            <td class="text-end"><i class="ri-more-fill" style="cursor:pointer"></i></td>
+                            <td class="text-end text-dim"><i class="ri-more-2-fill" style="cursor:pointer"></i></td>
                         </tr>
                     </tbody>
                 </table>
@@ -518,8 +654,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Placeholder for future interactivity
-        console.log("Admin Dashboard Loaded");
+        // Simple Sidebar Toggle for Mobile (if needed)
+        console.log("Admin Dashboard - Elite Edition Loaded");
     </script>
 </body>
 

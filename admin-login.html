@@ -4,235 +4,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | Geofroggy</title>
+    <title>Admin Authentication | Geofroggy</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
     
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --secondary: #8b5cf6;
+            --bg-dark: #020617;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-dim: #94a3b8;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
             color: var(--text-main);
             overflow: hidden;
+            position: relative;
         }
 
-        .login-container {
+        /* Animated Background Elements */
+        .bg-blobs {
+            position: absolute;
             width: 100%;
-            max-width: 420px;
-            padding: 2rem;
-            animation: fadeIn 0.8s ease-out;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            filter: blur(80px);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: move 20s infinite alternate;
         }
 
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
         }
 
-        .brand-logo {
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            background: #3b82f6;
+            top: 40%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.1); }
+        }
+
+        /* Login Card */
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .brand {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
-        .brand-logo img {
-            width: 60px;
+        .brand img {
+            width: 64px;
             height: auto;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.4));
+            margin-bottom: 1.25rem;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
         }
 
-        .brand-logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            margin: 0;
-            background: linear-gradient(to right, #fff, #94a3b8);
+        .brand h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to bottom right, #fff 30%, var(--text-dim));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .form-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-muted);
             margin-bottom: 0.5rem;
         }
 
-        .input-group {
-            position: relative;
+        .brand p {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Form Styling */
+        .form-group {
             margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.625rem;
+        }
+
+        .form-label {
+            font-size: 0.813rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .forgot-link {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #818cf8;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         .form-control {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 0.875rem 1rem 0.875rem 3rem;
             color: white;
-            transition: all 0.3s ease;
+            font-size: 0.938rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .form-control:focus {
-            background: rgba(0, 0, 0, 0.3);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            background: rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
             color: white;
+            outline: none;
         }
 
         .input-icon {
             position: absolute;
-            left: 1rem;
+            left: 1.125rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.2rem;
+            color: var(--text-dim);
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .form-control:focus + .input-icon {
+            color: var(--primary);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 1.125rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1.1rem;
             z-index: 10;
         }
 
-        .btn-login {
-            background: var(--primary-color);
-            border: none;
-            border-radius: 12px;
-            padding: 0.875rem;
+        .btn-submit {
             width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 14px;
+            padding: 1rem;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
-        .btn-login:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
         }
 
-        .btn-login:active {
+        .btn-submit:active {
             transform: translateY(0);
         }
 
-        .footer-links {
+        .footer {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             font-size: 0.875rem;
-            color: var(--text-muted);
+            color: var(--text-dim);
         }
 
-        .footer-links a {
-            color: var(--primary-color);
+        .footer a {
+            color: var(--text-main);
             text-decoration: none;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .footer a:hover {
+            border-bottom-color: var(--text-main);
+        }
+
+        /* Success/Error States */
+        .alert-custom {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.813rem;
             font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Ambient glow effects */
-        .glow {
+        /* Shine Effect */
+        .auth-card::before {
+            content: '';
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(79, 70, 229, 0) 70%);
-            border-radius: 50%;
-            z-index: -1;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 20%);
+            pointer-events: none;
+            z-index: 1;
         }
-
-        .glow-1 { top: -100px; left: -100px; }
-        .glow-2 { bottom: -100px; right: -100px; }
     </style>
 </head>
 
 <body>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-    <div class="login-container">
-        <div class="glass-card">
-            <div class="brand-logo">
-                <img src="/assets/geofogy-imgs.png" alt="Geofroggy Logo" onerror="this.src='https://placehold.co/60x60/4f46e5/white?text=GF'">
-                <h1>Admin Console</h1>
-            </div>
+    <div class="auth-card">
+        <div class="brand">
+            <img src="/assets/geofogy-imgs.png" alt="Geofroggy" onerror="this.src='https://placehold.co/64x64/6366f1/white?text=G'">
+            <h1>Admin Console</h1>
+            <p>Access the mission control center</p>
+        </div>
 
-            <form id="admin-login-form">
-                <div class="mb-3">
+        <div id="login-alert" class="alert-custom">
+            <i class="ri-error-warning-line"></i>
+            <span>Invalid credentials. Please try again.</span>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <div class="label-row">
                     <label class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <i class="ri-mail-line input-icon"></i>
-                        <input type="email" class="form-control" placeholder="admin@geofroggy.com" required>
-                    </div>
                 </div>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between">
-                        <label class="form-label">Password</label>
-                        <a href="#" class="form-label text-decoration-none" style="font-size: 0.75rem;">Forgot?</a>
-                    </div>
-                    <div class="input-group">
-                        <i class="ri-lock-password-line input-icon"></i>
-                        <input type="password" class="form-control" placeholder="••••••••" required>
-                    </div>
+                <div class="input-wrapper">
+                    <input type="email" class="form-control" placeholder="name@geofroggy.com" required>
+                    <i class="ri-mail-fill input-icon"></i>
                 </div>
-
-                <div class="mb-4 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember">
-                    <label class="form-check-label text-muted" for="remember" style="font-size: 0.875rem;">Remember this session</label>
-                </div>
-
-                <button type="submit" class="btn btn-login">
-                    Sign In to Dashboard
-                </button>
-            </form>
-
-            <div class="footer-links">
-                <p>Not an administrator? <a href="login.html">Return to Portal</a></p>
             </div>
+
+            <div class="form-group">
+                <div class="label-row">
+                    <label class="form-label">Password</label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" id="password-input" class="form-control" placeholder="••••••••" required>
+                    <i class="ri-lock-2-fill input-icon"></i>
+                    <i class="ri-eye-off-line toggle-password" id="toggle-password"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submit-btn">
+                <span>Sign In to Admin</span>
+                <i class="ri-arrow-right-line"></i>
+            </button>
+        </form>
+
+        <div class="footer">
+            Not an administrator? <a href="login.html">Return to Portal</a>
         </div>
     </div>
 
     <script>
-        document.getElementById('admin-login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Mock login - in a real app, this would hit the API
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Authenticating...';
-            btn.disabled = true;
+        // Toggle Password Visibility
+        const passwordInput = document.getElementById('password-input');
+        const toggleBtn = document.getElementById('toggle-password');
 
+        toggleBtn.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleBtn.className = type === 'password' ? 'ri-eye-off-line toggle-password' : 'ri-eye-line toggle-password';
+        });
+
+        // Form Submission
+        const form = document.getElementById('login-form');
+        const btn = document.getElementById('submit-btn');
+        const alert = document.getElementById('login-alert');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // UI Feedback
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Authenticating...</span>';
+            alert.style.display = 'none';
+
+            // Simulate API call
             setTimeout(() => {
+                // For demo purposes, we'll just redirect
                 window.location.href = 'admin-dashboard.html';
-            }, 1500);
+            }, 1200);
         });
     </script>
 </body>
