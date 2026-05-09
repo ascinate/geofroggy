@@ -412,13 +412,14 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                const text = await response.text();
+                const text = (await response.text()).trim();
                 let data;
                 try {
+                    console.log('Raw Server Response:', text);
                     data = JSON.parse(text);
                 } catch (e) {
-                    console.error('Response is not JSON:', text);
-                    throw new Error('Server returned an invalid response format.');
+                    console.error('Response is not clean JSON:', text);
+                    throw new Error('Server returned an invalid response format. Check console (F12) for details.');
                 }
 
                 if (!response.ok) {
