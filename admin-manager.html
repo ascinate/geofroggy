@@ -85,22 +85,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Table Sidebar (Internal) */
-        .db-sidebar {
-            width: 240px;
-            background: rgba(255, 255, 255, 0.02);
-            border-right: 1px solid var(--border);
-            padding: 1.5rem 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            height: calc(100vh - 40px);
-            position: sticky;
-            top: 20px;
-            border-radius: 20px;
-            margin-right: 1.5rem;
-        }
-
+        /* DB Sidebar items (Base styles moved to admin-layout.css) */
         .db-nav-item {
             display: flex;
             align-items: center;
@@ -190,6 +175,7 @@
             padding: 1rem 0.5rem !important;
             top: 10px !important;
             height: calc(100vh - 20px) !important;
+            overflow-y: auto !important;
         }
         .db-nav-item {
             padding: 0.5rem 0.75rem !important;

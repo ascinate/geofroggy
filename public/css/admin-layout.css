@@ -40,6 +40,21 @@
 
 .nav-section {
     flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.nav-section::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav-section::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-section::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
 }
 
 .nav-label {
@@ -385,4 +400,41 @@ table.dataTable tbody tr:hover td {
     border-radius: 8px;
     object-fit: cover;
     margin-right: 12px;
+}
+
+/* Database Explorer Sidebar (Sub-sidebar) */
+.db-sidebar {
+    width: 240px;
+    background: rgba(255, 255, 255, 0.02);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: calc(100vh - 40px);
+    position: sticky;
+    top: 20px;
+    border-radius: 20px;
+    margin-right: 1.5rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.db-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.db-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.db-sidebar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+.db-sidebar .nav-label {
+    padding-left: 0;
+    margin-bottom: 0.5rem;
 }
