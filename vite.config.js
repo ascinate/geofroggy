@@ -38,6 +38,7 @@ export default defineConfig({
                 teenMissionDetails: 'teen-mission-details.html',
                 adminLogin: 'admin-login.html',
                 adminDashboard: 'admin-dashboard.html',
+                adminUsers: 'admin-users.html',
             }
         }
     }
