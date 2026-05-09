@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Manager | Geofroggy Admin</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Custom Styles -->
+    <link href="/css/admin-layout.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Blobs */
+        .bg-blobs {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            filter: blur(120px);
+            opacity: 0.5;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 1rem 1.5rem;
+            max-width: calc(100vw - var(--sidebar-width));
+            animation: fadeIn 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Table Sidebar (Internal) */
+        .db-sidebar {
+            width: 240px;
+            background: rgba(255, 255, 255, 0.02);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            height: calc(100vh - 40px);
+            position: sticky;
+            top: 20px;
+            border-radius: 20px;
+            margin-right: 1.5rem;
+        }
+
+        .db-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+
+        .db-nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .db-nav-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .db-nav-item i {
+            font-size: 1.25rem;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .loader-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            transition: opacity 0.4s;
+        }
+
+        .layout-container {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+            .db-sidebar {
+                display: none; /* Add a toggle for mobile later */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Sidebar Placeholder -->
+    <div id="admin-sidebar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header mb-4">
+            <div id="header-text">
+                <h1 id="active-table-name">Database Manager</h1>
+                <p id="active-table-desc">Select a table from the left to start managing data.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-glass" onclick="dbManager.refresh()">
+                    <i class="ri-refresh-line"></i> Refresh
+                </button>
+                <button class="btn-primary-custom" id="add-new-btn">
+                    <i class="ri-add-line"></i> Add New Record
+                </button>
+            </div>
+        </div>
+
+        <div class="layout-container">
+            <!-- Internal DB Sidebar -->
+            <aside class="db-sidebar">
+                <div class="nav-label mb-2">Tables</div>
+                <div id="db-nav-list">
+                    <!-- Dynamic navigation items will be injected here -->
+                </div>
+            </aside>
+
+            <!-- Table View -->
+            <div class="content-card position-relative">
+                <div id="table-loader" class="loader-overlay" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                        <div class="h5 text-white mb-1">Loading Table</div>
+                        <div class="small text-dim">Synchronizing with database...</div>
+                    </div>
+                </div>
+
+                <div id="table-container">
+                    <table id="dynamicTable" class="table table-custom dt-responsive nowrap" style="width:100%">
+                        <thead>
+                            <tr id="table-header-row">
+                                <!-- Dynamic headers will be injected here -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="empty-state" class="text-center py-5" style="display: none;">
+                    <i class="ri-database-2-line text-dim mb-3" style="font-size: 4rem; opacity: 0.2;"></i>
+                    <h3 class="text-white">No Table Selected</h3>
+                    <p class="text-dim">Please select a table from the sidebar to view its contents.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Placeholder -->
+        <div id="admin-footer-placeholder"></div>
+    </main>
+
+    <!-- Modal for Add/Edit (Generic) -->
+    <div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary shadow-lg" style="border: 1px solid var(--border) !important; background: #0f172a !important;">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-white" id="modalTitle">Add New Record</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="genericForm">
+                        <div id="form-fields-container" class="row g-3">
+                            <!-- Dynamic fields will be injected here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-custom" id="save-btn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/admin-components.js"></script>
+    <script src="/js/admin-manager.js"></script>
+</body>
+
+</html>

@@ -44,6 +44,7 @@ export default defineConfig({
                 adminStories: 'admin-stories.html',
                 adminQuizzes: 'admin-quizzes.html',
                 adminProjects: 'admin-projects.html',
+                adminManager: 'admin-manager.html',
             }
         }
     }
