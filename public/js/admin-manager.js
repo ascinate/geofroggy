@@ -180,9 +180,12 @@ class DynamicDatabaseManager {
         
         container.innerHTML = '';
         this.activeTable.fields.forEach(field => {
+            // Skip readonly fields for NEW records (they are auto-generated)
+            if (!data && field.readonly) return;
+
             const value = data ? data[field.name] : '';
             const readonly = field.readonly ? 'readonly disabled' : '';
-            const required = field.required ? 'required' : '';
+            const required = field.required && !field.readonly ? 'required' : '';
             
             let inputHtml = '';
             if (field.type === 'select') {
