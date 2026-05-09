@@ -193,3 +193,196 @@
     box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
     filter: brightness(1.1);
 }
+
+/* --- Common DataTables & Component Styles --- */
+
+/* DataTables Wrapper Styling */
+.dataTables_wrapper .dataTables_length, 
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_processing, 
+.dataTables_wrapper .dataTables_paginate {
+    color: var(--text-dim) !important;
+    font-size: 0.813rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    color: white !important;
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.813rem !important;
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    color: white !important;
+    padding: 0.25rem 0.5rem !important;
+    outline: none;
+}
+
+/* Custom Table Aesthetics */
+table.dataTable {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+    margin: 1.5rem 0 !important;
+}
+
+table.dataTable thead th {
+    color: var(--text-dim);
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1rem !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+table.dataTable tbody td {
+    padding: 1rem !important;
+    background: transparent !important;
+    color: var(--text-main);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+table.dataTable tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Pagination Styling */
+.page-link {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-dim) !important;
+    border-radius: 8px !important;
+    margin: 0 2px;
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.813rem !important;
+    transition: all 0.2s;
+}
+
+.page-link:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: white !important;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.3);
+}
+
+.page-item.disabled .page-link {
+    background: rgba(255, 255, 255, 0.01) !important;
+    opacity: 0.5;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.status-active, .status-enabled, .status-published, .status-live, .status-approved {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.status-active::before, .status-enabled::before, .status-published::before, .status-live::before, .status-approved::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+}
+
+.status-inactive, .status-disabled, .status-draft, .status-review {
+    background: rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
+}
+
+.status-inactive::before, .status-disabled::before, .status-draft::before, .status-review::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+/* Action Buttons */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Utility */
+.cursor-pointer { cursor: pointer; }
+.text-dim { color: var(--text-dim); }
+.hover-white:hover { color: white !important; }
+
+/* --- Content Utilities --- */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.country-flag {
+    width: 24px;
+    height: 16px;
+    border-radius: 4px;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+.story-thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 12px;
+}
