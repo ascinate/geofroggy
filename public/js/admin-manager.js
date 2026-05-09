@@ -110,8 +110,15 @@ class DynamicDatabaseManager {
         const headerHtml = config.fields.map(f => `<th>${f.label}</th>`).join('') + '<th>Actions</th>';
         $('#dynamicTable').html(`<thead><tr>${headerHtml}</tr></thead><tbody></tbody>`);
 
+        // Suppress DataTables alert warnings (show in console instead)
+        $.fn.dataTable.ext.errMode = 'none';
+        $('#dynamicTable').on('error.dt', (e, settings, techNote, message) => {
+            console.warn('DataTables Error:', message);
+        });
+
         const columns = config.fields.map(f => ({
             data: f.name,
+            defaultContent: '<span class="text-dim">N/A</span>',
             render: (data) => {
                 if (data === null || data === undefined) return '<span class="text-dim">N/A</span>';
                 if (f.type === 'date') return new Date(data).toLocaleDateString();
