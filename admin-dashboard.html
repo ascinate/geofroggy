@@ -654,7 +654,37 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Simple Sidebar Toggle for Mobile (if needed)
+        // Session Protection & Data Population
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const profileData = localStorage.getItem('profile');
+
+            if (!token || !profileData) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+
+            const profile = JSON.parse(profileData);
+            
+            // Update User Pill
+            const userPill = document.querySelector('.user-pill');
+            if (userPill && profile) {
+                const nameEl = userPill.querySelector('.name');
+                const roleEl = userPill.querySelector('.role');
+                const avatarEl = userPill.querySelector('img');
+
+                if (nameEl) nameEl.textContent = profile.username || 'Admin User';
+                if (roleEl) roleEl.textContent = profile.role === 'admin' ? 'Super Admin' : 'Staff Member';
+                if (avatarEl && profile.avatar_url) avatarEl.src = profile.avatar_url;
+            }
+
+            // Update Header Welcome
+            const headerDesc = document.querySelector('.header p');
+            if (headerDesc && profile) {
+                headerDesc.textContent = `Welcome back, ${profile.username}. Here's what's happening today.`;
+            }
+        });
+
         console.log("Admin Dashboard - Elite Edition Loaded");
     </script>
 </body>

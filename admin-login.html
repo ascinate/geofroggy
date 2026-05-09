@@ -369,6 +369,10 @@
         </div>
     </div>
 
+    <!-- Global JS -->
+    <script src="/js/config.js"></script>
+    <script src="/js/alert.js"></script>
+
     <script>
         // Toggle Password Visibility
         const passwordInput = document.getElementById('password-input');
@@ -383,21 +387,65 @@
         // Form Submission
         const form = document.getElementById('login-form');
         const btn = document.getElementById('submit-btn');
-        const alert = document.getElementById('login-alert');
+        const alertBox = document.getElementById('login-alert');
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const email = form.querySelector('input[type="email"]').value;
+            const password = passwordInput.value;
 
             // UI Feedback
             btn.disabled = true;
+            const originalBtnContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Authenticating...</span>';
-            alert.style.display = 'none';
+            alertBox.style.display = 'none';
 
-            // Simulate API call
-            setTimeout(() => {
-                // For demo purposes, we'll just redirect
-                window.location.href = 'admin-dashboard.html';
-            }, 1200);
+            try {
+                const baseUrl = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : 'https://geo-froggy-backend.devhhtk.workers.dev';
+
+                const response = await fetch(`${baseUrl}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Invalid credentials');
+                }
+
+                // Check if user has admin role (optional but recommended)
+                if (data.profile.role !== 'admin') {
+                    throw new Error('Access denied. Administrator privileges required.');
+                }
+
+                // Success! Save session data
+                localStorage.setItem('token', data.session.access_token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('profile', JSON.stringify(data.profile));
+                localStorage.setItem('stats', JSON.stringify(data.stats));
+
+                showAlert('success', 'Authentication successful! Redirecting to dashboard...');
+
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+
+            } catch (err) {
+                console.error('Login error:', err);
+                showAlert('error', err.message);
+
+                // Also show in-card alert for redundancy
+                alertBox.querySelector('span').innerText = err.message;
+                alertBox.style.display = 'flex';
+
+                btn.disabled = false;
+                btn.innerHTML = originalBtnContent;
+            }
         });
     </script>
 </body>
