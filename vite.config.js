@@ -39,6 +39,11 @@ export default defineConfig({
                 adminLogin: 'admin-login.html',
                 adminDashboard: 'admin-dashboard.html',
                 adminUsers: 'admin-users.html',
+                adminCountries: 'admin-countries.html',
+                adminMissions: 'admin-missions.html',
+                adminStories: 'admin-stories.html',
+                adminQuizzes: 'admin-quizzes.html',
+                adminProjects: 'admin-projects.html',
             }
         }
     }
