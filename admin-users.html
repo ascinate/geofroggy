@@ -394,12 +394,16 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="/js/config.js"></script>
     <script src="/js/admin-components.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Initialize Normal Users Table
-            $('#normalUsersTable').DataTable({
+            const apiUrl = `${window.APP_CONFIG.API_BASE_URL}/api/auth/admin/users`;
+            const token = localStorage.getItem('token');
+
+            // Initialize DataTables with empty data initially
+            const normalUsersTable = $('#normalUsersTable').DataTable({
                 responsive: true,
                 dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
                 language: {
@@ -407,11 +411,28 @@
                     searchPlaceholder: "Search users...",
                     lengthMenu: "Show _MENU_",
                 },
-                pageLength: 10,
+                columns: [
+                    { data: null, render: data => `
+                        <div class="user-cell">
+                            <img src="${data.avatar_url || `https://ui-avatars.com/api/?name=${data.username}`}" class="user-avatar" alt="">
+                            <div class="fw-bold">${data.username}</div>
+                        </div>
+                    `},
+                    { data: 'email' },
+                    { data: 'stats', render: stats => stats && stats.length > 0 ? stats[0].missions_completed || 0 : 0 },
+                    { data: 'stats', render: stats => stats && stats.length > 0 ? (stats[0].xp || 0).toLocaleString() : 0 },
+                    { data: 'role', render: role => `<span class="status-badge status-active">${role === 'admin' ? 'Admin' : 'Active'}</span>` },
+                    { data: 'created_at', render: date => new Date(date).toLocaleDateString() },
+                    { data: null, render: () => `
+                        <div class="d-flex gap-2">
+                            <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                            <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                        </div>
+                    `}
+                ]
             });
 
-            // Initialize Admins Table
-            $('#adminsTable').DataTable({
+            const adminsTable = $('#adminsTable').DataTable({
                 responsive: true,
                 dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
                 language: {
@@ -419,8 +440,56 @@
                     searchPlaceholder: "Search admins...",
                     lengthMenu: "Show _MENU_",
                 },
-                pageLength: 10,
+                columns: [
+                    { data: null, render: data => `
+                        <div class="user-cell">
+                            <img src="${data.avatar_url || `https://ui-avatars.com/api/?name=${data.username}`}" class="user-avatar" alt="">
+                            <div class="fw-bold">${data.username}</div>
+                        </div>
+                    `},
+                    { data: 'email' },
+                    { data: 'role', render: role => role.toUpperCase() },
+                    { data: 'role', render: () => 'Full Access' },
+                    { data: 'role', render: () => `<span class="status-badge status-active">Active</span>` },
+                    { data: 'created_at', render: date => new Date(date).toLocaleDateString() },
+                    { data: null, render: () => `
+                        <div class="d-flex gap-2">
+                            <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                            <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                        </div>
+                    `}
+                ]
             });
+
+            // Fetch users from API
+            async function fetchUsers() {
+                try {
+                    const response = await fetch(apiUrl, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        const allUsers = result.data;
+                        
+                        // Split users into normal and admins
+                        const normalUsers = allUsers.filter(u => u.role !== 'admin');
+                        const adminUsers = allUsers.filter(u => u.role === 'admin');
+                        
+                        // Clear and add data
+                        normalUsersTable.clear().rows.add(normalUsers).draw();
+                        adminsTable.clear().rows.add(adminUsers).draw();
+                    } else {
+                        console.error('Failed to fetch users:', result.error);
+                    }
+                } catch (error) {
+                    console.error('Error fetching users:', error);
+                }
+            }
+
+            fetchUsers();
 
             // Re-adjust columns when switching tabs
             $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
