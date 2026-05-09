@@ -1,0 +1,47 @@
+{
+    "tables": [
+        {
+            "id": "users",
+            "dbTable": "users",
+            "label": "Users",
+            "icon": "ri-user-3-line",
+            "description": "Platform users and administrators",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true },
+                { "name": "username", "label": "Username", "type": "text", "required": true },
+                { "name": "email", "label": "Email", "type": "email", "required": true },
+                { "name": "role", "label": "Role", "type": "select", "options": ["user", "admin", "staff"] },
+                { "name": "created_at", "label": "Joined Date", "type": "date", "readonly": true }
+            ]
+        },
+        {
+            "id": "countries",
+            "dbTable": "countries",
+            "label": "Countries",
+            "icon": "ri-flag-line",
+            "description": "Global countries and regional settings",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true },
+                { "name": "name", "label": "Country Name", "type": "text", "required": true },
+                { "name": "code", "label": "ISO Code", "type": "text", "required": true },
+                { "name": "region", "label": "Region", "type": "select", "options": ["Europe", "Asia", "Africa", "Americas", "Oceania"] },
+                { "name": "difficulty", "label": "Difficulty", "type": "select", "options": ["Beginner", "Intermediate", "Advanced"] },
+                { "name": "status", "label": "Status", "type": "select", "options": ["active", "inactive"] }
+            ]
+        },
+        {
+            "id": "missions",
+            "dbTable": "missions",
+            "label": "Missions",
+            "icon": "ri-rocket-line",
+            "description": "Educational missions and challenges",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true },
+                { "name": "title", "label": "Mission Title", "type": "text", "required": true },
+                { "name": "description", "label": "Description", "type": "textarea" },
+                { "name": "xp_reward", "label": "XP Reward", "type": "number" },
+                { "name": "country_id", "label": "Country ID", "type": "number" }
+            ]
+        }
+    ]
+}

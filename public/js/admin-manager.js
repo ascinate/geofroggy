@@ -1,140 +1,11 @@
 /**
- * Geofroggy Database Manager Logic
- * Handles dynamic table switching and DataTables initialization.
+ * Geofroggy Dynamic Database Manager
+ * Logic for metadata-driven table management and CSV flows.
  */
 
-const MANAGED_TABLES = [
-    {
-        id: 'users',
-        name: 'Users',
-        icon: 'ri-user-3-line',
-        endpoint: '/api/auth/admin/users',
-        description: 'Monitor and manage all platform users and administrators.',
-        columns: [
-            { data: 'username', label: 'User', render: (data, type, row) => `
-                <div class="user-cell">
-                    <img src="${row.avatar_url || `https://ui-avatars.com/api/?name=${data}`}" class="user-avatar" alt="">
-                    <div class="fw-bold">${data}</div>
-                </div>
-            `},
-            { data: 'email', label: 'Email' },
-            { data: 'role', label: 'Role', render: data => `<span class="badge bg-primary-subtle text-primary border-0 text-uppercase">${data || 'user'}</span>` },
-            { data: 'created_at', label: 'Joined', render: data => data ? new Date(data).toLocaleDateString() : 'N/A' },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    },
-    {
-        id: 'countries',
-        name: 'Countries',
-        icon: 'ri-flag-line',
-        endpoint: '/api/country',
-        description: 'Configure countries and regions for Teen and Kids portals.',
-        columns: [
-            { data: 'name', label: 'Country', render: (data, type, row) => `
-                <div class="d-flex align-items-center">
-                    <img src="https://flagcdn.com/w40/${(row.code || 'un').toLowerCase()}.png" class="country-flag" alt="">
-                    <div class="fw-bold">${data}</div>
-                </div>
-            `},
-            { data: 'region', label: 'Region' },
-            { data: 'difficulty', label: 'Difficulty', render: data => `<span class="badge bg-info-subtle text-info border-0">${data || 'Beginner'}</span>` },
-            { data: 'status', label: 'Status', render: data => `<span class="status-badge ${data === 'active' ? 'status-active' : 'status-inactive'}">${data || 'active'}</span>` },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    },
-    {
-        id: 'missions',
-        name: 'Missions',
-        icon: 'ri-rocket-line',
-        endpoint: '/api/missions',
-        description: 'Manage educational missions and challenges.',
-        columns: [
-            { data: 'title', label: 'Mission Title', render: data => `<div class="fw-bold">${data}</div>` },
-            { data: 'country_name', label: 'Country' },
-            { data: 'xp_reward', label: 'XP Reward', render: data => `<span class="text-primary fw-bold">+${data} XP</span>` },
-            { data: 'type', label: 'Type' },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    },
-    {
-        id: 'stories',
-        name: 'Stories',
-        icon: 'ri-book-open-line',
-        endpoint: '/api/stories',
-        description: 'Curate cultural stories and multimedia content.',
-        columns: [
-            { data: 'title', label: 'Story', render: (data, type, row) => `
-                <div class="d-flex align-items-center">
-                    <img src="${row.thumbnail_url || 'https://placehold.co/40x40/0f172a/white?text=S'}" class="story-thumbnail" alt="">
-                    <div class="fw-bold">${data}</div>
-                </div>
-            `},
-            { data: 'category', label: 'Category' },
-            { data: 'author', label: 'Author' },
-            { data: 'status', label: 'Status', render: data => `<span class="status-badge status-active">${data || 'Published'}</span>` },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    },
-    {
-        id: 'quizzes',
-        name: 'Quizzes',
-        icon: 'ri-questionnaire-line',
-        endpoint: '/api/quiz',
-        description: 'Manage assessment quizzes and questions.',
-        columns: [
-            { data: 'title', label: 'Quiz Name', render: data => `<div class="fw-bold">${data}</div>` },
-            { data: 'questions_count', label: 'Questions' },
-            { data: 'difficulty', label: 'Difficulty' },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    },
-    {
-        id: 'projects',
-        name: 'Projects',
-        icon: 'ri-layout-grid-line',
-        endpoint: '/api/projects',
-        description: 'Manage community projects and impact initiatives.',
-        columns: [
-            { data: 'name', label: 'Project Name', render: data => `<div class="fw-bold">${data}</div>` },
-            { data: 'goal_amount', label: 'Goal', render: data => `$${data.toLocaleString()}` },
-            { data: 'status', label: 'Status', render: data => `<span class="status-badge status-active">${data || 'Active'}</span>` },
-            { data: null, label: 'Actions', orderable: false, render: () => `
-                <div class="d-flex gap-2">
-                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
-                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                </div>
-            `}
-        ]
-    }
-];
-
-class DatabaseManager {
+class DynamicDatabaseManager {
     constructor() {
+        this.config = null;
         this.activeTable = null;
         this.dataTable = null;
         this.apiUrl = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : '';
@@ -143,28 +14,36 @@ class DatabaseManager {
         this.init();
     }
 
-    init() {
-        this.renderSidebar();
-        this.bindEvents();
-        
-        // Auto-select first table if hash exists or default to first
-        const hash = window.location.hash.substring(1);
-        const initialTable = MANAGED_TABLES.find(t => t.id === hash) || MANAGED_TABLES[0];
-        if (initialTable) {
-            this.switchTable(initialTable.id);
+    async init() {
+        try {
+            // 1. Load the Table Schema
+            const response = await fetch('/config/db-schema.json');
+            this.config = await response.json();
+            
+            // 2. Render UI Components
+            this.renderSidebar();
+            this.bindEvents();
+            
+            // 3. Initial Table Selection
+            const hash = window.location.hash.substring(1);
+            const initialTable = this.config.tables.find(t => t.id === hash) || this.config.tables[0];
+            if (initialTable) {
+                this.switchTable(initialTable.id);
+            }
+        } catch (err) {
+            console.error('Failed to initialize Database Manager:', err);
         }
     }
 
     renderSidebar() {
         const navList = document.getElementById('db-nav-list');
-        navList.innerHTML = MANAGED_TABLES.map(table => `
+        navList.innerHTML = this.config.tables.map(table => `
             <a href="#${table.id}" class="db-nav-item" data-table-id="${table.id}">
                 <i class="${table.icon}"></i>
-                <span>${table.name}</span>
+                <span>${table.label}</span>
             </a>
         `).join('');
 
-        // Sidebar link clicks
         document.querySelectorAll('.db-nav-item').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -176,96 +55,112 @@ class DatabaseManager {
     }
 
     bindEvents() {
-        // Global refresh button
+        // Add New Button
         document.getElementById('add-new-btn').addEventListener('click', () => {
             this.showFormModal();
         });
 
-        // Save button in modal
+        // Save Button
         document.getElementById('save-btn').addEventListener('click', () => {
             this.handleSave();
         });
+
+        // Import CSV Button (Optional: We can add a button for this)
+        this.injectCsvTools();
+    }
+
+    injectCsvTools() {
+        const headerActions = document.querySelector('.header-actions');
+        if (!headerActions.querySelector('.btn-csv-import')) {
+            const importBtn = document.createElement('button');
+            importBtn.className = 'btn-glass btn-csv-import';
+            importBtn.innerHTML = '<i class="ri-upload-cloud-2-line"></i> Import CSV';
+            importBtn.onclick = () => this.showCsvImportModal();
+            headerActions.prepend(importBtn);
+        }
     }
 
     async switchTable(tableId) {
-        const tableConfig = MANAGED_TABLES.find(t => t.id === tableId);
+        const tableConfig = this.config.tables.find(t => t.id === tableId);
         if (!tableConfig) return;
 
-        console.log(`Switching to table: ${tableId}`);
         this.activeTable = tableConfig;
 
-        // Update UI states
+        // UI Updates
         document.querySelectorAll('.db-nav-item').forEach(link => {
             link.classList.toggle('active', link.getAttribute('data-table-id') === tableId);
         });
 
-        document.getElementById('active-table-name').textContent = tableConfig.name;
+        document.getElementById('active-table-name').textContent = tableConfig.label;
         document.getElementById('active-table-desc').textContent = tableConfig.description;
 
-        // Show loader
         $('#table-loader').show();
         $('#table-container').hide();
-        $('#empty-state').hide();
 
-        // Initialize DataTable
         this.initDataTable(tableConfig);
     }
 
     initDataTable(config) {
-        // Destroy existing table if it exists
         if (this.dataTable) {
             this.dataTable.destroy();
             $('#dynamicTable').empty();
         }
 
-        // Re-create header row
-        const headerHtml = config.columns.map(col => `<th>${col.label}</th>`).join('');
+        // Build headers from fields
+        const headerHtml = config.fields.map(f => `<th>${f.label}</th>`).join('') + '<th>Actions</th>';
         $('#dynamicTable').html(`<thead><tr>${headerHtml}</tr></thead><tbody></tbody>`);
 
-        // Initialize new DataTable
+        const columns = config.fields.map(f => ({
+            data: f.name,
+            render: (data) => {
+                if (data === null || data === undefined) return '<span class="text-dim">N/A</span>';
+                if (f.type === 'date') return new Date(data).toLocaleDateString();
+                return data;
+            }
+        }));
+
+        // Add Actions Column
+        columns.push({
+            data: null,
+            orderable: false,
+            render: () => `
+                <div class="d-flex gap-2">
+                    <button class="action-btn edit-row" title="Edit"><i class="ri-edit-line"></i></button>
+                    <button class="action-btn delete-row text-danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                </div>
+            `
+        });
+
         this.dataTable = $('#dynamicTable').DataTable({
             responsive: true,
-            processing: true,
-            serverSide: false, // Set to true if API supports it
             ajax: {
-                url: `${this.apiUrl}${config.endpoint}`,
+                url: `${this.apiUrl}/api/manage/${config.dbTable}`,
                 headers: { 'Authorization': `Bearer ${this.token}` },
                 dataSrc: (json) => {
                     $('#table-loader').hide();
                     $('#table-container').fadeIn();
-                    if (json.status === 'success') return json.data;
-                    console.error('API Error:', json.error);
-                    return [];
-                },
-                error: (xhr) => {
-                    $('#table-loader').hide();
-                    $('#empty-state').show();
-                    console.error('Connection Error', xhr);
+                    return json.data || [];
                 }
             },
-            columns: config.columns,
+            columns: columns,
             dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: `Search ${config.name.toLowerCase()}...`,
-                lengthMenu: "Show _MENU_",
+                searchPlaceholder: `Search ${config.label.toLowerCase()}...`
             },
-            drawCallback: () => {
-                // Bind action buttons after draw
-                this.bindActionButtons();
-            }
+            drawCallback: () => this.bindTableActions()
         });
     }
 
-    bindActionButtons() {
-        $('.edit-row').on('click', (e) => {
+    bindTableActions() {
+        $('.edit-row').off().on('click', (e) => {
             const data = this.dataTable.row($(e.currentTarget).closest('tr')).data();
             this.showFormModal(data);
         });
 
-        $('.delete-row').on('click', (e) => {
+        $('.delete-row').off().on('click', (e) => {
             const data = this.dataTable.row($(e.currentTarget).closest('tr')).data();
-            if (confirm(`Are you sure you want to delete this record?`)) {
+            if (confirm('Are you sure you want to delete this record?')) {
                 this.handleDelete(data.id);
             }
         });
@@ -274,48 +169,175 @@ class DatabaseManager {
     showFormModal(data = null) {
         const modal = new bootstrap.Modal(document.getElementById('formModal'));
         const container = document.getElementById('form-fields-container');
-        document.getElementById('modalTitle').textContent = data ? `Edit ${this.activeTable.name}` : `Add New ${this.activeTable.name}`;
+        document.getElementById('modalTitle').textContent = data ? `Edit ${this.activeTable.label}` : `Add New ${this.activeTable.label}`;
         
-        // Clear previous fields
         container.innerHTML = '';
-
-        // Generate fields based on columns (excluding actions)
-        this.activeTable.columns.forEach(col => {
-            if (col.label === 'Actions') return;
-
-            const val = data ? data[col.data] : '';
-            const fieldId = `field_${col.data}`;
+        this.activeTable.fields.forEach(field => {
+            const value = data ? data[field.name] : '';
+            const readonly = field.readonly ? 'readonly disabled' : '';
+            const required = field.required ? 'required' : '';
+            
+            let inputHtml = '';
+            if (field.type === 'select') {
+                inputHtml = `
+                    <select class="form-select bg-dark border-secondary text-white" name="${field.name}" ${readonly} ${required}>
+                        ${field.options.map(opt => `<option value="${opt}" ${opt === value ? 'selected' : ''}>${opt}</option>`).join('')}
+                    </select>`;
+            } else if (field.type === 'textarea') {
+                inputHtml = `<textarea class="form-control bg-dark border-secondary text-white" name="${field.name}" ${readonly} ${required}>${value}</textarea>`;
+            } else {
+                inputHtml = `<input type="${field.type}" class="form-control bg-dark border-secondary text-white" name="${field.name}" value="${value}" ${readonly} ${required}>`;
+            }
 
             container.innerHTML += `
                 <div class="col-md-6">
-                    <label class="form-label text-dim small fw-bold">${col.label}</label>
-                    <input type="text" class="form-control bg-dark border-secondary text-white" id="${fieldId}" name="${col.data}" value="${val || ''}">
+                    <label class="form-label text-dim small fw-bold">${field.label}</label>
+                    ${inputHtml}
                 </div>
             `;
         });
 
+        this.editingId = data ? data.id : null;
         modal.show();
     }
 
     async handleSave() {
-        // Placeholder for save logic
-        alert('Save functionality will be connected to the API endpoints.');
-        bootstrap.Modal.getInstance(document.getElementById('formModal')).hide();
+        const formData = new FormData(document.getElementById('genericForm'));
+        const payload = Object.fromEntries(formData.entries());
+        
+        const method = this.editingId ? 'PUT' : 'POST';
+        const url = this.editingId 
+            ? `${this.apiUrl}/api/manage/${this.activeTable.dbTable}/${this.editingId}`
+            : `${this.apiUrl}/api/manage/${this.activeTable.dbTable}`;
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                bootstrap.Modal.getInstance(document.getElementById('formModal')).hide();
+                this.dataTable.ajax.reload();
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (err) {
+            console.error('Save failed:', err);
+        }
     }
 
     async handleDelete(id) {
-        // Placeholder for delete logic
-        alert(`Delete record with ID: ${id}`);
+        try {
+            const response = await fetch(`${this.apiUrl}/api/manage/${this.activeTable.dbTable}/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${this.token}` }
+            });
+            const result = await response.json();
+            if (result.status === 'success') this.dataTable.ajax.reload();
+        } catch (err) {
+            console.error('Delete failed:', err);
+        }
     }
 
-    refresh() {
-        if (this.dataTable) {
-            this.dataTable.ajax.reload();
-        }
+    // --- CSV LOGIC ---
+
+    showCsvImportModal() {
+        const modalHtml = `
+            <div class="modal fade" id="csvModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark border-secondary">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-white">Import CSV to ${this.activeTable.label}</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-dim small">Accepted Headers: <br>
+                                <code class="text-primary">${this.activeTable.fields.filter(f => !f.readonly).map(f => f.name).join(', ')}</code>
+                            </p>
+                            <input type="file" id="csvFileInput" class="form-control bg-dark border-secondary text-white" accept=".csv">
+                            <div id="csvPreview" class="mt-3 small text-dim" style="max-height: 200px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="modal-footer border-secondary">
+                            <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary-custom" id="processCsvBtn">Process Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const modal = new bootstrap.Modal(document.getElementById('csvModal'));
+        modal.show();
+
+        document.getElementById('processCsvBtn').onclick = () => this.handleCsvUpload();
+        
+        document.getElementById('csvModal').addEventListener('hidden.bs.modal', (e) => {
+            e.target.remove();
+        });
+    }
+
+    async handleCsvUpload() {
+        const fileInput = document.getElementById('csvFileInput');
+        if (!fileInput.files.length) return alert('Please select a file');
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = async (e) => {
+            const text = e.target.result;
+            const rows = text.split('\n').map(r => r.split(',').map(c => c.trim()));
+            const headers = rows[0];
+            const dataRows = rows.slice(1).filter(r => r.length === headers.length && r.some(c => c !== ''));
+
+            // Validate Headers
+            const requiredFields = this.activeTable.fields.filter(f => !f.readonly).map(f => f.name);
+            const missingHeaders = requiredFields.filter(f => !headers.includes(f));
+
+            if (missingHeaders.length > 0) {
+                return alert('Missing headers: ' + missingHeaders.join(', '));
+            }
+
+            // Map data to objects
+            const payload = dataRows.map(row => {
+                const obj = {};
+                headers.forEach((h, i) => {
+                    if (requiredFields.includes(h)) obj[h] = row[i];
+                });
+                return obj;
+            });
+
+            // Send to API
+            try {
+                const response = await fetch(`${this.apiUrl}/api/manage/${this.activeTable.dbTable}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert(`Successfully imported ${payload.length} records!`);
+                    bootstrap.Modal.getInstance(document.getElementById('csvModal')).hide();
+                    this.dataTable.ajax.reload();
+                } else {
+                    alert('Import Error: ' + result.error);
+                }
+            } catch (err) {
+                console.error('CSV Import failed:', err);
+            }
+        };
+
+        reader.readAsText(file);
     }
 }
 
-// Initialize on load
 $(document).ready(() => {
-    window.dbManager = new DatabaseManager();
+    window.dbManager = new DynamicDatabaseManager();
 });
