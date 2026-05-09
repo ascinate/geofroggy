@@ -412,15 +412,26 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                const data = await response.json();
+                const text = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('Response is not JSON:', text);
+                    throw new Error('Server returned an invalid response format.');
+                }
 
                 if (!response.ok) {
                     throw new Error(data.error || 'Invalid credentials');
                 }
 
-                // Check if user has admin role (optional but recommended)
-                if (data.profile.role !== 'admin') {
+                // Check if user has admin role
+                if (data.profile && data.profile.role !== 'admin') {
                     throw new Error('Access denied. Administrator privileges required.');
+                }
+
+                if (!data.session || !data.session.access_token) {
+                    throw new Error('Login failed: No session data received.');
                 }
 
                 // Success! Save session data
