@@ -94,8 +94,9 @@ class DynamicDatabaseManager {
         document.getElementById('active-table-name').textContent = tableConfig.label;
         document.getElementById('active-table-desc').textContent = tableConfig.description;
 
-        $('#table-loader').show();
-        $('#table-container').hide();
+        // Show container but keep loader on top
+        $('#table-container').show();
+        $('#table-loader').fadeIn(200);
 
         this.initDataTable(tableConfig);
     }
@@ -141,12 +142,12 @@ class DynamicDatabaseManager {
 
         this.dataTable = $('#dynamicTable').DataTable({
             responsive: true,
+            autoWidth: false,
             ajax: {
                 url: `${this.apiUrl}/api/manage/${config.dbTable}`,
                 headers: { 'Authorization': `Bearer ${this.token}` },
                 dataSrc: (json) => {
-                    $('#table-loader').hide();
-                    $('#table-container').fadeIn();
+                    $('#table-loader').fadeOut(200);
                     return json.data || [];
                 }
             },
@@ -156,7 +157,13 @@ class DynamicDatabaseManager {
                 search: "_INPUT_",
                 searchPlaceholder: `Search ${config.label.toLowerCase()}...`
             },
-            drawCallback: () => this.bindTableActions()
+            drawCallback: () => {
+                this.bindTableActions();
+                // Force responsive recalc after draw
+                setTimeout(() => {
+                    if (this.dataTable) this.dataTable.columns.adjust().responsive.recalc();
+                }, 100);
+            }
         });
     }
 
