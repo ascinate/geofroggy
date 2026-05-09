@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Management | Geofroggy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <!-- Custom Styles -->
+    <link href="/css/admin-layout.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Blobs */
+        .bg-blobs {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            filter: blur(120px);
+            opacity: 0.5;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 50px) scale(1.05); }
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 1rem 1.5rem;
+            max-width: calc(100vw - var(--sidebar-width));
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Tabs */
+        .nav-tabs-custom {
+            border-bottom: 1px solid var(--border);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs-custom .nav-link {
+            background: none !important;
+            border: none !important;
+            color: var(--text-dim);
+            padding: 0.75rem 0;
+            font-weight: 700;
+            font-size: 0.875rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            color: white !important;
+        }
+
+        .nav-tabs-custom .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+        }
+
+        /* DataTables Custom Styling */
+        .dataTables_wrapper .dataTables_length, 
+        .dataTables_wrapper .dataTables_filter, 
+        .dataTables_wrapper .dataTables_info, 
+        .dataTables_wrapper .dataTables_processing, 
+        .dataTables_wrapper .dataTables_paginate {
+            color: var(--text-dim) !important;
+            font-size: 0.813rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            color: white !important;
+            padding: 0.4rem 0.75rem !important;
+            font-size: 0.813rem !important;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            color: white !important;
+            padding: 0.25rem 0.5rem !important;
+        }
+
+        table.dataTable {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            width: 100% !important;
+            margin: 1.5rem 0 !important;
+        }
+
+        table.dataTable thead th {
+            color: var(--text-dim);
+            font-weight: 700;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1rem !important;
+            border-bottom: 1px solid var(--border) !important;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        table.dataTable tbody td {
+            padding: 1rem !important;
+            background: transparent !important;
+            color: var(--text-main);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border) !important;
+        }
+
+        table.dataTable tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        .page-link {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-dim) !important;
+            border-radius: 8px !important;
+            margin: 0 2px;
+            padding: 0.4rem 0.75rem !important;
+            font-size: 0.813rem !important;
+        }
+
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-active::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .status-inactive {
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+        }
+
+        .status-inactive::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Sidebar Placeholder -->
+    <div id="admin-sidebar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header mb-4">
+            <div>
+                <h1>User Management</h1>
+                <p>Monitor and manage all users and administrators.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-glass">
+                    <i class="ri-download-2-line"></i> Export Data
+                </button>
+                <button class="btn-primary-custom">
+                    <i class="ri-user-add-line"></i> Add New User
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-custom" id="userTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="normal-users-tab" data-bs-toggle="tab" data-bs-target="#normal-users"
+                    type="button" role="tab" aria-controls="normal-users" aria-selected="true">
+                    Normal Users
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="admins-tab" data-bs-toggle="tab" data-bs-target="#admins" type="button"
+                    role="tab" aria-controls="admins" aria-selected="false">
+                    Administrators
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="userTabsContent">
+            <!-- Normal Users Tab -->
+            <div class="tab-pane fade show active" id="normal-users" role="tabpanel" aria-labelledby="normal-users-tab">
+                <div class="content-card">
+                    <table id="normalUsersTable" class="table table-custom dt-responsive nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Missions</th>
+                                <th>XP Points</th>
+                                <th>Status</th>
+                                <th>Joined Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Mock Data for Normal Users -->
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=6366f1&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Alex Johnson</div>
+                                    </div>
+                                </td>
+                                <td>alex.j@example.com</td>
+                                <td>24</td>
+                                <td>1,250</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>12 Oct 2023</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=8b5cf6&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Sarah Smith</div>
+                                    </div>
+                                </td>
+                                <td>sarah.s@example.com</td>
+                                <td>18</td>
+                                <td>850</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>14 Oct 2023</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Mike+Ross&background=3b82f6&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Mike Ross</div>
+                                    </div>
+                                </td>
+                                <td>mike.r@example.com</td>
+                                <td>42</td>
+                                <td>3,100</td>
+                                <td><span class="status-badge status-inactive">Inactive</span></td>
+                                <td>15 Oct 2023</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Emma+Wilson&background=ec4899&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Emma Wilson</div>
+                                    </div>
+                                </td>
+                                <td>emma.w@example.com</td>
+                                <td>31</td>
+                                <td>2,400</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>18 Oct 2023</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=10b981&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">John Doe</div>
+                                    </div>
+                                </td>
+                                <td>john.d@example.com</td>
+                                <td>12</td>
+                                <td>450</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>20 Oct 2023</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Admins Tab -->
+            <div class="tab-pane fade" id="admins" role="tabpanel" aria-labelledby="admins-tab">
+                <div class="content-card">
+                    <table id="adminsTable" class="table table-custom dt-responsive nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Administrator</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Mock Data for Admins -->
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Admin+One&background=f59e0b&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Admin One</div>
+                                    </div>
+                                </td>
+                                <td>admin1@geofroggy.com</td>
+                                <td>Super Admin</td>
+                                <td>All Access</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>2 hours ago</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Moderator+X&background=10b981&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">Moderator X</div>
+                                    </div>
+                                </td>
+                                <td>mod.x@geofroggy.com</td>
+                                <td>Staff</td>
+                                <td>Limited</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>1 day ago</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=System+Bot&background=6366f1&color=fff" class="user-avatar" alt="">
+                                        <div class="fw-bold">System Bot</div>
+                                    </div>
+                                </td>
+                                <td>bot@geofroggy.com</td>
+                                <td>Automation</td>
+                                <td>API Only</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>Just now</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
+                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Placeholder -->
+        <div id="admin-footer-placeholder"></div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="/js/admin-components.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Normal Users Table
+            $('#normalUsersTable').DataTable({
+                responsive: true,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search users...",
+                    lengthMenu: "Show _MENU_",
+                },
+                pageLength: 10,
+            });
+
+            // Initialize Admins Table
+            $('#adminsTable').DataTable({
+                responsive: true,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search admins...",
+                    lengthMenu: "Show _MENU_",
+                },
+                pageLength: 10,
+            });
+
+            // Re-adjust columns when switching tabs
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust().responsive.recalc();
+            });
+        });
+    </script>
+</body>
+
+</html>
