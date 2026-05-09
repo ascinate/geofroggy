@@ -330,11 +330,6 @@
             <p>Access the mission control center</p>
         </div>
 
-        <div id="login-alert" class="alert-custom">
-            <i class="ri-error-warning-line"></i>
-            <span>Invalid credentials. Please try again.</span>
-        </div>
-
         <form id="login-form">
             <div class="form-group">
                 <div class="label-row">
@@ -387,7 +382,6 @@
         // Form Submission
         const form = document.getElementById('login-form');
         const btn = document.getElementById('submit-btn');
-        const alertBox = document.getElementById('login-alert');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -399,7 +393,6 @@
             btn.disabled = true;
             const originalBtnContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> <span>Authenticating...</span>';
-            alertBox.style.display = 'none';
 
             try {
                 const baseUrl = (window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : 'https://geo-froggy-backend.devhhtk.workers.dev').replace(/\/$/, "");
@@ -453,10 +446,6 @@
             } catch (err) {
                 console.error('Login error:', err);
                 showAlert('error', err.message);
-
-                // Also show in-card alert for redundancy
-                alertBox.querySelector('span').innerText = err.message;
-                alertBox.style.display = 'flex';
 
                 btn.disabled = false;
                 btn.innerHTML = originalBtnContent;
