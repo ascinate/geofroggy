@@ -128,6 +128,19 @@
             padding: 1.5rem;
         }
 
+        .loader-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            transition: opacity 0.4s;
+        }
+
         @media (max-width: 1200px) {
             .main-content {
                 margin-left: 0;
@@ -180,7 +193,15 @@
         </ul>
 
         <!-- Tab Content -->
-        <div class="tab-content" id="userTabsContent">
+        <div class="tab-content position-relative" id="userTabsContent" style="min-height: 400px;">
+            <div id="table-loader" class="loader-overlay">
+                <div class="text-center">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <div class="h5 text-white mb-1">Synchronizing Data</div>
+                    <div class="small text-dim">Fetching latest user records...</div>
+                </div>
+            </div>
+
             <!-- Normal Users Tab -->
             <div class="tab-pane fade show active" id="normal-users" role="tabpanel" aria-labelledby="normal-users-tab">
                 <div class="content-card">
@@ -197,107 +218,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Mock Data for Normal Users -->
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=6366f1&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Alex Johnson</div>
-                                    </div>
-                                </td>
-                                <td>alex.j@example.com</td>
-                                <td>24</td>
-                                <td>1,250</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>12 Oct 2023</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Sarah+Smith&background=8b5cf6&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Sarah Smith</div>
-                                    </div>
-                                </td>
-                                <td>sarah.s@example.com</td>
-                                <td>18</td>
-                                <td>850</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>14 Oct 2023</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Mike+Ross&background=3b82f6&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Mike Ross</div>
-                                    </div>
-                                </td>
-                                <td>mike.r@example.com</td>
-                                <td>42</td>
-                                <td>3,100</td>
-                                <td><span class="status-badge status-inactive">Inactive</span></td>
-                                <td>15 Oct 2023</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Emma+Wilson&background=ec4899&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Emma Wilson</div>
-                                    </div>
-                                </td>
-                                <td>emma.w@example.com</td>
-                                <td>31</td>
-                                <td>2,400</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>18 Oct 2023</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=10b981&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">John Doe</div>
-                                    </div>
-                                </td>
-                                <td>john.d@example.com</td>
-                                <td>12</td>
-                                <td>450</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>20 Oct 2023</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="View"><i class="ri-eye-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -314,69 +234,11 @@
                                 <th>Role</th>
                                 <th>Permissions</th>
                                 <th>Status</th>
-                                <th>Last Login</th>
+                                <th>Joined Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Mock Data for Admins -->
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Admin+One&background=f59e0b&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Admin One</div>
-                                    </div>
-                                </td>
-                                <td>admin1@geofroggy.com</td>
-                                <td>Super Admin</td>
-                                <td>All Access</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>2 hours ago</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Moderator+X&background=10b981&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">Moderator X</div>
-                                    </div>
-                                </td>
-                                <td>mod.x@geofroggy.com</td>
-                                <td>Staff</td>
-                                <td>Limited</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>1 day ago</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=System+Bot&background=6366f1&color=fff" class="user-avatar" alt="">
-                                        <div class="fw-bold">System Bot</div>
-                                    </div>
-                                </td>
-                                <td>bot@geofroggy.com</td>
-                                <td>Automation</td>
-                                <td>API Only</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>Just now</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                        <button class="action-btn" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -481,11 +343,16 @@
                         // Clear and add data
                         normalUsersTable.clear().rows.add(normalUsers).draw();
                         adminsTable.clear().rows.add(adminUsers).draw();
+
+                        // Hide loader
+                        $('#table-loader').fadeOut(400);
                     } else {
                         console.error('Failed to fetch users:', result.error);
+                        $('#table-loader').html('<div class="text-danger fw-bold">Failed to load users</div>');
                     }
                 } catch (error) {
                     console.error('Error fetching users:', error);
+                    $('#table-loader').html('<div class="text-danger fw-bold">Connection Error</div>');
                 }
             }
 
