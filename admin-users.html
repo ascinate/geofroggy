@@ -421,7 +421,8 @@
             function bindActions() {
                 $('.edit-user').off().on('click', function() {
                     const id = $(this).data('id');
-                    const allData = [...normalUsersTable.rows().data(), ...adminsTable.rows().data()];
+                    // Use .toArray() to get plain arrays from DataTables
+                    const allData = [...normalUsersTable.rows().data().toArray(), ...adminsTable.rows().data().toArray()];
                     const user = allData.find(u => u.id === id);
                     if (user) showUserModal(user);
                 });
