@@ -7,12 +7,12 @@
             "icon": "ri-truck-line",
             "description": "Manage global transportation data and logistics history.",
             "fields": [
-                { "name": "id", "label": "ID", "type": "number", "readonly": true },
-                { "name": "country_id", "label": "Country ID", "type": "number", "required": true },
-                { "name": "year", "label": "Year", "type": "text", "required": true },
-                { "name": "field", "label": "Field/Category", "type": "text", "required": true },
-                { "name": "value", "label": "Value", "type": "textarea", "required": true },
-                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true }
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Field/Category", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": true }
             ]
         }
     ]

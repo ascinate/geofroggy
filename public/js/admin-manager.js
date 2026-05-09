@@ -106,8 +106,9 @@ class DynamicDatabaseManager {
             $('#dynamicTable').empty();
         }
 
-        // Build headers from fields
-        const headerHtml = config.fields.map(f => `<th>${f.label}</th>`).join('') + '<th>Actions</th>';
+        // Build headers from fields (only those with view: true)
+        const viewableFields = config.fields.filter(f => f.view !== false);
+        const headerHtml = viewableFields.map(f => `<th>${f.label}</th>`).join('') + '<th>Actions</th>';
         $('#dynamicTable').html(`<thead><tr>${headerHtml}</tr></thead><tbody></tbody>`);
 
         // Suppress DataTables alert warnings (show in console instead)
@@ -116,7 +117,7 @@ class DynamicDatabaseManager {
             console.warn('DataTables Error:', message);
         });
 
-        const columns = config.fields.map(f => ({
+        const columns = viewableFields.map(f => ({
             data: f.name,
             defaultContent: '<span class="text-dim">N/A</span>',
             render: (data) => {
