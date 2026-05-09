@@ -170,7 +170,7 @@
                 <button class="btn-glass">
                     <i class="ri-download-2-line"></i> Export Data
                 </button>
-                <button class="btn-primary-custom" onclick="showUserModal()">
+                <button class="btn-primary-custom" onclick="showAddUserModal()">
                     <i class="ri-user-add-line"></i> Add New Admin
                 </button>
             </div>
@@ -250,49 +250,79 @@
         <div id="admin-footer-placeholder"></div>
     </main>
 
-    <!-- Modal for Add/Edit User -->
-    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal for Add User -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark border-secondary shadow-lg" style="border: 1px solid var(--border) !important; background: #0f172a !important;">
                 <div class="modal-header border-secondary">
-                    <h5 class="modal-title text-white" id="userModalTitle">Add New Administrator</h5>
+                    <h5 class="modal-title text-white">Add New Admin User</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="userForm" class="row g-3">
-                        <input type="hidden" id="editUserId">
+                    <form id="addUserForm" class="row g-3">
                         <div class="col-12">
                             <label class="form-label text-dim small fw-bold">Username</label>
-                            <input type="text" class="form-control bg-dark border-secondary text-white" id="userName" required>
+                            <input type="text" class="form-control bg-dark border-secondary text-white" id="addUserName" required placeholder="Enter username">
                         </div>
                         <div class="col-12">
                             <label class="form-label text-dim small fw-bold">Email Address</label>
-                            <input type="email" class="form-control bg-dark border-secondary text-white" id="userEmail" required>
+                            <input type="email" class="form-control bg-dark border-secondary text-white" id="addUserEmail" required placeholder="Enter email address">
                         </div>
-                        <div id="passwordField" class="col-12">
+                        <div class="col-12">
                             <label class="form-label text-dim small fw-bold">Password</label>
-                            <input type="password" class="form-control bg-dark border-secondary text-white" id="userPassword" required>
+                            <input type="password" class="form-control bg-dark border-secondary text-white" id="addUserPassword" required placeholder="Enter password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-custom" id="confirmAddUserBtn">Add Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Edit User -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary shadow-lg" style="border: 1px solid var(--border) !important; background: #0f172a !important;">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-white">Edit User Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm" class="row g-3">
+                        <input type="hidden" id="editUserId">
+                        <div class="col-12">
+                            <label class="form-label text-dim small fw-bold">Username</label>
+                            <input type="text" class="form-control bg-dark border-secondary text-white" id="editUserName" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-dim small fw-bold">Email Address (Read-only)</label>
+                            <input type="email" class="form-control bg-dark border-secondary text-white opacity-50" id="editUserEmail" disabled>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-dim small fw-bold">Role</label>
-                            <select class="form-select bg-dark border-secondary text-white" id="userRole">
+                            <select class="form-select bg-dark border-secondary text-white" id="editUserRole">
+                                <option value="user">User</option>
+                                <option value="parent">Parent</option>
+                                <option value="teacher">Teacher</option>
                                 <option value="admin">Administrator</option>
-                                <option value="staff">Staff</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-dim small fw-bold">Age Group</label>
-                            <select class="form-select bg-dark border-secondary text-white" id="userAge">
-                                <option value="adult">Adult</option>
-                                <option value="teen">Teen</option>
+                            <select class="form-select bg-dark border-secondary text-white" id="editUserAge">
                                 <option value="child">Child</option>
+                                <option value="teen">Teen</option>
+                                <option value="adult">Adult</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary-custom" id="saveUserBtn">Save Administrator</button>
+                    <button type="button" class="btn btn-primary-custom" id="confirmEditUserBtn">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -392,44 +422,33 @@
             });
 
             // Action Functions
-            window.showUserModal = function(userData = null) {
-                const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                const title = document.getElementById('userModalTitle');
-                const passwordField = document.getElementById('passwordField');
-                
-                if (userData) {
-                    title.textContent = 'Edit Administrator';
-                    document.getElementById('editUserId').value = userData.id;
-                    document.getElementById('userName').value = userData.username;
-                    document.getElementById('userEmail').value = userData.email;
-                    document.getElementById('userEmail').disabled = true;
-                    document.getElementById('userRole').value = userData.role;
-                    document.getElementById('userAge').value = userData.age_group || 'adult';
-                    passwordField.style.display = 'none';
-                    document.getElementById('userPassword').required = false;
-                } else {
-                    title.textContent = 'Add New Administrator';
-                    document.getElementById('userForm').reset();
-                    document.getElementById('editUserId').value = '';
-                    document.getElementById('userEmail').disabled = false;
-                    passwordField.style.display = 'block';
-                    document.getElementById('userPassword').required = true;
-                }
+            window.showAddUserModal = function() {
+                const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                document.getElementById('addUserForm').reset();
+                modal.show();
+            }
+
+            window.showEditUserModal = function(userData) {
+                const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                document.getElementById('editUserId').value = userData.id;
+                document.getElementById('editUserName').value = userData.username;
+                document.getElementById('editUserEmail').value = userData.email;
+                document.getElementById('editUserRole').value = userData.role || 'user';
+                document.getElementById('editUserAge').value = userData.age_group || 'adult';
                 modal.show();
             }
 
             function bindActions() {
                 $('.edit-user').off().on('click', function() {
                     const id = $(this).data('id');
-                    // Use .toArray() to get plain arrays from DataTables
                     const allData = [...normalUsersTable.rows().data().toArray(), ...adminsTable.rows().data().toArray()];
                     const user = allData.find(u => u.id === id);
-                    if (user) showUserModal(user);
+                    if (user) showEditUserModal(user);
                 });
 
                 $('.delete-user').off().on('click', function() {
                     const id = $(this).data('id');
-                    if (confirm('Are you sure you want to delete this administrator? This action cannot be undone.')) {
+                    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
                         deleteUser(id);
                     }
                 });
@@ -452,30 +471,23 @@
                 }
             }
 
-            $('#saveUserBtn').on('click', async function() {
-                const id = document.getElementById('editUserId').value;
+            $('#confirmAddUserBtn').on('click', async function() {
                 const payload = {
-                    username: document.getElementById('userName').value,
-                    email: document.getElementById('userEmail').value,
-                    role: document.getElementById('userRole').value,
-                    age_group: document.getElementById('userAge').value,
+                    username: document.getElementById('addUserName').value,
+                    email: document.getElementById('addUserEmail').value,
+                    password: document.getElementById('addUserPassword').value,
+                    role: 'admin', // Default role as requested
+                    age_group: 'adult' // Default age group
                 };
 
-                if (!id) {
-                    payload.password = document.getElementById('userPassword').value;
-                }
-
-                if (!payload.username || !payload.email || (!id && !payload.password)) {
+                if (!payload.username || !payload.email || !payload.password) {
                     alert('Please fill all required fields');
                     return;
                 }
 
-                const method = id ? 'PUT' : 'POST';
-                const url = id ? `${apiUrl}/${id}` : apiUrl;
-
                 try {
-                    const response = await fetch(url, {
-                        method: method,
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
@@ -484,7 +496,41 @@
                     });
                     const result = await response.json();
                     if (result.status === 'success') {
-                        bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+                        bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+                        fetchUsers();
+                    } else {
+                        alert('Error: ' + result.error);
+                    }
+                } catch (err) {
+                    console.error('Save failed:', err);
+                }
+            });
+
+            $('#confirmEditUserBtn').on('click', async function() {
+                const id = document.getElementById('editUserId').value;
+                const payload = {
+                    username: document.getElementById('editUserName').value,
+                    role: document.getElementById('editUserRole').value,
+                    age_group: document.getElementById('editUserAge').value,
+                };
+
+                if (!payload.username) {
+                    alert('Username is required');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${apiUrl}/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
                         fetchUsers();
                     } else {
                         alert('Error: ' + result.error);
