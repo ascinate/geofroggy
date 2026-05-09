@@ -1,33 +1,287 @@
 {
     "tables": [
         {
-            "id": "geo_transportation",
-            "dbTable": "geo_transportation",
-            "label": "Geo Transportation",
-            "icon": "ri-truck-line",
-            "description": "Manage global transportation data and logistics history.",
+            "id": "countries",
+            "dbTable": "countries",
+            "label": "Countries (Global)",
+            "icon": "ri-global-line",
+            "description": "Primary country definitions used for quizzes and stories.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "name", "label": "Name", "type": "text", "required": true, "view": true },
+                { "name": "code", "label": "ISO Code", "type": "text", "required": true, "view": true },
+                { "name": "continent", "label": "Continent", "type": "text", "required": true, "view": true },
+                { "name": "description", "label": "Description", "type": "textarea", "required": false, "view": true }
+            ]
+        },
+        {
+            "id": "geo_country",
+            "dbTable": "geo_country",
+            "label": "Country Directory",
+            "icon": "ri-map-pin-2-line",
+            "description": "Comprehensive geographic and economic data for countries.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country", "label": "Country Name", "type": "text", "required": true, "view": true },
+                { "name": "slug", "label": "Slug", "type": "text", "required": true, "view": false },
+                { "name": "code", "label": "Code", "type": "text", "required": true, "view": true },
+                { "name": "capital", "label": "Capital", "type": "text", "required": true, "view": true },
+                { "name": "continent", "label": "Continent", "type": "text", "required": true, "view": true },
+                { "name": "population", "label": "Population", "type": "text", "required": true, "view": true },
+                { "name": "area", "label": "Area", "type": "text", "required": true, "view": false },
+                { "name": "economy", "label": "Economy", "type": "text", "required": true, "view": false },
+                { "name": "language", "label": "Language", "type": "text", "required": true, "view": false },
+                { "name": "publish_date", "label": "Publish Date", "type": "text", "required": true, "view": false },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "map_url", "label": "Map URL", "type": "text", "required": true, "view": false },
+                { "name": "iframe", "label": "Map Embed", "type": "text", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "levels",
+            "dbTable": "levels",
+            "label": "Experience Levels",
+            "icon": "ri-medal-line",
+            "description": "Define XP thresholds for user progression levels.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "level", "label": "Level Number", "type": "number", "required": true, "view": true },
+                { "name": "xp_required", "label": "XP Required", "type": "number", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "geo_introduction",
+            "dbTable": "geo_introduction",
+            "label": "Country Introductions",
+            "icon": "ri-information-line",
+            "description": "Introductory overviews for each country.",
             "fields": [
                 { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
                 { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
                 { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
-                { "name": "field", "label": "Field/Category", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Field", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Content", "type": "textarea", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "geo_geography",
+            "dbTable": "geo_geography",
+            "label": "Geography Data",
+            "icon": "ri-earth-line",
+            "description": "Detailed geographical facts and terrain information.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
                 { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
-                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": true }
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_people_and_society",
+            "dbTable": "geo_people_and_society",
+            "label": "People & Society",
+            "icon": "ri-group-line",
+            "description": "Demographics, culture, and societal metrics.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_government",
+            "dbTable": "geo_government",
+            "label": "Government & Politics",
+            "icon": "ri-government-line",
+            "description": "Political structure and administrative data.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_economy",
+            "dbTable": "geo_economy",
+            "label": "Economy & Trade",
+            "icon": "ri-money-dollar-circle-line",
+            "description": "Economic indicators, GDP, and trade statistics.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_energy",
+            "dbTable": "geo_energy",
+            "label": "Energy & Resources",
+            "icon": "ri-flashlight-line",
+            "description": "Power production, consumption, and resource data.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_communications",
+            "dbTable": "geo_communications",
+            "label": "Communications",
+            "icon": "ri-broadcast-line",
+            "description": "Telecommunications and connectivity infrastructure.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_transportation",
+            "dbTable": "geo_transportation",
+            "label": "Transportation",
+            "icon": "ri-truck-line",
+            "description": "Logistics, roads, railways, and transit data.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
             ]
         },
         {
             "id": "geo_military_and_security",
             "dbTable": "geo_military_and_security",
-            "label": "Geo Military & Security",
+            "label": "Military & Security",
             "icon": "ri-shield-keyhole-line",
-            "description": "Manage global military expenditures, security protocols, and strategic defense data.",
+            "description": "Defense spending and security infrastructure.",
             "fields": [
                 { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
                 { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
                 { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
-                { "name": "field", "label": "Field/Category", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
                 { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
-                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": true }
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_terrorism",
+            "dbTable": "geo_terrorism",
+            "label": "Terrorism Reports",
+            "icon": "ri-error-warning-line",
+            "description": "Data regarding regional security threats and terrorism.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "geo_transnational_issue",
+            "dbTable": "geo_transnational_issue",
+            "label": "Transnational Issues",
+            "icon": "ri-swap-line",
+            "description": "International disputes and cross-border issues.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "number", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "number", "required": true, "view": true },
+                { "name": "year", "label": "Year", "type": "text", "required": true, "view": true },
+                { "name": "field", "label": "Metric", "type": "text", "required": true, "view": true },
+                { "name": "value", "label": "Value", "type": "textarea", "required": true, "view": true },
+                { "name": "parent_id", "label": "Parent ID", "type": "number", "required": true, "view": false }
+            ]
+        },
+        {
+            "id": "stories",
+            "dbTable": "stories",
+            "label": "World Stories",
+            "icon": "ri-book-open-line",
+            "description": "Educational stories and narratives related to specific countries.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "title", "label": "Title", "type": "text", "required": true, "view": true },
+                { "name": "content", "label": "Content", "type": "textarea", "required": true, "view": false },
+                { "name": "country_id", "label": "Country ID", "type": "uuid", "required": true, "view": true },
+                { "name": "xp_reward", "label": "XP Reward", "type": "number", "required": true, "view": true },
+                { "name": "is_premium", "label": "Premium", "type": "boolean", "required": true, "view": true },
+                { "name": "category", "label": "Category", "type": "text", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "quizzes",
+            "dbTable": "quizzes",
+            "label": "Knowledge Quizzes",
+            "icon": "ri-questionnaire-line",
+            "description": "Quizzes designed to test knowledge about countries.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "country_id", "label": "Country ID", "type": "uuid", "required": true, "view": true },
+                { "name": "title", "label": "Title", "type": "text", "required": true, "view": true },
+                { "name": "xp_reward", "label": "XP Reward", "type": "number", "required": true, "view": true },
+                { "name": "is_premium", "label": "Premium", "type": "boolean", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "questions",
+            "dbTable": "questions",
+            "label": "Quiz Questions",
+            "icon": "ri-list-check",
+            "description": "Individual questions associated with specific quizzes.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "quiz_id", "label": "Quiz ID", "type": "uuid", "required": true, "view": true },
+                { "name": "question", "label": "Question Text", "type": "textarea", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "achievements",
+            "dbTable": "achievements",
+            "label": "Achievements",
+            "icon": "ri-trophy-line",
+            "description": "Defines milestones and rewards for user accomplishments.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "name", "label": "Achievement Name", "type": "text", "required": true, "view": true },
+                { "name": "xp_reward", "label": "XP Reward", "type": "number", "required": true, "view": true }
+            ]
+        },
+        {
+            "id": "missions",
+            "dbTable": "missions",
+            "label": "Content Missions",
+            "icon": "ri-rocket-line",
+            "description": "Specific objectives and tasks for users to complete.",
+            "fields": [
+                { "name": "id", "label": "ID", "type": "uuid", "readonly": true, "view": true },
+                { "name": "title", "label": "Mission Title", "type": "text", "required": true, "view": true },
+                { "name": "description", "label": "Description", "type": "textarea", "required": false, "view": false },
+                { "name": "thumbnail_url", "label": "Thumbnail", "type": "text", "required": false, "view": true },
+                { "name": "xp_reward", "label": "XP Reward", "type": "number", "required": true, "view": true },
+                { "name": "is_active", "label": "Active", "type": "boolean", "required": true, "view": true },
+                { "name": "mission_type", "label": "Type", "type": "text", "required": true, "view": true },
+                { "name": "created_at", "label": "Created At", "type": "text", "readonly": true, "view": true }
             ]
         }
     ]
