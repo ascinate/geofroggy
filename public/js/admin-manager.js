@@ -214,6 +214,11 @@ class DynamicDatabaseManager {
     async handleSave() {
         const formData = new FormData(document.getElementById('genericForm'));
         const payload = Object.fromEntries(formData.entries());
+
+        // Ensure ID is NOT sent for new records (POST)
+        if (!this.editingId) {
+            delete payload.id;
+        }
         
         const method = this.editingId ? 'PUT' : 'POST';
         const url = this.editingId 
