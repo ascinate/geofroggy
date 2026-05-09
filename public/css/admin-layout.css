@@ -85,6 +85,11 @@
     color: white;
 }
 
+.nav-link.text-danger-hover:hover {
+    background: rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
+}
+
 .nav-link.active {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;

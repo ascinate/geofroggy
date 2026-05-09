@@ -52,9 +52,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // Mobile Sidebar Toggle (if needed)
-        const sidebar = document.getElementById('sidebar');
-        // Add toggle logic here if you have a toggle button in the header
+        // Sidebar logout
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleLogout();
+            });
+        }
+    }
+
+    function handleLogout() {
+        // Clear all auth data
+        localStorage.removeItem('token');
+        localStorage.removeItem('profile');
+        localStorage.removeItem('sb-access-token'); // Supabase default
+        localStorage.removeItem('sb-refresh-token'); // Supabase default
+        
+        // Redirect to login
+        window.location.href = 'admin-login.html';
     }
 
     function updateUserProfile() {
